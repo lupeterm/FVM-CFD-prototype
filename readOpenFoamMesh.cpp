@@ -13,22 +13,44 @@ struct Node
     std::vector<int> iElements;
 };
 
+struct Face
+{
+    std::vector<int> iNodes;
+    int index;
+    int iOwner;
+    int iNeighbor;;
+};
+
 class Mesh
 {
     private:
         std::string caseDirectory_;
         // int numberofNodes;
-        std::vector<Node>& nodes_; 
+        std::vector<Node>& nodes_;
+        std::vector<Face>& faces_;
 
     public:
-        Mesh(std::string caseDir, std::vector<Node>& points)
-        :caseDirectory_(caseDir), nodes_(points)
+        Mesh(std::string caseDir, std::vector<Node>& points, std::vector<Face>& faces)
+        :caseDirectory_(caseDir), nodes_(points), faces_(faces)
         {}
 
         std::vector<Node>& nodes(){ return nodes_;}
+        std::vector<Face>& faces(){ return faces_;}
 };
 
-void readPoints(const std::string& pointsFile, std::vector<Node>& nodes)
+std::string getDirectory() {
+    // Implement a function to get directory from user
+    std::string caseDirectory;
+    std::cout << "Enter the case directory: ";
+    std::getline(std::cin, caseDirectory);
+    return caseDirectory;
+}
+
+void readPoints
+(
+    const std::string& pointsFile,
+    std::vector<Node>& nodes
+)
 {
     std::ifstream file(pointsFile);
     if(!file.is_open())
@@ -47,7 +69,10 @@ void readPoints(const std::string& pointsFile, std::vector<Node>& nodes)
 
     int numberOfPoins(0);
     file >> numberOfPoins;
-    // std::cout << "Number of points: " << numberOfPoins << std::endl;
+    
+    //--- Test ---
+    std::cout << "Number of points: " << numberOfPoins << std::endl;
+    
     std::getline(file, line); // Consume the rest of the line
     std::getline(file, line); // To consume the next line
 
@@ -59,26 +84,79 @@ void readPoints(const std::string& pointsFile, std::vector<Node>& nodes)
         double x(0.0), y(0.0), z(0.0);
         file >> x >> y >> z;
         file >> dummy; // To consume the right parenthesis
-        // file >> dummy; // To consume the newline character
-
+        
         nodes[i].centroid = {x, y, z};
         nodes[i].index = i;
         nodes[i].iFaces = {};
         nodes[i].iElements = {};
     }
 
-
+    file.close();
 }
 
-std::string getDirectory() {
-    // Implement a function to get directory from user
-    std::string caseDirectory;
-    std::cout << "Enter the case directory: ";
-    std::getline(std::cin, caseDirectory);
-    return caseDirectory;
+void readFaces
+(
+    const std::string& facesFile,
+    std::vector<Face>& faces
+)
+{
+    std::ifstream file(facesFile);
+    if (!file.is_open())
+    {
+        std::cerr << "Error opening file: " << facesFile << std::endl;
+        return;
+    }
+     std::cout << "Successfully open the faces file" << std::endl;
+
+    // Consume the first 18 lines
+    std::string line;
+    for (int i = 0; i < 18; ++i)
+    {
+        std::getline(file, line);
+    }
+
+    // Read the number of faces
+    int numberOfFaces;
+    file >> numberOfFaces;
+    std::getline(file, line); // Consume the rest of the line
+
+    //--- Test ---
+    std::cout << "Number of faces = " << numberOfFaces << std::endl;
+
+    // Consume the left parenthesis for faces
+    char dummy;
+    file >> dummy;
+
+    faces.resize(numberOfFaces);
+
+    // Read each face
+    for (int i = 0; i < numberOfFaces; ++i)
+    {
+        int numberOfPoints{0};
+        file >> numberOfPoints;
+        file >> dummy; // Consume the left parenthesis
+
+        faces[i].iNodes.resize(numberOfPoints);
+        for (int j = 0; j < numberOfPoints; ++j)
+        {
+            file >> faces[i].iNodes[j];
+        }
+        file >> dummy; // Consume the right parenthesis
+        faces[i].index = i;
+        faces[i].iOwner = -1;
+        faces[i].iNeighbor = -1;
+    }
+
+    file.close();
 }
 
-void cfdReadOpenFoamMesh(std::vector<Node>& nodes, std::string caseDirectory = "") {
+void cfdReadOpenFoamMesh
+(
+    std::vector<Node>& nodes,
+    std::vector<Face>& faces,
+    std::string caseDirectory = ""
+)
+{
     if (caseDirectory.empty()) {
         caseDirectory = getDirectory();
     }
@@ -91,19 +169,21 @@ void cfdReadOpenFoamMesh(std::vector<Node>& nodes, std::string caseDirectory = "
     
     // Add your file reading logic here
     readPoints(pointsFile, nodes);
+    readFaces(facesFile, faces);
 }
 
 int main(int argc, char* argv[]) {
     // std::cout << "Number of arguemnts: " << argc << std::endl;
-    // for (int i = 0; i < argc; ++i)
+    // for (int i = 0; i < argc; ++i);
     // {
     //     std::cout << "Command-line argument " << i << ":"  << argv[i] << std::endl;
     // }
     std::string caseDirectory(argv[1]);
     std::vector<Node> nodes;
-    cfdReadOpenFoamMesh(nodes, caseDirectory);
-    Mesh fvMesh{caseDirectory, nodes};
-    // ------------------ Test ----------------------
+    std::vector<Face> faces;
+    cfdReadOpenFoamMesh(nodes, faces, caseDirectory);
+    Mesh fvMesh{caseDirectory, nodes, faces};
+    // ------------------ Test readPoints----------------------
     int precision = 10;
     for (int i = 0; i < 3; ++i)
     { 
@@ -111,6 +191,28 @@ int main(int argc, char* argv[]) {
                     "(" << fvMesh.nodes()[i].centroid[0] << " " 
                         << fvMesh.nodes()[i].centroid[1] << " " 
                         << fvMesh.nodes()[i].centroid[2] << ")" << std::endl;
+    }
+
+    // ------------------ Test readFaces----------------------
+    for (int i = 0; i < 3; ++i)
+    { 
+        int numberOfPoints = fvMesh.faces()[i].iNodes.size();
+
+        std::cout << "(";
+
+        for (int j = 0; j < numberOfPoints; ++j)
+        {
+            std::cout << fvMesh.faces()[i].iNodes[j];
+            
+            if (j < numberOfPoints-1)
+            {
+                std::cout << " ";
+            }
+            else
+            {
+                std::cout << ")" << std::endl;;
+            }
+        }
     }
 
     return 0;
