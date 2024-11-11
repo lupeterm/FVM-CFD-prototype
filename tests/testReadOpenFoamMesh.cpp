@@ -6,17 +6,13 @@
 #include "readOpenFoamMesh.h"
 
 int main(int argc, char* argv[]) {
-    // std::cout << "Number of arguemnts: " << argc << std::endl;
-    // for (int i = 0; i < argc; ++i);
-    // {
-    //     std::cout << "Command-line argument " << i << ":"  << argv[i] << std::endl;
-    // }
+
     std::string caseDirectory(argv[1]);
-    // std::string caseDirectory("../cases/elbow");
     std::vector<Node> nodes;
     std::vector<Face> faces;
     cfdReadOpenFoamMesh(nodes, faces, caseDirectory);
     Mesh fvMesh{caseDirectory, nodes, faces};
+    
     // ------------------ Test readPoints----------------------
     int precision = 10;
     for (int i = 0; i < 3; ++i)
