@@ -2,6 +2,7 @@
 add_library(
     MyLibrary
     main.cpp
+    readOpenFoamMesh.cpp
 )
 
 target_include_directories(
