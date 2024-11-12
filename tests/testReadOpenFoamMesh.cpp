@@ -9,9 +9,12 @@
 
 TEST(ReadingOpenFoamMeshTest, ReadingMeshPointsWorks){
 
+    // --- Arrange ---
     std::string caseDirectory("../../cases/elbow");
     std::vector<Node> nodes;
     std::vector<Face> faces;
+
+    // --- Act ---
     cfdReadOpenFoamMesh(nodes, faces, caseDirectory);
     Mesh fvMesh{caseDirectory, nodes, faces};
     
@@ -48,9 +51,12 @@ TEST(ReadingOpenFoamMeshTest, ReadingMeshPointsWorks){
 
 TEST(ReadingOpenFoamMeshTest, ReadingMeshFacesWorks){
 
+    // --- Arrange ---
     std::string caseDirectory("../../cases/elbow");
     std::vector<Node> nodes;
     std::vector<Face> faces;
+
+    // --- Act ---
     cfdReadOpenFoamMesh(nodes, faces, caseDirectory);
     Mesh fvMesh{caseDirectory, nodes, faces};
         
