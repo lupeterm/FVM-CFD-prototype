@@ -1,13 +1,14 @@
 #include <iostream>
-// #include <string>
-// #include <vector>
 #include <fstream>
-// #include <iomanip>
-// #include <filesystem>
 #include "readOpenFoamMesh.h"
 
+// Forward declaration
+std::string getDirectory();
+void readPoints(const std::string& pointsFile, std::vector<Node>& nodes);
+void readFaces(const std::string& facesFile, std::vector<Face>& faces);
+void cfdReadOpenFoamMesh(std::vector<Node>& nodes, std::vector<Face>& faces, std::string caseDirectory);
+
 std::string getDirectory() {
-    // Implement a function to get directory from user
     std::string caseDirectory;
     std::cout << "Enter the case directory: ";
     std::getline(std::cin, caseDirectory);
@@ -127,7 +128,6 @@ void cfdReadOpenFoamMesh
     std::string neighbourFile = caseDirectory + "/constant/polyMesh/neighbour";
     std::string boundaryFile = caseDirectory + "/constant/polyMesh/boundary";
     
-    // Add your file reading logic here
     readPoints(pointsFile, nodes);
     readFaces(facesFile, faces);
 }
