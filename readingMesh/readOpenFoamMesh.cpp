@@ -106,7 +106,7 @@ void readFaces
         std::cerr << "Error opening file: " << facesFile << std::endl;
         return;
     }
-     std::cout << "Successfully open the faces file" << std::endl;
+    std::cout << "Successfully open the faces file" << std::endl;
 
     // Consume the first 18 lines
     std::string line;
