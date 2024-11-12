@@ -70,8 +70,7 @@ void readFaces
         std::cerr << "Error opening file: " << facesFile << std::endl;
         return;
     }
-     std::cout << "Successfully open the faces file" << std::endl;
-
+    
     // Consume the first 18 lines
     std::string line;
     for (int i = 0; i < 18; ++i)
@@ -83,9 +82,6 @@ void readFaces
     int numberOfFaces;
     file >> numberOfFaces;
     std::getline(file, line); // Consume the rest of the line
-
-    //--- Test ---
-    std::cout << "Number of faces = " << numberOfFaces << std::endl;
 
     // Consume the left parenthesis for faces
     char dummy;
