@@ -1,3 +1,5 @@
+#include <gtest/gtest.h>
+
 #include <vector>
 #include <string>
 #include <iostream>
@@ -5,45 +7,69 @@
 #include "mesh.h"
 #include "readOpenFoamMesh.h"
 
-int main(int argc, char* argv[]) {
+// #include "add.h"
 
-    std::string caseDirectory(argv[1]);
-    std::vector<Node> nodes;
-    std::vector<Face> faces;
-    cfdReadOpenFoamMesh(nodes, faces, caseDirectory);
-    Mesh fvMesh{caseDirectory, nodes, faces};
+// TEST(AdditionTest, HandlesPositiveInput) {
+//   EXPECT_EQ(add(1, 2), 3);
+// }
+
+// TEST(AdditionTest, HandlesNegativeInput) {
+//   EXPECT_EQ(add(-1, -1), -2);
+// }
+
+TEST(ReadingOpenFoamMeshTest, handleMeshPoints){
+
+  std::string caseDirectory("../../cases/elbow");
+  std::vector<Node> nodes;
+  std::vector<Face> faces;
+  cfdReadOpenFoamMesh(nodes, faces, caseDirectory);
+  Mesh fvMesh{caseDirectory, nodes, faces};
     
-    // ------------------ Test readPoints----------------------
-    int precision = 10;
-    for (int i = 0; i < 3; ++i)
-    { 
-        std::cout << std::fixed << std::setprecision(precision) << 
-                    "(" << fvMesh.nodes()[i].centroid[0] << " " 
-                        << fvMesh.nodes()[i].centroid[1] << " " 
-                        << fvMesh.nodes()[i].centroid[2] << ")" << std::endl;
-    }
+  // Assert
+  EXPECT_EQ(fvMesh.nodes().size(), 1074);
+   
+  EXPECT_EQ(fvMesh.nodes()[0].centroid[0], 32);
+  EXPECT_EQ(fvMesh.nodes()[0].centroid[1], 16);
+  EXPECT_EQ(fvMesh.nodes()[0].centroid[2], 0.9377383239);
 
-    // ------------------ Test readFaces----------------------
-    for (int i = 0; i < 3; ++i)
-    { 
-        int numberOfPoints = fvMesh.faces()[i].iNodes.size();
+  EXPECT_EQ(fvMesh.nodes()[1].centroid[0], 33.9429245);
+  EXPECT_EQ(fvMesh.nodes()[1].centroid[1], 16.11834526 );
+  EXPECT_EQ(fvMesh.nodes()[1].centroid[2], 0.9377383239);
 
-        std::cout << "(";
+  EXPECT_EQ(fvMesh.nodes()[2].centroid[0], 35.84160614);
+  EXPECT_EQ(fvMesh.nodes()[2].centroid[1], 16.46798134 );
+  EXPECT_EQ(fvMesh.nodes()[2].centroid[2], 0.9377383239);
 
-        for (int j = 0; j < numberOfPoints; ++j)
-        {
-            std::cout << fvMesh.faces()[i].iNodes[j];
+
+
+}
+
+TEST(ReadingOpenFoamMeshTest, handleMeshFaces){
+
+    // // ------------------ Test readFaces----------------------
+    // for (int i = 0; i < 3; ++i)
+    // { 
+    //     int numberOfPoints = fvMesh.faces()[i].iNodes.size();
+
+    //     std::cout << "(";
+
+    //     for (int j = 0; j < numberOfPoints; ++j)
+    //     {
+    //         std::cout << fvMesh.faces()[i].iNodes[j];
             
-            if (j < numberOfPoints-1)
-            {
-                std::cout << " ";
-            }
-            else
-            {
-                std::cout << ")" << std::endl;;
-            }
-        }
-    }
+    //         if (j < numberOfPoints-1)
+    //         {
+    //             std::cout << " ";
+    //         }
+    //         else
+    //         {
+    //             std::cout << ")" << std::endl;;
+    //         }
+    //     }
+    // }
+}
 
-    return 0;
+int main(int argc, char **argv) {
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
 }

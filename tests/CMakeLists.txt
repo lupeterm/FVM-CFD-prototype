@@ -2,15 +2,15 @@
 enable_testing()
 
 add_executable(
-  test_add
-  test_add.cpp
+  test_readOpenFoamMesh
+  testReadOpenFoamMesh.cpp
 )
 
 target_link_libraries(
-  test_add
+  test_readOpenFoamMesh
   MyLibrary
   GTest::gtest_main
 )
 
 include(GoogleTest)
-gtest_discover_tests(test_add)
+gtest_discover_tests(test_readOpenFoamMesh)

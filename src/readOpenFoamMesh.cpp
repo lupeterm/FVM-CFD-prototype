@@ -26,8 +26,7 @@ void readPoints
         std::cerr << "Error opening file: " << pointsFile << std::endl;
         return;
     }
-    std::cout << "Successfully open the points file" << std::endl;
-
+    
     // Consume the first 18 lines of the points file
     std::string line;
     for (int i = 0; i < 18; ++i)
@@ -37,10 +36,7 @@ void readPoints
 
     int numberOfPoins(0);
     file >> numberOfPoins;
-    
-    //--- Test ---
-    std::cout << "Number of points: " << numberOfPoins << std::endl;
-    
+       
     std::getline(file, line); // Consume the rest of the line
     std::getline(file, line); // To consume the next line
 

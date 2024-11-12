@@ -1,7 +1,7 @@
 # Source directory
 add_library(
     MyLibrary
-    main.cpp
+    # main.cpp
     readOpenFoamMesh.cpp
 )
 
