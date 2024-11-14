@@ -96,7 +96,56 @@ void readFaces(const std::string &facesFile, std::vector<Face> &faces) {
   file.close();
 }
 
-void readOwners(const std::string &ownerFile, std::vector<Face> &faces) {}
+void readOwners(const std::string &ownerFile, std::vector<Face> &faces) {
+  std::ifstream file(ownerFile);
+  if (!file.is_open()) {
+    std::cerr << "Error opening file: " << ownerFile << std::endl;
+    return;
+  }
+
+  // Consume the first 18 lines
+  std::string line;
+  for (int i = 0; i < 18; ++i) {
+    std::getline(file, line);
+  }
+
+  // Read the number of faces
+  int numberOfOwners;
+  file >> numberOfOwners;
+  std::getline(file, line); // Consume the rest of the line
+
+  // Consume the left parenthesis for owners
+  char dummy;
+  file >> dummy;
+
+  int numberOfElements{0};
+
+  // -- Test ---
+  std::cout << "Number of owners:" << numberOfOwners << std::endl;
+
+  int OwnerIndex{0};
+  int maxOwnerIndex{0};
+  for (int i = 0; i < numberOfOwners; ++i) {
+
+    file >> OwnerIndex;
+    faces[i].iOwner = OwnerIndex;
+
+    if (OwnerIndex > maxOwnerIndex) {
+      maxOwnerIndex = OwnerIndex;
+    }
+    // >> faces[i].iOwner;
+  }
+
+  // number of elements = the largest owner index + 1
+  numberOfElements = maxOwnerIndex + 1;
+
+  // -- Test ---
+  std::cout << "Number of elements:" << numberOfElements << std::endl;
+
+  file.close();
+
+  // return maxOwnerIndex;
+}
 
 void cfdReadOpenFoamMesh(std::vector<Node> &nodes, std::vector<Face> &faces,
                          std::string caseDirectory) {
@@ -113,4 +162,6 @@ void cfdReadOpenFoamMesh(std::vector<Node> &nodes, std::vector<Face> &faces,
   readPoints(pointsFile, nodes);
   readFaces(facesFile, faces);
   readOwners(ownerFile, faces);
+
+  // return numberOfElement;
 }

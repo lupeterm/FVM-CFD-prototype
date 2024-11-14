@@ -104,6 +104,31 @@ TEST(ReadingOpenFoamMeshTest, ReadingMeshFacesWorks) {
   EXPECT_EQ(fvMesh.faces()[3289].iNodes[2], 1012);
 }
 
+TEST(ReadingOpenFoamMeshTest, ReadingMeshOwnersWorks) {
+  // --- Arrange ---
+  std::string caseDirectory("../../cases/elbow");
+  std::vector<Node> nodes;
+  std::vector<Face> faces;
+
+  // --- Act ---
+  cfdReadOpenFoamMesh(nodes, faces, caseDirectory);
+  Mesh fvMesh{caseDirectory, nodes, faces};
+
+  // --- Assert ---
+  // Verify the number of elements
+  // EXPECT_EQ(fvMesh.numberOfElement(), 918);
+  EXPECT_EQ(fvMesh.faces()[0].iOwner, 0);
+  EXPECT_EQ(fvMesh.faces()[1].iOwner, 1);
+  EXPECT_EQ(fvMesh.faces()[2].iOwner, 2);
+  EXPECT_EQ(fvMesh.faces()[3].iOwner, 3);
+  EXPECT_EQ(fvMesh.faces()[4].iOwner, 4);
+  EXPECT_EQ(fvMesh.faces()[5].iOwner, 5);
+  EXPECT_EQ(fvMesh.faces()[6].iOwner, 6);
+  EXPECT_EQ(fvMesh.faces()[7].iOwner, 6);
+  EXPECT_EQ(fvMesh.faces()[8].iOwner, 7);
+  EXPECT_EQ(fvMesh.faces()[9].iOwner, 7);
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

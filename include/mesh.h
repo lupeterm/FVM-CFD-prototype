@@ -16,7 +16,6 @@ struct Face {
   int index;
   int iOwner;
   int iNeighbor;
-  ;
 };
 
 class Mesh {
@@ -25,6 +24,7 @@ private:
   // int numberofNodes;
   std::vector<Node> &nodes_;
   std::vector<Face> &faces_;
+  // int numberOfElement_;
 
 public:
   Mesh(std::string caseDir, std::vector<Node> &points, std::vector<Face> &faces)
@@ -32,6 +32,7 @@ public:
 
   std::vector<Node> &nodes() { return nodes_; }
   std::vector<Face> &faces() { return faces_; }
+  // int numberOfElement() { return numberOfElement_; }
 };
 
 #endif
