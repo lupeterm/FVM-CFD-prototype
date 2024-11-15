@@ -11,7 +11,7 @@ public:
   void getDirectory(Mesh &fvMesh);
   void ifFileOpened(const std::ifstream &file, const std::string &fileName);
   void consumeFileHeader(std::ifstream &file);
-  void readPointsFle(Mesh &fvMesh);
+  void readPointsFile(Mesh &fvMesh);
   //   void readFacesFile();
   //   void readOwnersFile();
   //   void readNeighborsFile();

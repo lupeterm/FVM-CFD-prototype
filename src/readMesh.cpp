@@ -2,21 +2,11 @@
 #include <fstream>
 #include <iostream>
 
-// // Forward declaration
-// std::string getDirectory();
-// void readPoints(const std::string &pointsFile, std::vector<Node> &nodes);
-// void readFaces(const std::string &facesFile, std::vector<Face> &faces);
-// void readOwners(const std::string &ownerFile, std::vector<Face> &faces);
-// void cfdReadOpenFoamMesh(std::vector<Node> &nodes, std::vector<Face> &faces,
-//                          std::string caseDirectory);
-
-// readMesh::readMesh(std::string &caseDir) : caseDir_(caseDir) {}
-
 void readMesh::readOpenFoamMesh(Mesh &fvMesh) {
   if (fvMesh.caseDir().empty()) {
     getDirectory(fvMesh);
   }
-  readPointsFle(fvMesh);
+  readPointsFile(fvMesh);
 }
 
 void readMesh::getDirectory(Mesh &fvMesh) {
@@ -38,7 +28,7 @@ void readMesh::consumeFileHeader(std::ifstream &file) {
   }
 }
 
-void readMesh::readPointsFle(Mesh &fvMesh) {
+void readMesh::readPointsFile(Mesh &fvMesh) {
   std::string pointsFileName = fvMesh.caseDir() + "/constant/polyMesh/points";
   std::ifstream pointsFile(pointsFileName);
   ifFileOpened(pointsFile, pointsFileName);
