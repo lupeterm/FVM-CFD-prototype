@@ -14,13 +14,31 @@ readMesh::readMesh(std::string &caseDir) : caseDir_(caseDir) {}
 
 void readMesh::readOpenFoamMesh(Mesh &fvMesh) {}
 
-std::string getDirectory() {
-  std::string caseDirectory;
+void readMesh::getDirectory() {
   std::cout << "Enter the case directory: ";
-  std::getline(std::cin, caseDirectory);
-  return caseDirectory;
+  std::getline(std::cin, caseDir_);
 }
 
+void readMesh::ifFileOpened(const std::ifstream &file,
+                            const std::string &fileName) {
+  if (!file.is_open()) {
+    std::cerr << "Error opening file: " << fileName << std::endl;
+  }
+}
+
+void readMesh::consumeFileHeader(std::ifstream &file) {
+  std::string line;
+  for (int i = 0; i < 18; ++i) {
+    std::getline(file, line);
+  }
+}
+
+void readMesh::readPointsFle() {
+  std::string pointsFileName = caseDir_ + "/constant/polyMesh/points";
+  std::ifstream pointsFile(pointsFileName);
+  ifFileOpened(pointsFile, pointsFileName);
+  consumeFileHeader(pointsFile);
+}
 // void readPoints(const std::string &pointsFile, std::vector<Node> &nodes) {
 //   std::ifstream file(pointsFile);
 //   if (!file.is_open()) {
@@ -151,21 +169,21 @@ std::string getDirectory() {
 //   // return maxOwnerIndex;
 // }
 
-void cfdReadOpenFoamMesh(std::vector<Node> &nodes, std::vector<Face> &faces,
-                         std::string caseDirectory) {
-  if (caseDirectory.empty()) {
-    caseDirectory = getDirectory();
-  }
+// void cfdReadOpenFoamMesh(std::vector<Node> &nodes, std::vector<Face> &faces,
+//                          std::string caseDirectory) {
+//   if (caseDirectory.empty()) {
+//     caseDirectory = getDirectory();
+//   }
 
-  std::string pointsFile = caseDirectory + "/constant/polyMesh/points";
-  std::string facesFile = caseDirectory + "/constant/polyMesh/faces";
-  std::string ownerFile = caseDirectory + "/constant/polyMesh/owner";
-  std::string neighbourFile = caseDirectory + "/constant/polyMesh/neighbour";
-  std::string boundaryFile = caseDirectory + "/constant/polyMesh/boundary";
+//   std::string pointsFile = caseDirectory + "/constant/polyMesh/points";
+//   std::string facesFile = caseDirectory + "/constant/polyMesh/faces";
+//   std::string ownerFile = caseDirectory + "/constant/polyMesh/owner";
+//   std::string neighbourFile = caseDirectory + "/constant/polyMesh/neighbour";
+//   std::string boundaryFile = caseDirectory + "/constant/polyMesh/boundary";
 
-  // readPoints(pointsFile, nodes);
-  // readFaces(facesFile, faces);
-  // readOwners(ownerFile, faces);
+//   // readPoints(pointsFile, nodes);
+//   // readFaces(facesFile, faces);
+//   // readOwners(ownerFile, faces);
 
-  // return numberOfElement;
-}
+//   // return numberOfElement;
+// }

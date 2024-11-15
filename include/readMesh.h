@@ -16,11 +16,14 @@ private:
   std::string caseDir_;
 
   // Private member functions
-private:
+  // private:
+public:
+  void getDirectory();
+  void ifFileOpened(const std::ifstream &file, const std::string &fileName);
+  void consumeFileHeader(std::ifstream &file);
   void readPointsFle();
   void readFacesFile();
   void readOwnersFile();
   void readNeighborsFile();
-  void consumeFileHeader();
 };
 #endif
