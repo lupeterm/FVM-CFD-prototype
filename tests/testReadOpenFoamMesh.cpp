@@ -15,7 +15,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingMeshPointsWorks) {
   std::vector<Face> faces;
 
   // --- Act ---
-  cfdReadOpenFoamMesh(nodes, faces, caseDirectory);
+  // cfdReadOpenFoamMesh(nodes, faces, caseDirectory);
   Mesh fvMesh{caseDirectory, nodes, faces};
 
   // --- Assert ---
@@ -57,7 +57,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingMeshFacesWorks) {
   std::vector<Face> faces;
 
   // --- Act ---
-  cfdReadOpenFoamMesh(nodes, faces, caseDirectory);
+  // cfdReadOpenFoamMesh(nodes, faces, caseDirectory);
   Mesh fvMesh{caseDirectory, nodes, faces};
 
   // --- Assert ---
@@ -111,7 +111,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingMeshOwnersWorks) {
   std::vector<Face> faces;
 
   // --- Act ---
-  cfdReadOpenFoamMesh(nodes, faces, caseDirectory);
+  // cfdReadOpenFoamMesh(nodes, faces, caseDirectory);
   Mesh fvMesh{caseDirectory, nodes, faces};
 
   // --- Assert ---

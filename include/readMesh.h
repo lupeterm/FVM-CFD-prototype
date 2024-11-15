@@ -5,7 +5,25 @@
 #include <string>
 #include <vector>
 
-void cfdReadOpenFoamMesh(std::vector<Node> &nodes, std::vector<Face> &faces,
-                         std::string caseDirectory = "");
+class readMesh {
+public:
+  readMesh();
+
+  void readOpenFoamMesh(Mesh &fvMesh);
+
+  // Private data members
+private:
+  std::string caseDir;
+
+  // Private member functions
+private:
+  void readPointsFle();
+  void readFacesFile();
+  void readOwnersFile();
+  void readNeighborsFile();
+  void consumeFileHeader();
+};
+// void cfdReadOpenFoamMesh(std::vector<Node> &nodes, std::vector<Face> &faces,
+//                          std::string caseDirectory = "");
 
 #endif
