@@ -1,5 +1,5 @@
-#ifndef READ_OPENFOAM_MESH_H
-#define READ_OPENFOAM_MESH_H
+#ifndef READ_MESH_H
+#define READ_MESH_H
 
 #include "mesh.h"
 #include <string>

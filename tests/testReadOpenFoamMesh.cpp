@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "mesh.h"
-#include "readOpenFoamMesh.h"
+#include "readMesh.h"
 #include <iomanip>
 #include <iostream>
 #include <string>
