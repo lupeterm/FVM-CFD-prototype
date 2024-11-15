@@ -64,52 +64,32 @@ void readMesh::readFacesFile(Mesh &fvMesh) {
   ifFileOpened(facesFile, facesFileName);
   consumeFileHeader(facesFile);
 
-  // --- Start to read points data from the file ---
+  // --- Start to read faces data from the file ---
   facesFile >> fvMesh.nFaces();
+
+  std::string line;
+  std::getline(facesFile, line); // Consume the rest of the line
+
+  // Consume the left parenthesis for faces
+  char dummy;
+  facesFile >> dummy;
+
+  fvMesh.constructFaces();
+
+  for (std::size_t i = 0; i < fvMesh.nFaces(); ++i) {
+    facesFile >> fvMesh.faces()[i].nNodes();
+    facesFile >> dummy; // Consume the left parenthesis
+
+    fvMesh.faces()[i].constructNodeList();
+
+    for (std::size_t j = 0; j < fvMesh.faces()[i].nNodes(); ++j) {
+      facesFile >> fvMesh.faces()[i].iNodes()[j];
+    }
+    facesFile >> dummy; // Consume the right parenthesis
+  }
+
+  facesFile.close();
 }
-
-// void readFaces(const std::string &facesFile, std::vector<Face> &faces) {
-//   std::ifstream file(facesFile);
-//   if (!file.is_open()) {
-//     std::cerr << "Error opening file: " << facesFile << std::endl;
-//     return;
-//   }
-
-//   // Consume the first 18 lines
-//   std::string line;
-//   for (int i = 0; i < 18; ++i) {
-//     std::getline(file, line);
-//   }
-
-//   // Read the number of faces
-//   int numberOfFaces;
-//   file >> numberOfFaces;
-//   std::getline(file, line); // Consume the rest of the line
-
-//   // Consume the left parenthesis for faces
-//   char dummy;
-//   file >> dummy;
-
-//   faces.resize(numberOfFaces);
-
-//   // Read each face
-//   for (int i = 0; i < numberOfFaces; ++i) {
-//     int numberOfPoints{0};
-//     file >> numberOfPoints;
-//     file >> dummy; // Consume the left parenthesis
-
-//     faces[i].iNodes.resize(numberOfPoints);
-//     for (int j = 0; j < numberOfPoints; ++j) {
-//       file >> faces[i].iNodes[j];
-//     }
-//     file >> dummy; // Consume the right parenthesis
-//     faces[i].index = i;
-//     faces[i].iOwner = -1;
-//     faces[i].iNeighbor = -1;
-//   }
-
-//   file.close();
-// }
 
 // void readOwners(const std::string &ownerFile, std::vector<Face> &faces) {
 //   std::ifstream file(ownerFile);

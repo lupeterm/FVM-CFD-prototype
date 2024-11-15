@@ -22,5 +22,6 @@ public:
   Node *nodes() { return nodes_; }
   void constructNodes() { nodes_ = new Node[nNodes_]; }
   Face *faces() { return faces_; }
+  void constructFaces() { faces_ = new Face[nFaces_]; }
 };
 #endif
