@@ -8,7 +8,7 @@
 
 class Mesh {
 private:
-  std::string caseDir_;
+  std::string caseDir_ = "";
   std::size_t nNodes_ = 0;
   Node *nodes_ = nullptr;
   // std::string caseDirectory_;
