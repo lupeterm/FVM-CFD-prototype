@@ -10,13 +10,9 @@ TEST(ReadingOpenFoamMeshTest, ReadingMeshPointsWorks) {
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
   Mesh fvMesh(caseDirectory);
-  //   std::vector<Node> nodes;
-  //   std::vector<Face> faces;
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
-  //   // cfdReadOpenFoamMesh(nodes, faces, caseDirectory);
-  //   Mesh fvMesh{caseDirectory, nodes, faces};
 
   // --- Assert ---
   // Verify the number of nodes
@@ -103,30 +99,30 @@ TEST(ReadingOpenFoamMeshTest, ReadingMeshFacesWorks) {
   EXPECT_EQ(fvMesh.faces()[3289].iNodes()[2], 1012);
 }
 
-// TEST(ReadingOpenFoamMeshTest, ReadingMeshOwnersWorks) {
-//   // --- Arrange ---
-//   std::string caseDirectory("../../cases/elbow");
-//   std::vector<Node> nodes;
-//   std::vector<Face> faces;
+TEST(ReadingOpenFoamMeshTest, ReadingMeshOwnersWorks) {
+  // --- Arrange ---
+  std::string caseDirectory("../../cases/elbow");
+  readMesh meshReader;
+  Mesh fvMesh(caseDirectory);
 
-//   // --- Act ---
-//   // cfdReadOpenFoamMesh(nodes, faces, caseDirectory);
-//   Mesh fvMesh{caseDirectory, nodes, faces};
+  // -- -Act-- -
+  meshReader.readOpenFoamMesh(fvMesh);
 
-//   // --- Assert ---
-//   // Verify the number of elements
-//   // EXPECT_EQ(fvMesh.numberOfElement(), 918);
-//   EXPECT_EQ(fvMesh.faces()[0].iOwner, 0);
-//   EXPECT_EQ(fvMesh.faces()[1].iOwner, 1);
-//   EXPECT_EQ(fvMesh.faces()[2].iOwner, 2);
-//   EXPECT_EQ(fvMesh.faces()[3].iOwner, 3);
-//   EXPECT_EQ(fvMesh.faces()[4].iOwner, 4);
-//   EXPECT_EQ(fvMesh.faces()[5].iOwner, 5);
-//   EXPECT_EQ(fvMesh.faces()[6].iOwner, 6);
-//   EXPECT_EQ(fvMesh.faces()[7].iOwner, 6);
-//   EXPECT_EQ(fvMesh.faces()[8].iOwner, 7);
-//   EXPECT_EQ(fvMesh.faces()[9].iOwner, 7);
-// }
+  // --- Assert ---
+  // Verify the number of elements
+  EXPECT_EQ(fvMesh.nOwners(), 3290);
+  EXPECT_EQ(fvMesh.nElements(), 918);
+  EXPECT_EQ(fvMesh.faces()[0].iOwner(), 0);
+  EXPECT_EQ(fvMesh.faces()[1].iOwner(), 1);
+  EXPECT_EQ(fvMesh.faces()[2].iOwner(), 2);
+  EXPECT_EQ(fvMesh.faces()[3].iOwner(), 3);
+  EXPECT_EQ(fvMesh.faces()[4].iOwner(), 4);
+  EXPECT_EQ(fvMesh.faces()[5].iOwner(), 5);
+  EXPECT_EQ(fvMesh.faces()[6].iOwner(), 6);
+  EXPECT_EQ(fvMesh.faces()[7].iOwner(), 6);
+  EXPECT_EQ(fvMesh.faces()[8].iOwner(), 7);
+  EXPECT_EQ(fvMesh.faces()[9].iOwner(), 7);
+}
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);

@@ -13,7 +13,7 @@ public:
   void consumeFileHeader(std::ifstream &file);
   void readPointsFile(Mesh &fvMesh);
   void readFacesFile(Mesh &fvMesh);
-  //   void readOwnersFile();
+  void readOwnersFile(Mesh &fvMesh);
   //   void readNeighborsFile();
 };
 #endif

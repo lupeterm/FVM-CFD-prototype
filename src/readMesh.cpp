@@ -8,6 +8,7 @@ void readMesh::readOpenFoamMesh(Mesh &fvMesh) {
   }
   readPointsFile(fvMesh);
   readFacesFile(fvMesh);
+  readOwnersFile(fvMesh);
 }
 
 void readMesh::getDirectory(Mesh &fvMesh) {
@@ -91,56 +92,34 @@ void readMesh::readFacesFile(Mesh &fvMesh) {
   facesFile.close();
 }
 
-// void readOwners(const std::string &ownerFile, std::vector<Face> &faces) {
-//   std::ifstream file(ownerFile);
-//   if (!file.is_open()) {
-//     std::cerr << "Error opening file: " << ownerFile << std::endl;
-//     return;
-//   }
+void readMesh::readOwnersFile(Mesh &fvMesh) {
+  std::string ownersFileName = fvMesh.caseDir() + "/constant/polyMesh/owner";
+  std::ifstream ownersFile(ownersFileName);
+  ifFileOpened(ownersFile, ownersFileName);
+  consumeFileHeader(ownersFile);
 
-//   // Consume the first 18 lines
-//   std::string line;
-//   for (int i = 0; i < 18; ++i) {
-//     std::getline(file, line);
-//   }
+  ownersFile >> fvMesh.nOwners();
 
-//   // Read the number of faces
-//   int numberOfOwners;
-//   file >> numberOfOwners;
-//   std::getline(file, line); // Consume the rest of the line
+  std::string line;
+  std::getline(ownersFile, line); // Consume the rest of the line
 
-//   // Consume the left parenthesis for owners
-//   char dummy;
-//   file >> dummy;
+  // Consume the left parenthesis for owners
+  char dummy;
+  ownersFile >> dummy;
 
-//   int numberOfElements{0};
+  std::size_t maxOwnerIdx{0};
+  std::size_t ownerIdx{0};
+  for (std::size_t i = 0; i < fvMesh.nOwners(); ++i) {
+    ownersFile >> ownerIdx;
+    fvMesh.faces()[i].iOwner() = ownerIdx;
+    if (ownerIdx > maxOwnerIdx) {
+      maxOwnerIdx = ownerIdx;
+    }
+  }
+  fvMesh.nElements() = maxOwnerIdx + 1;
 
-//   // -- Test ---
-//   std::cout << "Number of owners:" << numberOfOwners << std::endl;
-
-//   int OwnerIndex{0};
-//   int maxOwnerIndex{0};
-//   for (int i = 0; i < numberOfOwners; ++i) {
-
-//     file >> OwnerIndex;
-//     faces[i].iOwner = OwnerIndex;
-
-//     if (OwnerIndex > maxOwnerIndex) {
-//       maxOwnerIndex = OwnerIndex;
-//     }
-//     // >> faces[i].iOwner;
-//   }
-
-//   // number of elements = the largest owner index + 1
-//   numberOfElements = maxOwnerIndex + 1;
-
-//   // -- Test ---
-//   std::cout << "Number of elements:" << numberOfElements << std::endl;
-
-//   file.close();
-
-//   // return maxOwnerIndex;
-// }
+  ownersFile.close();
+}
 
 // void cfdReadOpenFoamMesh(std::vector<Node> &nodes, std::vector<Face> &faces,
 //                          std::string caseDirectory) {
