@@ -10,13 +10,18 @@
 // void cfdReadOpenFoamMesh(std::vector<Node> &nodes, std::vector<Face> &faces,
 //                          std::string caseDirectory);
 
-readMesh::readMesh(std::string &caseDir) : caseDir_(caseDir) {}
+// readMesh::readMesh(std::string &caseDir) : caseDir_(caseDir) {}
 
-void readMesh::readOpenFoamMesh(Mesh &fvMesh) {}
+void readMesh::readOpenFoamMesh(Mesh &fvMesh) {
+  if (fvMesh.caseDir().empty()) {
+    getDirectory(fvMesh);
+  }
+  readPointsFle(fvMesh);
+}
 
-void readMesh::getDirectory() {
+void readMesh::getDirectory(Mesh &fvMesh) {
   std::cout << "Enter the case directory: ";
-  std::getline(std::cin, caseDir_);
+  std::getline(std::cin, fvMesh.caseDir());
 }
 
 void readMesh::ifFileOpened(const std::ifstream &file,
@@ -33,11 +38,14 @@ void readMesh::consumeFileHeader(std::ifstream &file) {
   }
 }
 
-void readMesh::readPointsFle() {
-  std::string pointsFileName = caseDir_ + "/constant/polyMesh/points";
+void readMesh::readPointsFle(Mesh &fvMesh) {
+  std::string pointsFileName = fvMesh.caseDir() + "/constant/polyMesh/points";
   std::ifstream pointsFile(pointsFileName);
   ifFileOpened(pointsFile, pointsFileName);
   consumeFileHeader(pointsFile);
+
+  // --- Start to read points data from the file---
+  pointsFile >> fvMesh.nNodes();
 }
 // void readPoints(const std::string &pointsFile, std::vector<Node> &nodes) {
 //   std::ifstream file(pointsFile);

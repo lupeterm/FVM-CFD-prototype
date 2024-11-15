@@ -6,24 +6,14 @@
 
 class readMesh {
 public:
-  readMesh(std::string &caseDir);
-
   void readOpenFoamMesh(Mesh &fvMesh);
 
-  // Private data members
-private:
-  /// @brief case directory
-  std::string caseDir_;
-
-  // Private member functions
-  // private:
-public:
-  void getDirectory();
+  void getDirectory(Mesh &fvMesh);
   void ifFileOpened(const std::ifstream &file, const std::string &fileName);
   void consumeFileHeader(std::ifstream &file);
-  void readPointsFle();
-  void readFacesFile();
-  void readOwnersFile();
-  void readNeighborsFile();
+  void readPointsFle(Mesh &fvMesh);
+  //   void readFacesFile();
+  //   void readOwnersFile();
+  //   void readNeighborsFile();
 };
 #endif
