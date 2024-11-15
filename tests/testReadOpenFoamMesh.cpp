@@ -22,36 +22,34 @@ TEST(ReadingOpenFoamMeshTest, ReadingMeshPointsWorks) {
   //   Mesh fvMesh{caseDirectory, nodes, faces};
 
   // --- Assert ---
-  //   // Verify the number of nodes
+  // Verify the number of nodes
   EXPECT_EQ(fvMesh.nNodes(), 1074);
-  EXPECT_EQ(fvMesh.nodes()[0].x(), 0.0);
-  //   EXPECT_EQ(fvMesh.nodes().size(), 1074);
 
-  //   // Verify the first 3 nodes
-  //   EXPECT_EQ(fvMesh.nodes()[0].centroid[0], 32);
-  //   EXPECT_EQ(fvMesh.nodes()[0].centroid[1], 16);
-  //   EXPECT_EQ(fvMesh.nodes()[0].centroid[2], 0.9377383239);
+  // Verify the first 3 nodes
+  EXPECT_EQ(fvMesh.nodes()[0].x(), 32);
+  EXPECT_EQ(fvMesh.nodes()[0].y(), 16);
+  EXPECT_EQ(fvMesh.nodes()[0].z(), 0.9377383239);
 
-  //   EXPECT_EQ(fvMesh.nodes()[1].centroid[0], 33.9429245);
-  //   EXPECT_EQ(fvMesh.nodes()[1].centroid[1], 16.11834526);
-  //   EXPECT_EQ(fvMesh.nodes()[1].centroid[2], 0.9377383239);
+  EXPECT_EQ(fvMesh.nodes()[1].x(), 33.9429245);
+  EXPECT_EQ(fvMesh.nodes()[1].y(), 16.11834526);
+  EXPECT_EQ(fvMesh.nodes()[1].z(), 0.9377383239);
 
-  //   EXPECT_EQ(fvMesh.nodes()[2].centroid[0], 35.84160614);
-  //   EXPECT_EQ(fvMesh.nodes()[2].centroid[1], 16.46798134);
-  //   EXPECT_EQ(fvMesh.nodes()[2].centroid[2], 0.9377383239);
+  EXPECT_EQ(fvMesh.nodes()[2].x(), 35.84160614);
+  EXPECT_EQ(fvMesh.nodes()[2].y(), 16.46798134);
+  EXPECT_EQ(fvMesh.nodes()[2].z(), 0.9377383239);
 
-  //   // Verify the last 3 nodes
-  //   EXPECT_EQ(fvMesh.nodes()[1071].centroid[0], 47.07066231);
-  //   EXPECT_EQ(fvMesh.nodes()[1071].centroid[1], 11.31027148);
-  //   EXPECT_EQ(fvMesh.nodes()[1071].centroid[2], -0.9377383239);
+  // Verify the last 3 nodes
+  EXPECT_EQ(fvMesh.nodes()[1071].x(), 47.07066231);
+  EXPECT_EQ(fvMesh.nodes()[1071].y(), 11.31027148);
+  EXPECT_EQ(fvMesh.nodes()[1071].z(), -0.9377383239);
 
-  //   EXPECT_EQ(fvMesh.nodes()[1072].centroid[0], 54.24871481);
-  //   EXPECT_EQ(fvMesh.nodes()[1072].centroid[1], 14.34322867);
-  //   EXPECT_EQ(fvMesh.nodes()[1072].centroid[2], -0.9377383239);
+  EXPECT_EQ(fvMesh.nodes()[1072].x(), 54.24871481);
+  EXPECT_EQ(fvMesh.nodes()[1072].y(), 14.34322867);
+  EXPECT_EQ(fvMesh.nodes()[1072].z(), -0.9377383239);
 
-  //   EXPECT_EQ(fvMesh.nodes()[1073].centroid[0], 54.15826673);
-  //   EXPECT_EQ(fvMesh.nodes()[1073].centroid[1], 15.64273318);
-  //   EXPECT_EQ(fvMesh.nodes()[1073].centroid[2], -0.9377383239);
+  EXPECT_EQ(fvMesh.nodes()[1073].x(), 54.15826673);
+  EXPECT_EQ(fvMesh.nodes()[1073].y(), 15.64273318);
+  EXPECT_EQ(fvMesh.nodes()[1073].z(), -0.9377383239);
 }
 
 // TEST(ReadingOpenFoamMeshTest, ReadingMeshFacesWorks) {

@@ -44,7 +44,7 @@ void readMesh::readPointsFle(Mesh &fvMesh) {
   ifFileOpened(pointsFile, pointsFileName);
   consumeFileHeader(pointsFile);
 
-  // --- Start to read points data from the file---
+  // --- Start to read points data from the file ---
   pointsFile >> fvMesh.nNodes();
 
   std::string line;
@@ -52,42 +52,20 @@ void readMesh::readPointsFle(Mesh &fvMesh) {
   std::getline(pointsFile, line); // To consume the next line
 
   fvMesh.constructNodes();
+
+  // Read x, y, z coordinates to mesh nodes
+  for (std::size_t i = 0; i < fvMesh.nNodes(); ++i) {
+    char dummy;
+    pointsFile >> dummy; // To consume the left parenthesis
+
+    pointsFile >> fvMesh.nodes()[i].x() >> fvMesh.nodes()[i].y() >>
+        fvMesh.nodes()[i].z();
+
+    pointsFile >> dummy; // To consume the right parenthesis
+  }
+
+  pointsFile.close();
 }
-// void readPoints(const std::string &pointsFile, std::vector<Node> &nodes) {
-//   std::ifstream file(pointsFile);
-//   if (!file.is_open()) {
-//     std::cerr << "Error opening file: " << pointsFile << std::endl;
-//     return;
-//   }
-
-//   // Consume the first 18 lines of the points file
-//   std::string line;
-//   for (int i = 0; i < 18; ++i) {
-//     std::getline(file, line);
-//   }
-
-//   int numberOfPoins(0);
-//   file >> numberOfPoins;
-
-//   std::getline(file, line); // Consume the rest of the line
-//   std::getline(file, line); // To consume the next line
-
-//   nodes.resize(numberOfPoins);
-//   for (int i = 0; i < numberOfPoins; ++i) {
-//     char dummy;
-//     file >> dummy; // To consume the left parenthesis
-//     double x(0.0), y(0.0), z(0.0);
-//     file >> x >> y >> z;
-//     file >> dummy; // To consume the right parenthesis
-
-//     nodes[i].centroid = {x, y, z};
-//     nodes[i].index = i;
-//     nodes[i].iFaces = {};
-//     nodes[i].iElements = {};
-//   }
-
-//   file.close();
-// }
 
 // void readFaces(const std::string &facesFile, std::vector<Face> &faces) {
 //   std::ifstream file(facesFile);
