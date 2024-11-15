@@ -3,7 +3,6 @@
 
 class Node {
 public:
-  //   Node(double X, double Y, double Z) : x_(X), y_(Y), z_(Z){};
   double &x() { return x_; }
   double &y() { return y_; }
   double &z() { return z_; }

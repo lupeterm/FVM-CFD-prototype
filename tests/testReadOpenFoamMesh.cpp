@@ -2,10 +2,7 @@
 
 #include "Mesh.h"
 #include "readMesh.h"
-#include <iomanip>
-#include <iostream>
 #include <string>
-#include <vector>
 
 TEST(ReadingOpenFoamMeshTest, ReadingMeshPointsWorks) {
 
