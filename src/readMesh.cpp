@@ -46,6 +46,12 @@ void readMesh::readPointsFle(Mesh &fvMesh) {
 
   // --- Start to read points data from the file---
   pointsFile >> fvMesh.nNodes();
+
+  std::string line;
+  std::getline(pointsFile, line); // Consume the rest of the line
+  std::getline(pointsFile, line); // To consume the next line
+
+  fvMesh.constructNodes();
 }
 // void readPoints(const std::string &pointsFile, std::vector<Node> &nodes) {
 //   std::ifstream file(pointsFile);

@@ -24,6 +24,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingMeshPointsWorks) {
   // --- Assert ---
   //   // Verify the number of nodes
   EXPECT_EQ(fvMesh.nNodes(), 1074);
+  EXPECT_EQ(fvMesh.nodes()[0].x(), 0.0);
   //   EXPECT_EQ(fvMesh.nodes().size(), 1074);
 
   //   // Verify the first 3 nodes
