@@ -7,6 +7,7 @@ void readMesh::readOpenFoamMesh(Mesh &fvMesh) {
     getDirectory(fvMesh);
   }
   readPointsFile(fvMesh);
+  readFacesFile(fvMesh);
 }
 
 void readMesh::getDirectory(Mesh &fvMesh) {
@@ -55,6 +56,16 @@ void readMesh::readPointsFile(Mesh &fvMesh) {
   }
 
   pointsFile.close();
+}
+
+void readMesh::readFacesFile(Mesh &fvMesh) {
+  std::string facesFileName = fvMesh.caseDir() + "/constant/polyMesh/faces";
+  std::ifstream facesFile(facesFileName);
+  ifFileOpened(facesFile, facesFileName);
+  consumeFileHeader(facesFile);
+
+  // --- Start to read points data from the file ---
+  facesFile >> fvMesh.nFaces();
 }
 
 // void readFaces(const std::string &facesFile, std::vector<Face> &faces) {

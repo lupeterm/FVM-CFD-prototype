@@ -49,60 +49,59 @@ TEST(ReadingOpenFoamMeshTest, ReadingMeshPointsWorks) {
   EXPECT_EQ(fvMesh.nodes()[1073].z(), -0.9377383239);
 }
 
-// TEST(ReadingOpenFoamMeshTest, ReadingMeshFacesWorks) {
+TEST(ReadingOpenFoamMeshTest, ReadingMeshFacesWorks) {
 
-//   // --- Arrange ---
-//   std::string caseDirectory("../../cases/elbow");
-//   std::vector<Node> nodes;
-//   std::vector<Face> faces;
+  // --- Arrange ---
+  std::string caseDirectory("../../cases/elbow");
+  readMesh meshReader;
+  Mesh fvMesh(caseDirectory);
 
-//   // --- Act ---
-//   // cfdReadOpenFoamMesh(nodes, faces, caseDirectory);
-//   Mesh fvMesh{caseDirectory, nodes, faces};
+  // -- -Act-- -
+  meshReader.readOpenFoamMesh(fvMesh);
 
-//   // --- Assert ---
-//   // Verify the number of faces
-//   EXPECT_EQ(fvMesh.faces().size(), 3290);
+  // --- Assert ---
+  // Verify the number of faces
+  EXPECT_EQ(fvMesh.nFaces(), 3290);
 
-//   // Verify the 1st face
-//   EXPECT_EQ(fvMesh.faces()[0].iNodes.size(), 4);
-//   EXPECT_EQ(fvMesh.faces()[0].iNodes[0], 36);
-//   EXPECT_EQ(fvMesh.faces()[0].iNodes[1], 573);
-//   EXPECT_EQ(fvMesh.faces()[0].iNodes[2], 589);
-//   EXPECT_EQ(fvMesh.faces()[0].iNodes[3], 52);
+  //   // Verify the 1st face
+  //   EXPECT_EQ(fvMesh.faces()[0].iNodes.size(), 4);
+  //   EXPECT_EQ(fvMesh.faces()[0].iNodes[0], 36);
+  //   EXPECT_EQ(fvMesh.faces()[0].iNodes[1], 573);
+  //   EXPECT_EQ(fvMesh.faces()[0].iNodes[2], 589);
+  //   EXPECT_EQ(fvMesh.faces()[0].iNodes[3], 52);
 
-//   // Verify the 2nd face
-//   EXPECT_EQ(fvMesh.faces()[1].iNodes.size(), 4);
-//   EXPECT_EQ(fvMesh.faces()[1].iNodes[0], 41);
-//   EXPECT_EQ(fvMesh.faces()[1].iNodes[1], 578);
-//   EXPECT_EQ(fvMesh.faces()[1].iNodes[2], 634);
-//   EXPECT_EQ(fvMesh.faces()[1].iNodes[3], 97);
+  //   // Verify the 2nd face
+  //   EXPECT_EQ(fvMesh.faces()[1].iNodes.size(), 4);
+  //   EXPECT_EQ(fvMesh.faces()[1].iNodes[0], 41);
+  //   EXPECT_EQ(fvMesh.faces()[1].iNodes[1], 578);
+  //   EXPECT_EQ(fvMesh.faces()[1].iNodes[2], 634);
+  //   EXPECT_EQ(fvMesh.faces()[1].iNodes[3], 97);
 
-//   // Verify the 3rd face
-//   EXPECT_EQ(fvMesh.faces()[2].iNodes.size(), 4);
-//   EXPECT_EQ(fvMesh.faces()[2].iNodes[0], 44);
-//   EXPECT_EQ(fvMesh.faces()[2].iNodes[1], 81);
-//   EXPECT_EQ(fvMesh.faces()[2].iNodes[2], 618);
-//   EXPECT_EQ(fvMesh.faces()[2].iNodes[3], 581);
+  //   // Verify the 3rd face
+  //   EXPECT_EQ(fvMesh.faces()[2].iNodes.size(), 4);
+  //   EXPECT_EQ(fvMesh.faces()[2].iNodes[0], 44);
+  //   EXPECT_EQ(fvMesh.faces()[2].iNodes[1], 81);
+  //   EXPECT_EQ(fvMesh.faces()[2].iNodes[2], 618);
+  //   EXPECT_EQ(fvMesh.faces()[2].iNodes[3], 581);
 
-//   // Verify the third from the last face
-//   EXPECT_EQ(fvMesh.faces()[3287].iNodes.size(), 3);
-//   EXPECT_EQ(fvMesh.faces()[3287].iNodes[0], 1072);
-//   EXPECT_EQ(fvMesh.faces()[3287].iNodes[1], 945);
-//   EXPECT_EQ(fvMesh.faces()[3287].iNodes[2], 1073);
+  //   // Verify the third from the last face
+  //   EXPECT_EQ(fvMesh.faces()[3287].iNodes.size(), 3);
+  //   EXPECT_EQ(fvMesh.faces()[3287].iNodes[0], 1072);
+  //   EXPECT_EQ(fvMesh.faces()[3287].iNodes[1], 945);
+  //   EXPECT_EQ(fvMesh.faces()[3287].iNodes[2], 1073);
 
-//   // Verify the third from the last face
-//   EXPECT_EQ(fvMesh.faces()[3288].iNodes.size(), 3);
-//   EXPECT_EQ(fvMesh.faces()[3288].iNodes[0], 536);
-//   EXPECT_EQ(fvMesh.faces()[3288].iNodes[1], 475);
-//   EXPECT_EQ(fvMesh.faces()[3288].iNodes[2], 408);
+  //   // Verify the third from the last face
+  //   EXPECT_EQ(fvMesh.faces()[3288].iNodes.size(), 3);
+  //   EXPECT_EQ(fvMesh.faces()[3288].iNodes[0], 536);
+  //   EXPECT_EQ(fvMesh.faces()[3288].iNodes[1], 475);
+  //   EXPECT_EQ(fvMesh.faces()[3288].iNodes[2], 408);
 
-//   // Verify the third from the last face
-//   EXPECT_EQ(fvMesh.faces()[3289].iNodes.size(), 3);
-//   EXPECT_EQ(fvMesh.faces()[3289].iNodes[0], 1073);
-//   EXPECT_EQ(fvMesh.faces()[3289].iNodes[1], 945);
-//   EXPECT_EQ(fvMesh.faces()[3289].iNodes[2], 1012);
-// }
+  //   // Verify the third from the last face
+  //   EXPECT_EQ(fvMesh.faces()[3289].iNodes.size(), 3);
+  //   EXPECT_EQ(fvMesh.faces()[3289].iNodes[0], 1073);
+  //   EXPECT_EQ(fvMesh.faces()[3289].iNodes[1], 945);
+  //   EXPECT_EQ(fvMesh.faces()[3289].iNodes[2], 1012);
+}
 
 // TEST(ReadingOpenFoamMeshTest, ReadingMeshOwnersWorks) {
 //   // --- Arrange ---
