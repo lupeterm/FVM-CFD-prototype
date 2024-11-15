@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "mesh.h"
+#include "Mesh.h"
 #include "readMesh.h"
 #include <iomanip>
 #include <iostream>

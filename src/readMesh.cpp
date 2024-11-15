@@ -10,6 +10,10 @@
 // void cfdReadOpenFoamMesh(std::vector<Node> &nodes, std::vector<Face> &faces,
 //                          std::string caseDirectory);
 
+readMesh::readMesh(std::string &caseDir) : caseDir_(caseDir) {}
+
+void readMesh::readOpenFoamMesh(Mesh &fvMesh) {}
+
 std::string getDirectory() {
   std::string caseDirectory;
   std::cout << "Enter the case directory: ";

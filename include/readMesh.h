@@ -1,19 +1,19 @@
 #ifndef READ_MESH_H
 #define READ_MESH_H
 
-#include "mesh.h"
+#include "Mesh.h"
 #include <string>
-#include <vector>
 
 class readMesh {
 public:
-  readMesh();
+  readMesh(std::string &caseDir);
 
   void readOpenFoamMesh(Mesh &fvMesh);
 
   // Private data members
 private:
-  std::string caseDir;
+  /// @brief case directory
+  std::string caseDir_;
 
   // Private member functions
 private:
@@ -23,7 +23,4 @@ private:
   void readNeighborsFile();
   void consumeFileHeader();
 };
-// void cfdReadOpenFoamMesh(std::vector<Node> &nodes, std::vector<Face> &faces,
-//                          std::string caseDirectory = "");
-
 #endif
