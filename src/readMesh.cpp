@@ -55,6 +55,8 @@ void readMesh::readPointsFile(Mesh &fvMesh) {
         fvMesh.nodes()[i].z();
 
     pointsFile >> dummy; // To consume the right parenthesis
+
+    fvMesh.nodes()[i].index() = i;
   }
 
   pointsFile.close();
@@ -88,6 +90,8 @@ void readMesh::readFacesFile(Mesh &fvMesh) {
       facesFile >> fvMesh.faces()[i].iNodes()[j];
     }
     facesFile >> dummy; // Consume the right parenthesis
+
+    fvMesh.faces()[i].index() = i;
   }
 
   facesFile.close();
