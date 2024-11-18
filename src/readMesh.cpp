@@ -26,10 +26,10 @@ void readMesh::ifFileOpened(const std::ifstream &file,
   }
 }
 
-void readMesh::consumeFileHeader(std::ifstream &file, std::size_t nLines) {
+void readMesh::discardFileHeader(std::ifstream &file, std::size_t nLines) {
   std::string line;
   for (int i = 0; i < nLines; ++i) {
-    std::getline(file, line);
+    file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   }
 }
 
@@ -37,7 +37,7 @@ void readMesh::readPointsFile(Mesh &fvMesh) {
   std::string pointsFileName = fvMesh.caseDir() + "/constant/polyMesh/points";
   std::ifstream pointsFile(pointsFileName);
   ifFileOpened(pointsFile, pointsFileName);
-  consumeFileHeader(pointsFile);
+  discardFileHeader(pointsFile);
 
   // --- Start to read points data from the file ---
   pointsFile >> fvMesh.nNodes();
@@ -52,13 +52,13 @@ void readMesh::readPointsFile(Mesh &fvMesh) {
 
   // Read x, y, z coordinates to mesh nodes
   for (std::size_t i = 0; i < fvMesh.nNodes(); ++i) {
-    char dummy;
-    pointsFile >> dummy; // To consume the left parenthesis
+    pointsFile.ignore(1); // Discard the left parenthesis
 
     pointsFile >> fvMesh.nodes()[i].x() >> fvMesh.nodes()[i].y() >>
         fvMesh.nodes()[i].z();
 
-    pointsFile >> dummy; // To consume the right parenthesis
+    // Discard the rest of the line
+    pointsFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
     fvMesh.nodes()[i].index() = i;
   }
@@ -70,7 +70,7 @@ void readMesh::readFacesFile(Mesh &fvMesh) {
   std::string facesFileName = fvMesh.caseDir() + "/constant/polyMesh/faces";
   std::ifstream facesFile(facesFileName);
   ifFileOpened(facesFile, facesFileName);
-  consumeFileHeader(facesFile);
+  discardFileHeader(facesFile);
 
   // --- Start to read faces data from the file ---
   facesFile >> fvMesh.nFaces();
@@ -104,7 +104,7 @@ void readMesh::readOwnersFile(Mesh &fvMesh) {
   std::string ownersFileName = fvMesh.caseDir() + "/constant/polyMesh/owner";
   std::ifstream ownersFile(ownersFileName);
   ifFileOpened(ownersFile, ownersFileName);
-  consumeFileHeader(ownersFile);
+  discardFileHeader(ownersFile);
 
   ownersFile >> fvMesh.nOwners();
 
@@ -133,7 +133,7 @@ void readMesh::readNeighborsFile(Mesh &fvMesh) {
       fvMesh.caseDir() + "/constant/polyMesh/neighbour";
   std::ifstream neighborsFile(neighborsFileName);
   ifFileOpened(neighborsFile, neighborsFileName);
-  consumeFileHeader(neighborsFile);
+  discardFileHeader(neighborsFile);
 
   std::size_t nNeighbors{0};
   neighborsFile >> nNeighbors;
@@ -158,7 +158,7 @@ void readMesh::readBoundaryFile(Mesh &fvMesh) {
 
   std::ifstream boundaryFile(boundaryFileName);
   ifFileOpened(boundaryFile, boundaryFileName);
-  consumeFileHeader(boundaryFile, 17);
+  discardFileHeader(boundaryFile, 17);
 
   boundaryFile >> fvMesh.nBoundaries();
 
