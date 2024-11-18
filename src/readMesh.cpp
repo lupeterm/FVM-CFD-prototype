@@ -129,7 +129,20 @@ void readMesh::readNeighborsFile(Mesh &fvMesh) {
   ifFileOpened(neighborsFile, neighborsFileName);
   consumeFileHeader(neighborsFile);
 
-  neighborsFile >> fvMesh.nNeighbors();
+  std::size_t nNeighbors{0};
+  neighborsFile >> nNeighbors;
+  std::string line;
+  std::getline(neighborsFile, line); // Consume the rest of the line
+
+  // Consume the left parenthesis for owners
+  char dummy;
+  neighborsFile >> dummy;
+
+  for (std::size_t i = 0; i < nNeighbors; ++i) {
+    neighborsFile >> fvMesh.faces()[i].iNeighbor();
+  }
+
+  fvMesh.nInteriorFaces() = nNeighbors;
 }
 // void cfdReadOpenFoamMesh(std::vector<Node> &nodes, std::vector<Face> &faces,
 //                          std::string caseDirectory) {

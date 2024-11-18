@@ -135,7 +135,17 @@ TEST(ReadingOpenFoamMeshTest, ReadingNeighborsWorks) {
 
   // --- Assert ---
   // Verify the number of elements
-  EXPECT_EQ(fvMesh.nNeighbors(), 1300);
+  EXPECT_EQ(fvMesh.nInteriorFaces(), 1300);
+  EXPECT_EQ(fvMesh.faces()[0].iNeighbor(), 22);
+  EXPECT_EQ(fvMesh.faces()[1].iNeighbor(), 68);
+  EXPECT_EQ(fvMesh.faces()[2].iNeighbor(), 29);
+  EXPECT_EQ(fvMesh.faces()[3].iNeighbor(), 96);
+  EXPECT_EQ(fvMesh.faces()[4].iNeighbor(), 31);
+  EXPECT_EQ(fvMesh.faces()[5].iNeighbor(), 34);
+  EXPECT_EQ(fvMesh.faces()[6].iNeighbor(), 38);
+  EXPECT_EQ(fvMesh.faces()[7].iNeighbor(), 40);
+  EXPECT_EQ(fvMesh.faces()[8].iNeighbor(), 42);
+  EXPECT_EQ(fvMesh.faces()[9].iNeighbor(), 45);
 }
 
 int main(int argc, char **argv) {
