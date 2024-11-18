@@ -9,6 +9,7 @@ void readMesh::readOpenFoamMesh(Mesh &fvMesh) {
   readPointsFile(fvMesh);
   readFacesFile(fvMesh);
   readOwnersFile(fvMesh);
+  readNeighborsFile(fvMesh);
 }
 
 void readMesh::getDirectory(Mesh &fvMesh) {
@@ -121,6 +122,15 @@ void readMesh::readOwnersFile(Mesh &fvMesh) {
   ownersFile.close();
 }
 
+void readMesh::readNeighborsFile(Mesh &fvMesh) {
+  std::string neighborsFileName =
+      fvMesh.caseDir() + "/constant/polyMesh/neighbour";
+  std::ifstream neighborsFile(neighborsFileName);
+  ifFileOpened(neighborsFile, neighborsFileName);
+  consumeFileHeader(neighborsFile);
+
+  neighborsFile >> fvMesh.nNeighbors();
+}
 // void cfdReadOpenFoamMesh(std::vector<Node> &nodes, std::vector<Face> &faces,
 //                          std::string caseDirectory) {
 //   if (caseDirectory.empty()) {

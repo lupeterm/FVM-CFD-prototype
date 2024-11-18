@@ -14,6 +14,6 @@ public:
   void readPointsFile(Mesh &fvMesh);
   void readFacesFile(Mesh &fvMesh);
   void readOwnersFile(Mesh &fvMesh);
-  //   void readNeighborsFile();
+  void readNeighborsFile(Mesh &fvMesh);
 };
 #endif

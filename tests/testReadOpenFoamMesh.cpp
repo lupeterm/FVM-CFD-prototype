@@ -4,7 +4,7 @@
 #include "readMesh.h"
 #include <string>
 
-TEST(ReadingOpenFoamMeshTest, ReadingMeshPointsWorks) {
+TEST(ReadingOpenFoamMeshTest, ReadingPointsWorks) {
 
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
@@ -45,7 +45,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingMeshPointsWorks) {
   EXPECT_EQ(fvMesh.nodes()[1073].z(), -0.9377383239);
 }
 
-TEST(ReadingOpenFoamMeshTest, ReadingMeshFacesWorks) {
+TEST(ReadingOpenFoamMeshTest, ReadingFacesWorks) {
 
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
@@ -99,7 +99,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingMeshFacesWorks) {
   EXPECT_EQ(fvMesh.faces()[3289].iNodes()[2], 1012);
 }
 
-TEST(ReadingOpenFoamMeshTest, ReadingMeshOwnersWorks) {
+TEST(ReadingOpenFoamMeshTest, ReadingOwnersWorks) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
@@ -122,6 +122,20 @@ TEST(ReadingOpenFoamMeshTest, ReadingMeshOwnersWorks) {
   EXPECT_EQ(fvMesh.faces()[7].iOwner(), 6);
   EXPECT_EQ(fvMesh.faces()[8].iOwner(), 7);
   EXPECT_EQ(fvMesh.faces()[9].iOwner(), 7);
+}
+
+TEST(ReadingOpenFoamMeshTest, ReadingNeighborsWorks) {
+  // --- Arrange ---
+  std::string caseDirectory("../../cases/elbow");
+  readMesh meshReader;
+  Mesh fvMesh(caseDirectory);
+
+  // -- -Act-- -
+  meshReader.readOpenFoamMesh(fvMesh);
+
+  // --- Assert ---
+  // Verify the number of elements
+  EXPECT_EQ(fvMesh.nNeighbors(), 1300);
 }
 
 int main(int argc, char **argv) {
