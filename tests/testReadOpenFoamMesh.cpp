@@ -109,9 +109,10 @@ TEST(ReadingOpenFoamMeshTest, ReadingOwnersWorks) {
   meshReader.readOpenFoamMesh(fvMesh);
 
   // --- Assert ---
-  // Verify the number of elements
   EXPECT_EQ(fvMesh.nOwners(), 3290);
   EXPECT_EQ(fvMesh.nElements(), 918);
+
+  // Verify the first 10 entries in the owner file
   EXPECT_EQ(fvMesh.faces()[0].iOwner(), 0);
   EXPECT_EQ(fvMesh.faces()[1].iOwner(), 1);
   EXPECT_EQ(fvMesh.faces()[2].iOwner(), 2);
@@ -122,6 +123,18 @@ TEST(ReadingOpenFoamMeshTest, ReadingOwnersWorks) {
   EXPECT_EQ(fvMesh.faces()[7].iOwner(), 6);
   EXPECT_EQ(fvMesh.faces()[8].iOwner(), 7);
   EXPECT_EQ(fvMesh.faces()[9].iOwner(), 7);
+
+  // Verify the last 10 entries in the owner file
+  EXPECT_EQ(fvMesh.faces()[3280].iOwner(), 913);
+  EXPECT_EQ(fvMesh.faces()[3281].iOwner(), 913);
+  EXPECT_EQ(fvMesh.faces()[3282].iOwner(), 914);
+  EXPECT_EQ(fvMesh.faces()[3283].iOwner(), 914);
+  EXPECT_EQ(fvMesh.faces()[3284].iOwner(), 915);
+  EXPECT_EQ(fvMesh.faces()[3285].iOwner(), 915);
+  EXPECT_EQ(fvMesh.faces()[3286].iOwner(), 916);
+  EXPECT_EQ(fvMesh.faces()[3287].iOwner(), 916);
+  EXPECT_EQ(fvMesh.faces()[3288].iOwner(), 917);
+  EXPECT_EQ(fvMesh.faces()[3289].iOwner(), 917);
 }
 
 TEST(ReadingOpenFoamMeshTest, ReadingNeighborsWorks) {
@@ -134,8 +147,9 @@ TEST(ReadingOpenFoamMeshTest, ReadingNeighborsWorks) {
   meshReader.readOpenFoamMesh(fvMesh);
 
   // --- Assert ---
-  // Verify the number of elements
   EXPECT_EQ(fvMesh.nInteriorFaces(), 1300);
+
+  // Verify the first 10 entries in the neighbor file
   EXPECT_EQ(fvMesh.faces()[0].iNeighbor(), 22);
   EXPECT_EQ(fvMesh.faces()[1].iNeighbor(), 68);
   EXPECT_EQ(fvMesh.faces()[2].iNeighbor(), 29);
@@ -146,6 +160,18 @@ TEST(ReadingOpenFoamMeshTest, ReadingNeighborsWorks) {
   EXPECT_EQ(fvMesh.faces()[7].iNeighbor(), 40);
   EXPECT_EQ(fvMesh.faces()[8].iNeighbor(), 42);
   EXPECT_EQ(fvMesh.faces()[9].iNeighbor(), 45);
+
+  // Verify the last 10 entries in the neighbor file
+  EXPECT_EQ(fvMesh.faces()[1290].iNeighbor(), 910);
+  EXPECT_EQ(fvMesh.faces()[1291].iNeighbor(), 911);
+  EXPECT_EQ(fvMesh.faces()[1292].iNeighbor(), 914);
+  EXPECT_EQ(fvMesh.faces()[1293].iNeighbor(), 912);
+  EXPECT_EQ(fvMesh.faces()[1294].iNeighbor(), 916);
+  EXPECT_EQ(fvMesh.faces()[1295].iNeighbor(), 915);
+  EXPECT_EQ(fvMesh.faces()[1296].iNeighbor(), 917);
+  EXPECT_EQ(fvMesh.faces()[1297].iNeighbor(), 915);
+  EXPECT_EQ(fvMesh.faces()[1298].iNeighbor(), 916);
+  EXPECT_EQ(fvMesh.faces()[1299].iNeighbor(), 917);
 }
 
 int main(int argc, char **argv) {

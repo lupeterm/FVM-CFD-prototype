@@ -147,6 +147,7 @@ void readMesh::readNeighborsFile(Mesh &fvMesh) {
   }
 
   fvMesh.nInteriorFaces() = nNeighbors;
+  neighborsFile.close();
 }
 // void cfdReadOpenFoamMesh(std::vector<Node> &nodes, std::vector<Face> &faces,
 //                          std::string caseDirectory) {
