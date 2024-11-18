@@ -26,7 +26,7 @@ void readMesh::ifFileOpened(const std::ifstream &file,
   }
 }
 
-void readMesh::discardFileHeader(std::ifstream &file, std::size_t nLines) {
+void readMesh::discardLines(std::ifstream &file, std::size_t nLines) {
   std::string line;
   for (int i = 0; i < nLines; ++i) {
     file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -37,16 +37,15 @@ void readMesh::readPointsFile(Mesh &fvMesh) {
   std::string pointsFileName = fvMesh.caseDir() + "/constant/polyMesh/points";
   std::ifstream pointsFile(pointsFileName);
   ifFileOpened(pointsFile, pointsFileName);
-  discardFileHeader(pointsFile);
+
+  // Discard the file header
+  discardLines(pointsFile, 18);
 
   // --- Start to read points data from the file ---
   pointsFile >> fvMesh.nNodes();
 
-  // Discard the rest of the line
-  pointsFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-  // Discard the next line
-  pointsFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+  // Discard the rest of the line and the next line
+  discardLines(pointsFile, 2);
 
   fvMesh.constructNodes();
 
@@ -70,16 +69,15 @@ void readMesh::readFacesFile(Mesh &fvMesh) {
   std::string facesFileName = fvMesh.caseDir() + "/constant/polyMesh/faces";
   std::ifstream facesFile(facesFileName);
   ifFileOpened(facesFile, facesFileName);
-  discardFileHeader(facesFile);
+
+  // Discard the file header
+  discardLines(facesFile, 18);
 
   // --- Start to read faces data from the file ---
   facesFile >> fvMesh.nFaces();
 
-  // Discard the rest of the line
-  facesFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-  // Discard the next line
-  facesFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+  // Discard the rest of the line and the next line
+  discardLines(facesFile, 2);
 
   fvMesh.constructFaces();
 
@@ -104,15 +102,14 @@ void readMesh::readOwnersFile(Mesh &fvMesh) {
   std::string ownersFileName = fvMesh.caseDir() + "/constant/polyMesh/owner";
   std::ifstream ownersFile(ownersFileName);
   ifFileOpened(ownersFile, ownersFileName);
-  discardFileHeader(ownersFile);
+
+  // Discard the file header
+  discardLines(ownersFile, 18);
 
   ownersFile >> fvMesh.nOwners();
 
-  // Discard the rest of the line
-  ownersFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-  // Discard the next line
-  ownersFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+  // Discard the rest of the line and the next line
+  discardLines(ownersFile, 2);
 
   std::size_t maxOwnerIdx{0};
   std::size_t ownerIdx{0};
@@ -133,16 +130,15 @@ void readMesh::readNeighborsFile(Mesh &fvMesh) {
       fvMesh.caseDir() + "/constant/polyMesh/neighbour";
   std::ifstream neighborsFile(neighborsFileName);
   ifFileOpened(neighborsFile, neighborsFileName);
-  discardFileHeader(neighborsFile);
+
+  // Discard the file header
+  discardLines(neighborsFile, 18);
 
   std::size_t nNeighbors{0};
   neighborsFile >> nNeighbors;
 
-  // Discard the rest of the line
-  neighborsFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-  // Discard the next line
-  neighborsFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+  // Discard the rest of the line and the next line
+  discardLines(neighborsFile, 2);
 
   for (std::size_t i = 0; i < nNeighbors; ++i) {
     neighborsFile >> fvMesh.faces()[i].iNeighbor();
@@ -158,15 +154,14 @@ void readMesh::readBoundaryFile(Mesh &fvMesh) {
 
   std::ifstream boundaryFile(boundaryFileName);
   ifFileOpened(boundaryFile, boundaryFileName);
-  discardFileHeader(boundaryFile, 17);
+
+  // Discard the file header
+  discardLines(boundaryFile, 17);
 
   boundaryFile >> fvMesh.nBoundaries();
 
-  // Discard the rest of the line
-  boundaryFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-  // Discard the next line
-  boundaryFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+  // Discard the rest of the line and the next line
+  discardLines(boundaryFile, 2);
 
   fvMesh.constructBoundaries();
   // for (std::size_t i = 0; i < fvMesh.nBoundaries(); ++i) {

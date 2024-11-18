@@ -10,7 +10,7 @@ public:
 
   void getDirectory(Mesh &fvMesh);
   void ifFileOpened(const std::ifstream &file, const std::string &fileName);
-  void discardFileHeader(std::ifstream &file, std::size_t nLines = 18);
+  void discardLines(std::ifstream &file, std::size_t nLines = 1);
   void readPointsFile(Mesh &fvMesh);
   void readFacesFile(Mesh &fvMesh);
   void readOwnersFile(Mesh &fvMesh);
