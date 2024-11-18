@@ -10,6 +10,7 @@ void readMesh::readOpenFoamMesh(Mesh &fvMesh) {
   readFacesFile(fvMesh);
   readOwnersFile(fvMesh);
   readNeighborsFile(fvMesh);
+  readBoundaryFile(fvMesh);
 }
 
 void readMesh::getDirectory(Mesh &fvMesh) {
@@ -24,9 +25,9 @@ void readMesh::ifFileOpened(const std::ifstream &file,
   }
 }
 
-void readMesh::consumeFileHeader(std::ifstream &file) {
+void readMesh::consumeFileHeader(std::ifstream &file, std::size_t nLines) {
   std::string line;
-  for (int i = 0; i < 18; ++i) {
+  for (int i = 0; i < nLines; ++i) {
     std::getline(file, line);
   }
 }
@@ -149,6 +150,20 @@ void readMesh::readNeighborsFile(Mesh &fvMesh) {
   fvMesh.nInteriorFaces() = nNeighbors;
   neighborsFile.close();
 }
+
+void readMesh::readBoundaryFile(Mesh &fvMesh) {
+  std::string boundaryFileName =
+      fvMesh.caseDir() + "/constant/polyMesh/boundary";
+
+  std::ifstream boundaryFile(boundaryFileName);
+  ifFileOpened(boundaryFile, boundaryFileName);
+  consumeFileHeader(boundaryFile, 17);
+
+  boundaryFile >> fvMesh.nBoundaries();
+
+  // for (std::size_t i = 0; )
+}
+
 // void cfdReadOpenFoamMesh(std::vector<Node> &nodes, std::vector<Face> &faces,
 //                          std::string caseDirectory) {
 //   if (caseDirectory.empty()) {
