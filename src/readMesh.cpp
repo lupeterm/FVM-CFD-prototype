@@ -1,6 +1,7 @@
 #include "readMesh.h"
 #include <fstream>
 #include <iostream>
+#include <limits>
 
 void readMesh::readOpenFoamMesh(Mesh &fvMesh) {
   if (fvMesh.caseDir().empty()) {
@@ -41,9 +42,11 @@ void readMesh::readPointsFile(Mesh &fvMesh) {
   // --- Start to read points data from the file ---
   pointsFile >> fvMesh.nNodes();
 
-  std::string line;
-  std::getline(pointsFile, line); // Consume the rest of the line
-  std::getline(pointsFile, line); // To consume the next line
+  // Discard the rest of the line
+  pointsFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+  // Discard the next line
+  pointsFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
   fvMesh.constructNodes();
 
@@ -72,25 +75,24 @@ void readMesh::readFacesFile(Mesh &fvMesh) {
   // --- Start to read faces data from the file ---
   facesFile >> fvMesh.nFaces();
 
-  std::string line;
-  std::getline(facesFile, line); // Consume the rest of the line
+  // Discard the rest of the line
+  facesFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-  // Consume the left parenthesis for faces
-  char dummy;
-  facesFile >> dummy;
+  // Discard the next line
+  facesFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
   fvMesh.constructFaces();
 
   for (std::size_t i = 0; i < fvMesh.nFaces(); ++i) {
     facesFile >> fvMesh.faces()[i].nNodes();
-    facesFile >> dummy; // Consume the left parenthesis
+    facesFile.ignore(1); // Discard the left parenthesis
 
     fvMesh.faces()[i].constructNodeList();
 
     for (std::size_t j = 0; j < fvMesh.faces()[i].nNodes(); ++j) {
       facesFile >> fvMesh.faces()[i].iNodes()[j];
     }
-    facesFile >> dummy; // Consume the right parenthesis
+    facesFile.ignore(1); // Discard the right parenthesis
 
     fvMesh.faces()[i].index() = i;
   }
@@ -106,12 +108,11 @@ void readMesh::readOwnersFile(Mesh &fvMesh) {
 
   ownersFile >> fvMesh.nOwners();
 
-  std::string line;
-  std::getline(ownersFile, line); // Consume the rest of the line
+  // Discard the rest of the line
+  ownersFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-  // Consume the left parenthesis for owners
-  char dummy;
-  ownersFile >> dummy;
+  // Discard the next line
+  ownersFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
   std::size_t maxOwnerIdx{0};
   std::size_t ownerIdx{0};
@@ -136,12 +137,12 @@ void readMesh::readNeighborsFile(Mesh &fvMesh) {
 
   std::size_t nNeighbors{0};
   neighborsFile >> nNeighbors;
-  std::string line;
-  std::getline(neighborsFile, line); // Consume the rest of the line
 
-  // Consume the left parenthesis for owners
-  char dummy;
-  neighborsFile >> dummy;
+  // Discard the rest of the line
+  neighborsFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+  // Discard the next line
+  neighborsFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
   for (std::size_t i = 0; i < nNeighbors; ++i) {
     neighborsFile >> fvMesh.faces()[i].iNeighbor();
@@ -161,7 +162,16 @@ void readMesh::readBoundaryFile(Mesh &fvMesh) {
 
   boundaryFile >> fvMesh.nBoundaries();
 
-  // for (std::size_t i = 0; )
+  // Discard the rest of the line
+  boundaryFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+  // Discard the next line
+  boundaryFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+  fvMesh.constructBoundaries();
+  // for (std::size_t i = 0; i < fvMesh.nBoundaries(); ++i) {
+  boundaryFile >> fvMesh.boundaries()[0].userName();
+  // }
 }
 
 // void cfdReadOpenFoamMesh(std::vector<Node> &nodes, std::vector<Face> &faces,

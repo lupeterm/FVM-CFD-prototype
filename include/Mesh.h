@@ -1,6 +1,7 @@
 #ifndef MESH_H
 #define MESH_H
 
+#include "Boundary.h"
 #include "Face.h"
 #include "Node.h"
 #include <cstddef>
@@ -17,6 +18,7 @@ private:
   std::size_t nBoundaries_ = 0;
   Node *nodes_ = nullptr;
   Face *faces_ = nullptr;
+  Boundary *boundaries_ = nullptr;
 
 public:
   Mesh(std::string caseDir) : caseDir_(caseDir) {}
@@ -31,5 +33,7 @@ public:
   void constructNodes() { nodes_ = new Node[nNodes_]; }
   Face *faces() { return faces_; }
   void constructFaces() { faces_ = new Face[nFaces_]; }
+  Boundary *boundaries() { return boundaries_; }
+  void constructBoundaries() { boundaries_ = new Boundary[nBoundaries_]; }
 };
 #endif
