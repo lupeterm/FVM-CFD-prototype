@@ -9,6 +9,11 @@ public:
 
 private:
   std::size_t index_ = 0;
+  std::size_t *iNeighbors_ = nullptr;
+  std::size_t *iFaces_ = nullptr;
+  std::size_t *iNodes_ = nullptr;
+  double volume_ = 0;
+  int *faceSign = nullptr;
 };
 
 #endif
