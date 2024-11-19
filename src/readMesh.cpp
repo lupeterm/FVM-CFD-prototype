@@ -159,23 +159,23 @@ void readMesh::readBoundaryFile(Mesh &fvMesh) {
   discardLines(boundaryFile, 17);
 
   boundaryFile >> fvMesh.nBoundaries();
+  fvMesh.nPatches() = fvMesh.nBoundaries();
 
   // Discard the rest of the line and the next line
   discardLines(boundaryFile, 2);
 
   fvMesh.constructBoundaries();
 
-  // for (std::size_t i = 0; i < fvMesh.nBoundaries(); ++i) {
-  for (std::size_t i = 0; i < 1; ++i) {
+  for (std::size_t i = 0; i < fvMesh.nBoundaries(); ++i) {
 
     boundaryFile >> fvMesh.boundaries()[i].userName();
     fvMesh.boundaries()[i].index() = i;
 
+    discardLines(boundaryFile, 2);
     std::string token{""};
     boundaryFile >> token;
     while (token.compare("}") != 0) {
 
-      boundaryFile >> token;
       if (token.compare("type") == 0) {
         boundaryFile >> fvMesh.boundaries()[i].type();
         fvMesh.boundaries()[i].type().pop_back();
@@ -187,8 +187,10 @@ void readMesh::readBoundaryFile(Mesh &fvMesh) {
         boundaryFile >> fvMesh.boundaries()[i].startFace();
       }
       discardLines(boundaryFile);
+      boundaryFile >> token;
     }
   }
+  boundaryFile.close();
 }
 
 // void cfdReadOpenFoamMesh(std::vector<Node> &nodes, std::vector<Face> &faces,

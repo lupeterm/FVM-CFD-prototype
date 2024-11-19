@@ -16,6 +16,7 @@ private:
   std::size_t nElements_ = 0;
   std::size_t nInteriorFaces_ = 0;
   std::size_t nBoundaries_ = 0;
+  std::size_t nPatches_ = 0;
   Node *nodes_ = nullptr;
   Face *faces_ = nullptr;
   Boundary *boundaries_ = nullptr;
@@ -29,6 +30,7 @@ public:
   std::size_t &nElements() { return nElements_; }
   std::size_t &nInteriorFaces() { return nInteriorFaces_; }
   std::size_t &nBoundaries() { return nBoundaries_; }
+  std::size_t &nPatches() { return nPatches_; }
   Node *nodes() { return nodes_; }
   void constructNodes() { nodes_ = new Node[nNodes_]; }
   Face *faces() { return faces_; }

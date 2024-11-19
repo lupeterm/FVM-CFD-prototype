@@ -185,11 +185,48 @@ TEST(ReadingOpenFoamMeshTest, ReadingBoundariesWorks) {
 
   // --- Assert ---
   EXPECT_EQ(fvMesh.nBoundaries(), 6);
+
+  // Verify the 1st boundary
   EXPECT_EQ(fvMesh.boundaries()[0].userName(), "wall-4");
   EXPECT_EQ(fvMesh.boundaries()[0].index(), 0);
   EXPECT_EQ(fvMesh.boundaries()[0].type(), "wall");
   EXPECT_EQ(fvMesh.boundaries()[0].nFaces(), 100);
   EXPECT_EQ(fvMesh.boundaries()[0].startFace(), 1300);
+
+  // Verify the 2nd boundary
+  EXPECT_EQ(fvMesh.boundaries()[1].userName(), "velocity-inlet-5");
+  EXPECT_EQ(fvMesh.boundaries()[1].index(), 1);
+  EXPECT_EQ(fvMesh.boundaries()[1].type(), "inlet");
+  EXPECT_EQ(fvMesh.boundaries()[1].nFaces(), 8);
+  EXPECT_EQ(fvMesh.boundaries()[1].startFace(), 1400);
+
+  // Verify the 3rd boundary
+  EXPECT_EQ(fvMesh.boundaries()[2].userName(), "velocity-inlet-6");
+  EXPECT_EQ(fvMesh.boundaries()[2].index(), 2);
+  EXPECT_EQ(fvMesh.boundaries()[2].type(), "inlet");
+  EXPECT_EQ(fvMesh.boundaries()[2].nFaces(), 4);
+  EXPECT_EQ(fvMesh.boundaries()[2].startFace(), 1408);
+
+  // Verify the 4th boundary
+  EXPECT_EQ(fvMesh.boundaries()[3].userName(), "pressure-outlet-7");
+  EXPECT_EQ(fvMesh.boundaries()[3].index(), 3);
+  EXPECT_EQ(fvMesh.boundaries()[3].type(), "outlet");
+  EXPECT_EQ(fvMesh.boundaries()[3].nFaces(), 8);
+  EXPECT_EQ(fvMesh.boundaries()[3].startFace(), 1412);
+
+  // Verify the 5th boundary
+  EXPECT_EQ(fvMesh.boundaries()[4].userName(), "wall-8");
+  EXPECT_EQ(fvMesh.boundaries()[4].index(), 4);
+  EXPECT_EQ(fvMesh.boundaries()[4].type(), "wall");
+  EXPECT_EQ(fvMesh.boundaries()[4].nFaces(), 34);
+  EXPECT_EQ(fvMesh.boundaries()[4].startFace(), 1420);
+
+  // Verify the 6th boundary
+  EXPECT_EQ(fvMesh.boundaries()[5].userName(), "frontAndBackPlanes");
+  EXPECT_EQ(fvMesh.boundaries()[5].index(), 5);
+  EXPECT_EQ(fvMesh.boundaries()[5].type(), "empty");
+  EXPECT_EQ(fvMesh.boundaries()[5].nFaces(), 1836);
+  EXPECT_EQ(fvMesh.boundaries()[5].startFace(), 1454);
 }
 
 int main(int argc, char **argv) {
