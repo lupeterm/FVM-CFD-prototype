@@ -192,22 +192,3 @@ void readMesh::readBoundaryFile(Mesh &fvMesh) {
   }
   boundaryFile.close();
 }
-
-// void cfdReadOpenFoamMesh(std::vector<Node> &nodes, std::vector<Face> &faces,
-//                          std::string caseDirectory) {
-//   if (caseDirectory.empty()) {
-//     caseDirectory = getDirectory();
-//   }
-
-//   std::string pointsFile = caseDirectory + "/constant/polyMesh/points";
-//   std::string facesFile = caseDirectory + "/constant/polyMesh/faces";
-//   std::string ownerFile = caseDirectory + "/constant/polyMesh/owner";
-//   std::string neighbourFile = caseDirectory + "/constant/polyMesh/neighbour";
-//   std::string boundaryFile = caseDirectory + "/constant/polyMesh/boundary";
-
-//   // readPoints(pointsFile, nodes);
-//   // readFaces(facesFile, faces);
-//   // readOwners(ownerFile, faces);
-
-//   // return numberOfElement;
-// }
