@@ -16,5 +16,6 @@ public:
   void readOwnersFile(Mesh &fvMesh);
   void readNeighborsFile(Mesh &fvMesh);
   void readBoundaryFile(Mesh &fvMesh);
+  void constructElements(Mesh &fvMesh);
 };
 #endif

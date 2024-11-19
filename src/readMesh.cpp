@@ -12,6 +12,7 @@ void readMesh::readOpenFoamMesh(Mesh &fvMesh) {
   readOwnersFile(fvMesh);
   readNeighborsFile(fvMesh);
   readBoundaryFile(fvMesh);
+  constructElements(fvMesh);
 }
 
 void readMesh::getDirectory(Mesh &fvMesh) {
@@ -47,7 +48,7 @@ void readMesh::readPointsFile(Mesh &fvMesh) {
   // Discard the rest of the line and the next line
   discardLines(pointsFile, 2);
 
-  fvMesh.constructNodes();
+  fvMesh.allocateNodes();
 
   // Read x, y, z coordinates to mesh nodes
   for (std::size_t i = 0; i < fvMesh.nNodes(); ++i) {
@@ -79,13 +80,13 @@ void readMesh::readFacesFile(Mesh &fvMesh) {
   // Discard the rest of the line and the next line
   discardLines(facesFile, 2);
 
-  fvMesh.constructFaces();
+  fvMesh.allocateFaces();
 
   for (std::size_t i = 0; i < fvMesh.nFaces(); ++i) {
     facesFile >> fvMesh.faces()[i].nNodes();
     facesFile.ignore(1); // Discard the left parenthesis
 
-    fvMesh.faces()[i].constructNodeList();
+    fvMesh.faces()[i].allocateNodeList();
 
     for (std::size_t j = 0; j < fvMesh.faces()[i].nNodes(); ++j) {
       facesFile >> fvMesh.faces()[i].iNodes()[j];
@@ -164,7 +165,7 @@ void readMesh::readBoundaryFile(Mesh &fvMesh) {
   // Discard the rest of the line and the next line
   discardLines(boundaryFile, 2);
 
-  fvMesh.constructBoundaries();
+  fvMesh.allocateBoundaries();
 
   for (std::size_t i = 0; i < fvMesh.nBoundaries(); ++i) {
 
@@ -191,4 +192,12 @@ void readMesh::readBoundaryFile(Mesh &fvMesh) {
     }
   }
   boundaryFile.close();
+}
+
+// *** Construct elements ***
+void readMesh::constructElements(Mesh &fvMesh) {
+  fvMesh.allocateElements();
+  for (std::size_t i = 0; i < fvMesh.nElements(); ++i) {
+    fvMesh.elements()[i].index() = i;
+  }
 }

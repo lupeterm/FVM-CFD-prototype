@@ -2,6 +2,7 @@
 #define MESH_H
 
 #include "Boundary.h"
+#include "Elements.h"
 #include "Face.h"
 #include "Node.h"
 #include <cstddef>
@@ -20,6 +21,7 @@ private:
   Node *nodes_ = nullptr;
   Face *faces_ = nullptr;
   Boundary *boundaries_ = nullptr;
+  Element *elements_ = nullptr;
 
 public:
   Mesh(std::string caseDir) : caseDir_(caseDir) {}
@@ -32,10 +34,12 @@ public:
   std::size_t &nBoundaries() { return nBoundaries_; }
   std::size_t &nPatches() { return nPatches_; }
   Node *nodes() { return nodes_; }
-  void constructNodes() { nodes_ = new Node[nNodes_]; }
+  void allocateNodes() { nodes_ = new Node[nNodes_]; }
   Face *faces() { return faces_; }
-  void constructFaces() { faces_ = new Face[nFaces_]; }
+  void allocateFaces() { faces_ = new Face[nFaces_]; }
   Boundary *boundaries() { return boundaries_; }
-  void constructBoundaries() { boundaries_ = new Boundary[nBoundaries_]; }
+  void allocateBoundaries() { boundaries_ = new Boundary[nBoundaries_]; }
+  Element *elements() { return elements_; }
+  void allocateElements() { elements_ = new Element[nElements_]; }
 };
 #endif

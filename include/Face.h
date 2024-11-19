@@ -7,7 +7,7 @@ class Face {
 public:
   std::size_t &nNodes() { return nNodes_; }
   std::size_t *iNodes() { return iNodes_; }
-  void constructNodeList() { iNodes_ = new std::size_t[nNodes_]; }
+  void allocateNodeList() { iNodes_ = new std::size_t[nNodes_]; }
   std::size_t &index() { return index_; }
   std::size_t &iOwner() { return iOwner_; }
   std::size_t &iNeighbor() { return iNeighbor_; }
