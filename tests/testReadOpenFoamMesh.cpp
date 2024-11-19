@@ -186,6 +186,10 @@ TEST(ReadingOpenFoamMeshTest, ReadingBoundariesWorks) {
   // --- Assert ---
   EXPECT_EQ(fvMesh.nBoundaries(), 6);
   EXPECT_EQ(fvMesh.boundaries()[0].userName(), "wall-4");
+  EXPECT_EQ(fvMesh.boundaries()[0].index(), 0);
+  EXPECT_EQ(fvMesh.boundaries()[0].type(), "wall");
+  EXPECT_EQ(fvMesh.boundaries()[0].nFaces(), 100);
+  EXPECT_EQ(fvMesh.boundaries()[0].startFace(), 1300);
 }
 
 int main(int argc, char **argv) {

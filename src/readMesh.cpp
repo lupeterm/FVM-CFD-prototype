@@ -164,9 +164,31 @@ void readMesh::readBoundaryFile(Mesh &fvMesh) {
   discardLines(boundaryFile, 2);
 
   fvMesh.constructBoundaries();
+
   // for (std::size_t i = 0; i < fvMesh.nBoundaries(); ++i) {
-  boundaryFile >> fvMesh.boundaries()[0].userName();
-  // }
+  for (std::size_t i = 0; i < 1; ++i) {
+
+    boundaryFile >> fvMesh.boundaries()[i].userName();
+    fvMesh.boundaries()[i].index() = i;
+
+    std::string token{""};
+    boundaryFile >> token;
+    while (token.compare("}") != 0) {
+
+      boundaryFile >> token;
+      if (token.compare("type") == 0) {
+        boundaryFile >> fvMesh.boundaries()[i].type();
+        fvMesh.boundaries()[i].type().pop_back();
+
+      } else if (token.compare("nFaces") == 0) {
+        boundaryFile >> fvMesh.boundaries()[i].nFaces();
+
+      } else if (token.compare("startFace") == 0) {
+        boundaryFile >> fvMesh.boundaries()[i].startFace();
+      }
+      discardLines(boundaryFile);
+    }
+  }
 }
 
 // void cfdReadOpenFoamMesh(std::vector<Node> &nodes, std::vector<Face> &faces,
