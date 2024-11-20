@@ -239,6 +239,7 @@ TEST(ReadingOpenFoamMeshTest, constructingElementNeighborsWorks) {
   meshReader.readOpenFoamMesh(fvMesh);
 
   // --- Assert ---
+  EXPECT_EQ(fvMesh.elements()[0].nNeighbors(), 1);
   EXPECT_EQ(fvMesh.elements()[0].iNeighbors()[0], 22);
 }
 
