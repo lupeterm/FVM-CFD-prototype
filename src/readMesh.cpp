@@ -197,7 +197,19 @@ void readMesh::readBoundaryFile(Mesh &fvMesh) {
 // *** Construct elements ***
 void readMesh::constructElements(Mesh &fvMesh) {
   fvMesh.allocateElements();
+
   for (std::size_t i = 0; i < fvMesh.nElements(); ++i) {
     fvMesh.elements()[i].index() = i;
+    fvMesh.elements()[i].allocate_iNeighbors();
+    fvMesh.elements()[i].allocate_iFaces();
+    fvMesh.elements()[i].allocate_iNodes();
+    fvMesh.elements()[i].allocate_faceSigns();
+  }
+
+  for (std::size_t i = 0; i < fvMesh.nInteriorFaces(); ++i) {
+    std::size_t iOwner = fvMesh.faces()[i].iOwner();
+    std::size_t iNeighbor = fvMesh.faces()[i].iNeighbor();
+
+    // fvMesh.elements()[iOwner].iFaces()[j] = i;
   }
 }
