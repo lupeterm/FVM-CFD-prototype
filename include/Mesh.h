@@ -9,20 +9,6 @@
 #include <string>
 
 class Mesh {
-private:
-  std::string caseDir_ = "";
-  std::size_t nNodes_ = 0;
-  std::size_t nFaces_ = 0;
-  std::size_t nOwners_ = 0;
-  std::size_t nElements_ = 0;
-  std::size_t nInteriorFaces_ = 0;
-  std::size_t nBoundaries_ = 0;
-  std::size_t nPatches_ = 0;
-  Node *nodes_ = nullptr;
-  Face *faces_ = nullptr;
-  Boundary *boundaries_ = nullptr;
-  Element *elements_ = nullptr;
-
 public:
   Mesh(std::string caseDir) : caseDir_(caseDir) {}
   std::string &caseDir() { return caseDir_; }
@@ -41,5 +27,19 @@ public:
   void allocateBoundaries() { boundaries_ = new Boundary[nBoundaries_]; }
   Element *elements() { return elements_; }
   void allocateElements() { elements_ = new Element[nElements_]; }
+
+private:
+  std::string caseDir_ = "";
+  std::size_t nNodes_ = 0;
+  std::size_t nFaces_ = 0;
+  std::size_t nOwners_ = 0;
+  std::size_t nElements_ = 0;
+  std::size_t nInteriorFaces_ = 0;
+  std::size_t nBoundaries_ = 0;
+  std::size_t nPatches_ = 0;
+  Node *nodes_ = nullptr;
+  Face *faces_ = nullptr;
+  Boundary *boundaries_ = nullptr;
+  Element *elements_ = nullptr;
 };
 #endif
