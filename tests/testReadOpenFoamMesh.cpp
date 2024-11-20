@@ -229,6 +229,19 @@ TEST(ReadingOpenFoamMeshTest, ReadingBoundariesWorks) {
   EXPECT_EQ(fvMesh.boundaries()[5].startFace(), 1454);
 }
 
+TEST(ReadingOpenFoamMeshTest, constructingElementNeighborsWorks) {
+  // --- Arrange ---
+  std::string caseDirectory("../../cases/elbow");
+  readMesh meshReader;
+  Mesh fvMesh(caseDirectory);
+
+  // -- -Act-- -
+  meshReader.readOpenFoamMesh(fvMesh);
+
+  // --- Assert ---
+  EXPECT_EQ(fvMesh.elements()[0].iNeighbors()[0], 22);
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
