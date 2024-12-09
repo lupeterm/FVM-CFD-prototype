@@ -231,4 +231,7 @@ void readMesh::constructElements(Mesh &fvMesh) {
     fvMesh.elements()[i].nNeighbors() =
         fvMesh.elements()[i].iNeighbors().size();
   }
+
+  fvMesh.nBElements() = nFaces - nInteriorFaces;
+  fvMesh.nBFaces() = nFaces - nInteriorFaces;
 }
