@@ -239,17 +239,76 @@ TEST(ReadingOpenFoamMeshTest, constructingElementNeighborsWorks) {
   meshReader.readOpenFoamMesh(fvMesh);
 
   // --- Assert ---
+  // *** Verify neighbors for particular elements ***
   EXPECT_EQ(fvMesh.elements()[0].nNeighbors(), 1);
   EXPECT_EQ(fvMesh.elements()[0].iNeighbors()[0], 22);
+
   EXPECT_EQ(fvMesh.elements()[1].nNeighbors(), 1);
   EXPECT_EQ(fvMesh.elements()[1].iNeighbors()[0], 68);
+
   EXPECT_EQ(fvMesh.elements()[99].nNeighbors(), 3);
   EXPECT_EQ(fvMesh.elements()[99].iNeighbors()[0], 19);
   EXPECT_EQ(fvMesh.elements()[99].iNeighbors()[1], 100);
   EXPECT_EQ(fvMesh.elements()[99].iNeighbors()[2], 326);
+
   EXPECT_EQ(fvMesh.elements()[100].nNeighbors(), 2);
   EXPECT_EQ(fvMesh.elements()[100].iNeighbors()[0], 99);
   EXPECT_EQ(fvMesh.elements()[100].iNeighbors()[1], 213);
+
+  // Last two elements
+  EXPECT_EQ(fvMesh.elements()[916].nNeighbors(), 3);
+  EXPECT_EQ(fvMesh.elements()[916].iNeighbors()[0], 912);
+  EXPECT_EQ(fvMesh.elements()[916].iNeighbors()[1], 914);
+  EXPECT_EQ(fvMesh.elements()[916].iNeighbors()[2], 917);
+
+  EXPECT_EQ(fvMesh.elements()[917].nNeighbors(), 3);
+  EXPECT_EQ(fvMesh.elements()[917].iNeighbors()[0], 802);
+  EXPECT_EQ(fvMesh.elements()[917].iNeighbors()[1], 913);
+  EXPECT_EQ(fvMesh.elements()[917].iNeighbors()[2], 916);
+
+  // *** Verify faces for particular elements ***
+  EXPECT_EQ(fvMesh.elements()[0].iFaces().size(), 5);
+  EXPECT_EQ(fvMesh.elements()[0].iFaces()[0], 0);
+  EXPECT_EQ(fvMesh.elements()[0].iFaces()[1], 1300);
+  EXPECT_EQ(fvMesh.elements()[0].iFaces()[2], 1400);
+  EXPECT_EQ(fvMesh.elements()[0].iFaces()[3], 1454);
+  EXPECT_EQ(fvMesh.elements()[0].iFaces()[4], 1455);
+
+  EXPECT_EQ(fvMesh.elements()[1].iFaces().size(), 5);
+  EXPECT_EQ(fvMesh.elements()[1].iFaces()[0], 1);
+  EXPECT_EQ(fvMesh.elements()[1].iFaces()[1], 1301);
+  EXPECT_EQ(fvMesh.elements()[1].iFaces()[2], 1408);
+  EXPECT_EQ(fvMesh.elements()[1].iFaces()[3], 1456);
+  EXPECT_EQ(fvMesh.elements()[1].iFaces()[4], 1457);
+
+  EXPECT_EQ(fvMesh.elements()[99].iFaces().size(), 5);
+  EXPECT_EQ(fvMesh.elements()[99].iFaces()[0], 32);
+  EXPECT_EQ(fvMesh.elements()[99].iFaces()[1], 154);
+  EXPECT_EQ(fvMesh.elements()[99].iFaces()[2], 155);
+  EXPECT_EQ(fvMesh.elements()[99].iFaces()[3], 1652);
+  EXPECT_EQ(fvMesh.elements()[99].iFaces()[4], 1653);
+
+  EXPECT_EQ(fvMesh.elements()[100].iFaces().size(), 5);
+  EXPECT_EQ(fvMesh.elements()[100].iFaces()[0], 154);
+  EXPECT_EQ(fvMesh.elements()[100].iFaces()[1], 156);
+  EXPECT_EQ(fvMesh.elements()[100].iFaces()[2], 1349);
+  EXPECT_EQ(fvMesh.elements()[100].iFaces()[3], 1654);
+  EXPECT_EQ(fvMesh.elements()[100].iFaces()[4], 1655);
+
+  // Last two elements
+  EXPECT_EQ(fvMesh.elements()[916].iFaces().size(), 5);
+  EXPECT_EQ(fvMesh.elements()[916].iFaces()[0], 1294);
+  EXPECT_EQ(fvMesh.elements()[916].iFaces()[1], 1298);
+  EXPECT_EQ(fvMesh.elements()[916].iFaces()[2], 1299);
+  EXPECT_EQ(fvMesh.elements()[916].iFaces()[3], 3286);
+  EXPECT_EQ(fvMesh.elements()[916].iFaces()[4], 3287);
+
+  EXPECT_EQ(fvMesh.elements()[917].iFaces().size(), 5);
+  EXPECT_EQ(fvMesh.elements()[917].iFaces()[0], 1171);
+  EXPECT_EQ(fvMesh.elements()[917].iFaces()[1], 1296);
+  EXPECT_EQ(fvMesh.elements()[917].iFaces()[2], 1299);
+  EXPECT_EQ(fvMesh.elements()[917].iFaces()[3], 3288);
+  EXPECT_EQ(fvMesh.elements()[917].iFaces()[4], 3289);
 }
 
 int main(int argc, char **argv) {

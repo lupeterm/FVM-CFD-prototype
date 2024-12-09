@@ -198,24 +198,34 @@ void readMesh::readBoundaryFile(Mesh &fvMesh) {
 void readMesh::constructElements(Mesh &fvMesh) {
   fvMesh.allocateElements();
 
-  for (std::size_t i = 0; i < fvMesh.nElements(); ++i) {
+  std::size_t nElements = fvMesh.nElements();
+  for (std::size_t i = 0; i < nElements; ++i) {
     fvMesh.elements()[i].index() = i;
-    // fvMesh.elements()[i].allocate_iFaces();
     // fvMesh.elements()[i].allocate_iNodes();
     // fvMesh.elements()[i].allocate_faceSigns();
   }
 
-  for (std::size_t i = 0; i < fvMesh.nInteriorFaces(); ++i) {
+  std::size_t nInteriorFaces = fvMesh.nInteriorFaces();
+  for (std::size_t i = 0; i < nInteriorFaces; ++i) {
     std::size_t iOwner = fvMesh.faces()[i].iOwner();
     std::size_t iNeighbor = fvMesh.faces()[i].iNeighbor();
 
-    // fvMesh.elements()[iOwner].iFaces().push_back(i);
+    fvMesh.elements()[iOwner].iFaces().push_back(i);
     fvMesh.elements()[iOwner].iNeighbors().push_back(iNeighbor);
 
+    fvMesh.elements()[iNeighbor].iFaces().push_back(i);
     fvMesh.elements()[iNeighbor].iNeighbors().push_back(iOwner);
   }
 
-  for (std::size_t i = 0; i < fvMesh.nElements(); ++i) {
+  // Go through boundary faces
+  std::size_t nFaces = fvMesh.nFaces();
+  for (std::size_t iBFace = nInteriorFaces; iBFace < nFaces; ++iBFace) {
+    std::size_t iOwner = fvMesh.faces()[iBFace].iOwner();
+
+    fvMesh.elements()[iOwner].iFaces().push_back(iBFace);
+  }
+
+  for (std::size_t i = 0; i < nElements; ++i) {
     fvMesh.elements()[i].nNeighbors() =
         fvMesh.elements()[i].iNeighbors().size();
   }
