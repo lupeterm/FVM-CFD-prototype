@@ -202,7 +202,6 @@ void readMesh::constructElements(Mesh &fvMesh) {
   for (std::size_t i = 0; i < nElements; ++i) {
     fvMesh.elements()[i].index() = i;
     // fvMesh.elements()[i].allocate_iNodes();
-    // fvMesh.elements()[i].allocate_faceSigns();
   }
 
   std::size_t nInteriorFaces = fvMesh.nInteriorFaces();
