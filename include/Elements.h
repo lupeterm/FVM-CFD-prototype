@@ -10,7 +10,6 @@ public:
   // std::size_t *iNeighbors() { return iNeighbors_; }
   // std::size_t *iFaces() { return iFaces_; }
   int *faceSigns() { return faceSigns_; }
-  // void allocate_iNeighbors() { iNeighbors_ = new std::size_t[maxFaces_]; }
   // void allocate_iFaces() { iFaces_ = new std::size_t[maxFaces_]; }
   // void allocate_iNodes() { iNodes_ = new std::size_t[maxNodes_]; }
   // void allocate_faceSigns() { faceSigns_ = new int[maxFaces_]; }

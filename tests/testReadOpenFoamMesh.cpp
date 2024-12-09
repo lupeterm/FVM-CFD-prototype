@@ -241,6 +241,15 @@ TEST(ReadingOpenFoamMeshTest, constructingElementNeighborsWorks) {
   // --- Assert ---
   EXPECT_EQ(fvMesh.elements()[0].nNeighbors(), 1);
   EXPECT_EQ(fvMesh.elements()[0].iNeighbors()[0], 22);
+  EXPECT_EQ(fvMesh.elements()[1].nNeighbors(), 1);
+  EXPECT_EQ(fvMesh.elements()[1].iNeighbors()[0], 68);
+  EXPECT_EQ(fvMesh.elements()[99].nNeighbors(), 3);
+  EXPECT_EQ(fvMesh.elements()[99].iNeighbors()[0], 19);
+  EXPECT_EQ(fvMesh.elements()[99].iNeighbors()[1], 100);
+  EXPECT_EQ(fvMesh.elements()[99].iNeighbors()[2], 326);
+  EXPECT_EQ(fvMesh.elements()[100].nNeighbors(), 2);
+  EXPECT_EQ(fvMesh.elements()[100].iNeighbors()[0], 99);
+  EXPECT_EQ(fvMesh.elements()[100].iNeighbors()[1], 213);
 }
 
 int main(int argc, char **argv) {
