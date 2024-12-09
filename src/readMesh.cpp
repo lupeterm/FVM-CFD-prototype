@@ -13,6 +13,7 @@ void readMesh::readOpenFoamMesh(Mesh &fvMesh) {
   readNeighborsFile(fvMesh);
   readBoundaryFile(fvMesh);
   constructElements(fvMesh);
+  setupNodeConnectivities(fvMesh);
 }
 
 void readMesh::getDirectory(Mesh &fvMesh) {
@@ -234,4 +235,16 @@ void readMesh::constructElements(Mesh &fvMesh) {
 
   fvMesh.nBElements() = nFaces - nInteriorFaces;
   fvMesh.nBFaces() = nFaces - nInteriorFaces;
+}
+
+void readMesh::setupNodeConnectivities(Mesh &fvMesh) {
+  std::size_t nFaces = fvMesh.nFaces();
+  for (std::size_t i = 0; i < nFaces; ++i) {
+
+    std::size_t *iNodes = fvMesh.faces()[i].iNodes();
+    std::size_t nNodes = fvMesh.faces()[i].nNodes();
+    for (std::size_t j = 0; j < nNodes; ++j) {
+      fvMesh.nodes()[iNodes[j]].iFaces().push_back(i);
+    }
+  }
 }

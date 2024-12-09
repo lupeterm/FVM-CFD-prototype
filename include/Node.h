@@ -9,13 +9,14 @@ public:
   double &y() { return y_; }
   double &z() { return z_; }
   std::size_t &index() { return index_; }
+  std::vector<std::size_t> &iFaces() { return iFaces_; }
 
 private:
   double x_ = 0.0;
   double y_ = 0.0;
   double z_ = 0.0;
   std::size_t index_ = 0;
-  double *iFaces_ = nullptr;
+  std::vector<std::size_t> iFaces_;
   double *iElements_ = nullptr;
 };
 #endif

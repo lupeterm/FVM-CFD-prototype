@@ -385,6 +385,88 @@ TEST(ReadingOpenFoamMeshTest, constructingElementBoundaryWorks) {
   EXPECT_EQ(fvMesh.nBFaces(), 1990);
 }
 
+TEST(ReadingOpenFoamMeshTest, setupNodeConnectivitiesWorks) {
+  // --- Arrange ---
+  std::string caseDirectory("../../cases/elbow");
+  readMesh meshReader;
+  Mesh fvMesh(caseDirectory);
+
+  // -- -Act-- -
+  meshReader.readOpenFoamMesh(fvMesh);
+
+  // --- Assert ---
+  EXPECT_EQ(fvMesh.nodes()[0].iFaces().size(), 7);
+  EXPECT_EQ(fvMesh.nodes()[0].iFaces()[0], 171);
+  EXPECT_EQ(fvMesh.nodes()[0].iFaces()[1], 327);
+  EXPECT_EQ(fvMesh.nodes()[0].iFaces()[2], 1354);
+  EXPECT_EQ(fvMesh.nodes()[0].iFaces()[3], 1385);
+  EXPECT_EQ(fvMesh.nodes()[0].iFaces()[4], 1676);
+  EXPECT_EQ(fvMesh.nodes()[0].iFaces()[5], 1890);
+  EXPECT_EQ(fvMesh.nodes()[0].iFaces()[6], 1892);
+
+  EXPECT_EQ(fvMesh.nodes()[1].iFaces().size(), 7);
+  EXPECT_EQ(fvMesh.nodes()[1].iFaces()[0], 329);
+  EXPECT_EQ(fvMesh.nodes()[1].iFaces()[1], 426);
+  EXPECT_EQ(fvMesh.nodes()[1].iFaces()[2], 1385);
+  EXPECT_EQ(fvMesh.nodes()[1].iFaces()[3], 1399);
+  EXPECT_EQ(fvMesh.nodes()[1].iFaces()[4], 1892);
+  EXPECT_EQ(fvMesh.nodes()[1].iFaces()[5], 2040);
+  EXPECT_EQ(fvMesh.nodes()[1].iFaces()[6], 2044);
+
+  EXPECT_EQ(fvMesh.nodes()[499].iFaces().size(), 10);
+  EXPECT_EQ(fvMesh.nodes()[499].iFaces()[0], 1098);
+  EXPECT_EQ(fvMesh.nodes()[499].iFaces()[1], 1099);
+  EXPECT_EQ(fvMesh.nodes()[499].iFaces()[2], 1100);
+  EXPECT_EQ(fvMesh.nodes()[499].iFaces()[3], 1101);
+  EXPECT_EQ(fvMesh.nodes()[499].iFaces()[4], 1103);
+  EXPECT_EQ(fvMesh.nodes()[499].iFaces()[5], 2946);
+  EXPECT_EQ(fvMesh.nodes()[499].iFaces()[6], 2948);
+  EXPECT_EQ(fvMesh.nodes()[499].iFaces()[7], 2950);
+  EXPECT_EQ(fvMesh.nodes()[499].iFaces()[8], 2952);
+  EXPECT_EQ(fvMesh.nodes()[499].iFaces()[9], 2954);
+
+  EXPECT_EQ(fvMesh.nodes()[500].iFaces().size(), 12);
+  EXPECT_EQ(fvMesh.nodes()[500].iFaces()[0], 1104);
+  EXPECT_EQ(fvMesh.nodes()[500].iFaces()[1], 1105);
+  EXPECT_EQ(fvMesh.nodes()[500].iFaces()[2], 1108);
+  EXPECT_EQ(fvMesh.nodes()[500].iFaces()[3], 1109);
+  EXPECT_EQ(fvMesh.nodes()[500].iFaces()[4], 1132);
+  EXPECT_EQ(fvMesh.nodes()[500].iFaces()[5], 1248);
+  EXPECT_EQ(fvMesh.nodes()[500].iFaces()[6], 2956);
+  EXPECT_EQ(fvMesh.nodes()[500].iFaces()[7], 2960);
+  EXPECT_EQ(fvMesh.nodes()[500].iFaces()[8], 2962);
+  EXPECT_EQ(fvMesh.nodes()[500].iFaces()[9], 3000);
+  EXPECT_EQ(fvMesh.nodes()[500].iFaces()[10], 3192);
+  EXPECT_EQ(fvMesh.nodes()[500].iFaces()[11], 3194);
+
+  // Last two nodes
+  EXPECT_EQ(fvMesh.nodes()[1072].iFaces().size(), 12);
+  EXPECT_EQ(fvMesh.nodes()[1072].iFaces()[0], 1290);
+  EXPECT_EQ(fvMesh.nodes()[1072].iFaces()[1], 1291);
+  EXPECT_EQ(fvMesh.nodes()[1072].iFaces()[2], 1292);
+  EXPECT_EQ(fvMesh.nodes()[1072].iFaces()[3], 1293);
+  EXPECT_EQ(fvMesh.nodes()[1072].iFaces()[4], 1294);
+  EXPECT_EQ(fvMesh.nodes()[1072].iFaces()[5], 1298);
+  EXPECT_EQ(fvMesh.nodes()[1072].iFaces()[6], 3273);
+  EXPECT_EQ(fvMesh.nodes()[1072].iFaces()[7], 3275);
+  EXPECT_EQ(fvMesh.nodes()[1072].iFaces()[8], 3277);
+  EXPECT_EQ(fvMesh.nodes()[1072].iFaces()[9], 3279);
+  EXPECT_EQ(fvMesh.nodes()[1072].iFaces()[10], 3283);
+  EXPECT_EQ(fvMesh.nodes()[1072].iFaces()[11], 3287);
+
+  EXPECT_EQ(fvMesh.nodes()[1073].iFaces().size(), 10);
+  EXPECT_EQ(fvMesh.nodes()[1073].iFaces()[0], 1295);
+  EXPECT_EQ(fvMesh.nodes()[1073].iFaces()[1], 1296);
+  EXPECT_EQ(fvMesh.nodes()[1073].iFaces()[2], 1297);
+  EXPECT_EQ(fvMesh.nodes()[1073].iFaces()[3], 1298);
+  EXPECT_EQ(fvMesh.nodes()[1073].iFaces()[4], 1299);
+  EXPECT_EQ(fvMesh.nodes()[1073].iFaces()[5], 3281);
+  EXPECT_EQ(fvMesh.nodes()[1073].iFaces()[6], 3283);
+  EXPECT_EQ(fvMesh.nodes()[1073].iFaces()[7], 3285);
+  EXPECT_EQ(fvMesh.nodes()[1073].iFaces()[8], 3287);
+  EXPECT_EQ(fvMesh.nodes()[1073].iFaces()[9], 3289);
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

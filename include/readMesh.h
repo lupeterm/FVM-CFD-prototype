@@ -17,5 +17,6 @@ public:
   void readNeighborsFile(Mesh &fvMesh);
   void readBoundaryFile(Mesh &fvMesh);
   void constructElements(Mesh &fvMesh);
+  void setupNodeConnectivities(Mesh &fvMesh);
 };
 #endif
