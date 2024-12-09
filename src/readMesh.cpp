@@ -212,9 +212,11 @@ void readMesh::constructElements(Mesh &fvMesh) {
 
     fvMesh.elements()[iOwner].iFaces().push_back(i);
     fvMesh.elements()[iOwner].iNeighbors().push_back(iNeighbor);
+    fvMesh.elements()[iOwner].faceSigns().push_back(1);
 
     fvMesh.elements()[iNeighbor].iFaces().push_back(i);
     fvMesh.elements()[iNeighbor].iNeighbors().push_back(iOwner);
+    fvMesh.elements()[iNeighbor].faceSigns().push_back(-1);
   }
 
   // Go through boundary faces
@@ -223,6 +225,7 @@ void readMesh::constructElements(Mesh &fvMesh) {
     std::size_t iOwner = fvMesh.faces()[iBFace].iOwner();
 
     fvMesh.elements()[iOwner].iFaces().push_back(iBFace);
+    fvMesh.elements()[iOwner].faceSigns().push_back(1);
   }
 
   for (std::size_t i = 0; i < nElements; ++i) {

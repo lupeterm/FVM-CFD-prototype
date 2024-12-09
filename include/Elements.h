@@ -7,7 +7,7 @@
 class Element {
 public:
   std::size_t &index() { return index_; }
-  int *faceSigns() { return faceSigns_; }
+  std::vector<int> &faceSigns() { return faceSigns_; }
   // void allocate_iNodes() { iNodes_ = new std::size_t[maxNodes_]; }
   // void allocate_faceSigns() { faceSigns_ = new int[maxFaces_]; }
   std::vector<std::size_t> &iFaces() { return iFaces_; }
@@ -20,7 +20,8 @@ private:
   std::vector<std::size_t> iFaces_;
   std::vector<std::size_t> iNeighbors_;
   double volume_ = 0;
-  int *faceSigns_ = nullptr;
+  // int *faceSigns_ = nullptr;
+  std::vector<int> faceSigns_;
   // std::size_t maxFaces_ = 6;
   // std::size_t maxNodes_ = 8;
   std::size_t nNeighbors_ = 0;
