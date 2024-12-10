@@ -196,7 +196,6 @@ void readMesh::readBoundaryFile(Mesh &fvMesh) {
   boundaryFile.close();
 }
 
-// *** Construct elements ***
 void readMesh::constructElements(Mesh &fvMesh) {
   fvMesh.allocateElements();
 
