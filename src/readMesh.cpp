@@ -1,4 +1,5 @@
 #include "readMesh.h"
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <limits>
@@ -202,7 +203,6 @@ void readMesh::constructElements(Mesh &fvMesh) {
   const std::size_t nElements = fvMesh.nElements();
   for (std::size_t i = 0; i < nElements; ++i) {
     fvMesh.elements()[i].index() = i;
-    // fvMesh.elements()[i].allocate_iNodes();
   }
 
   const std::size_t nInteriorFaces = fvMesh.nInteriorFaces();
@@ -245,6 +245,25 @@ void readMesh::setupNodeConnectivities(Mesh &fvMesh) {
     const std::size_t nNodes = fvMesh.faces()[i].nNodes();
     for (std::size_t j = 0; j < nNodes; ++j) {
       fvMesh.nodes()[iNodes[j]].iFaces().push_back(i);
+    }
+  }
+
+  const std::size_t nElements = fvMesh.nElements();
+  for (std::size_t i = 0; i < nElements; ++i) {
+
+    for (auto iFace : fvMesh.elements()[i].iFaces()) {
+
+      std::size_t *iNodes = fvMesh.faces()[iFace].iNodes();
+      const std::size_t nNodes = fvMesh.faces()[iFace].nNodes();
+      for (std::size_t j = 0; j < nNodes; ++j) {
+        if (std::count(fvMesh.elements()[i].iNodes().begin(),
+                       fvMesh.elements()[i].iNodes().end(), iNodes[j]) == 0) {
+
+          fvMesh.elements()[i].iNodes().push_back(iNodes[j]);
+          fvMesh.nodes()[iNodes[j]].iElements().push_back(
+              fvMesh.elements()[i].index());
+        }
+      }
     }
   }
 }

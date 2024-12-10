@@ -385,7 +385,7 @@ TEST(ReadingOpenFoamMeshTest, constructingElementBoundaryWorks) {
   EXPECT_EQ(fvMesh.nBFaces(), 1990);
 }
 
-TEST(ReadingOpenFoamMeshTest, setupNodeConnectivitiesWorks) {
+TEST(ReadingOpenFoamMeshTest, setupNodeConnectivitiesPart1Works) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
@@ -465,6 +465,67 @@ TEST(ReadingOpenFoamMeshTest, setupNodeConnectivitiesWorks) {
   EXPECT_EQ(fvMesh.nodes()[1073].iFaces()[7], 3285);
   EXPECT_EQ(fvMesh.nodes()[1073].iFaces()[8], 3287);
   EXPECT_EQ(fvMesh.nodes()[1073].iFaces()[9], 3289);
+}
+
+TEST(ReadingOpenFoamMeshTest, setupNodeConnectivitiesPart2Works) {
+  // --- Arrange ---
+  std::string caseDirectory("../../cases/elbow");
+  readMesh meshReader;
+  Mesh fvMesh(caseDirectory);
+
+  // -- -Act-- -
+  meshReader.readOpenFoamMesh(fvMesh);
+
+  // --- Assert ---
+  // *** Verify the node indices of some finite volume elements ***
+  EXPECT_EQ(fvMesh.elements()[0].iNodes().size(), 6);
+  EXPECT_EQ(fvMesh.elements()[0].iNodes()[0], 36);
+  EXPECT_EQ(fvMesh.elements()[0].iNodes()[1], 573);
+  EXPECT_EQ(fvMesh.elements()[0].iNodes()[2], 589);
+  EXPECT_EQ(fvMesh.elements()[0].iNodes()[3], 52);
+  EXPECT_EQ(fvMesh.elements()[0].iNodes()[4], 37);
+  EXPECT_EQ(fvMesh.elements()[0].iNodes()[5], 574);
+
+  EXPECT_EQ(fvMesh.elements()[1].iNodes().size(), 6);
+  EXPECT_EQ(fvMesh.elements()[1].iNodes()[0], 41);
+  EXPECT_EQ(fvMesh.elements()[1].iNodes()[1], 578);
+  EXPECT_EQ(fvMesh.elements()[1].iNodes()[2], 634);
+  EXPECT_EQ(fvMesh.elements()[1].iNodes()[3], 97);
+  EXPECT_EQ(fvMesh.elements()[1].iNodes()[4], 42);
+  EXPECT_EQ(fvMesh.elements()[1].iNodes()[5], 579);
+
+  EXPECT_EQ(fvMesh.elements()[449].iNodes().size(), 6);
+  EXPECT_EQ(fvMesh.elements()[449].iNodes()[0], 214);
+  EXPECT_EQ(fvMesh.elements()[449].iNodes()[1], 751);
+  EXPECT_EQ(fvMesh.elements()[449].iNodes()[2], 799);
+  EXPECT_EQ(fvMesh.elements()[449].iNodes()[3], 262);
+  EXPECT_EQ(fvMesh.elements()[449].iNodes()[4], 402);
+  EXPECT_EQ(fvMesh.elements()[449].iNodes()[5], 939);
+
+  EXPECT_EQ(fvMesh.elements()[450].iNodes().size(), 6);
+  EXPECT_EQ(fvMesh.elements()[450].iNodes()[0], 304);
+  EXPECT_EQ(fvMesh.elements()[450].iNodes()[1], 341);
+  EXPECT_EQ(fvMesh.elements()[450].iNodes()[2], 878);
+  EXPECT_EQ(fvMesh.elements()[450].iNodes()[3], 841);
+  EXPECT_EQ(fvMesh.elements()[450].iNodes()[4], 404);
+  EXPECT_EQ(fvMesh.elements()[450].iNodes()[5], 941);
+
+  // Last two elements
+  EXPECT_EQ(fvMesh.elements()[916].iNodes().size(), 6);
+  EXPECT_EQ(fvMesh.elements()[916].iNodes()[0], 408);
+  EXPECT_EQ(fvMesh.elements()[916].iNodes()[1], 535);
+  EXPECT_EQ(fvMesh.elements()[916].iNodes()[2], 1072);
+  EXPECT_EQ(fvMesh.elements()[916].iNodes()[3], 945);
+  EXPECT_EQ(fvMesh.elements()[916].iNodes()[4], 536);
+  EXPECT_EQ(fvMesh.elements()[916].iNodes()[5], 1073);
+
+  EXPECT_EQ(fvMesh.elements()[917].iNodes().size(), 6);
+  EXPECT_EQ(fvMesh.elements()[917].iNodes()[0], 475);
+  EXPECT_EQ(fvMesh.elements()[917].iNodes()[1], 408);
+  EXPECT_EQ(fvMesh.elements()[917].iNodes()[2], 945);
+  EXPECT_EQ(fvMesh.elements()[917].iNodes()[3], 1012);
+  EXPECT_EQ(fvMesh.elements()[917].iNodes()[4], 1073);
+  EXPECT_EQ(fvMesh.elements()[917].iNodes()[5], 536);
 }
 
 int main(int argc, char **argv) {
