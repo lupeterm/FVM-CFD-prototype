@@ -210,11 +210,11 @@ void readMesh::constructElements(Mesh &fvMesh) {
     std::size_t iOwner = fvMesh.faces()[i].iOwner();
     std::size_t iNeighbor = fvMesh.faces()[i].iNeighbor();
 
-    fvMesh.elements()[iOwner].iFaces().push_back(i);
+    fvMesh.elements()[iOwner].iFaces().push_back(fvMesh.faces()[i].index());
     fvMesh.elements()[iOwner].iNeighbors().push_back(iNeighbor);
     fvMesh.elements()[iOwner].faceSigns().push_back(1);
 
-    fvMesh.elements()[iNeighbor].iFaces().push_back(i);
+    fvMesh.elements()[iNeighbor].iFaces().push_back(fvMesh.faces()[i].index());
     fvMesh.elements()[iNeighbor].iNeighbors().push_back(iOwner);
     fvMesh.elements()[iNeighbor].faceSigns().push_back(-1);
   }
@@ -244,7 +244,7 @@ void readMesh::setupNodeConnectivities(Mesh &fvMesh) {
     std::size_t *iNodes = fvMesh.faces()[i].iNodes();
     const std::size_t nNodes = fvMesh.faces()[i].nNodes();
     for (std::size_t j = 0; j < nNodes; ++j) {
-      fvMesh.nodes()[iNodes[j]].iFaces().push_back(i);
+      fvMesh.nodes()[iNodes[j]].iFaces().push_back(fvMesh.faces()[i].index());
     }
   }
 
