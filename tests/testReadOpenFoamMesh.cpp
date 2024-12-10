@@ -528,6 +528,59 @@ TEST(ReadingOpenFoamMeshTest, setupNodeConnectivitiesPart2Works) {
   EXPECT_EQ(fvMesh.elements()[917].iNodes()[5], 536);
 }
 
+TEST(ReadingOpenFoamMeshTest, setupNodeConnectivitiesPart3Works) {
+  // --- Arrange ---
+  std::string caseDirectory("../../cases/elbow");
+  readMesh meshReader;
+  Mesh fvMesh(caseDirectory);
+
+  // -- -Act-- -
+  meshReader.readOpenFoamMesh(fvMesh);
+
+  // --- Assert ---
+  // *** Verify the element indices of some nodes ***
+  EXPECT_EQ(fvMesh.nodes()[0].iElements().size(), 3);
+  EXPECT_EQ(fvMesh.nodes()[0].iElements()[0], 111);
+  EXPECT_EQ(fvMesh.nodes()[0].iElements()[1], 218);
+  EXPECT_EQ(fvMesh.nodes()[0].iElements()[2], 219);
+
+  EXPECT_EQ(fvMesh.nodes()[1].iElements().size(), 3);
+  EXPECT_EQ(fvMesh.nodes()[1].iElements()[0], 219);
+  EXPECT_EQ(fvMesh.nodes()[1].iElements()[1], 293);
+  EXPECT_EQ(fvMesh.nodes()[1].iElements()[2], 295);
+
+  EXPECT_EQ(fvMesh.nodes()[499].iElements().size(), 5);
+  EXPECT_EQ(fvMesh.nodes()[499].iElements()[0], 746);
+  EXPECT_EQ(fvMesh.nodes()[499].iElements()[1], 747);
+  EXPECT_EQ(fvMesh.nodes()[499].iElements()[2], 748);
+  EXPECT_EQ(fvMesh.nodes()[499].iElements()[3], 749);
+  EXPECT_EQ(fvMesh.nodes()[499].iElements()[4], 750);
+
+  EXPECT_EQ(fvMesh.nodes()[500].iElements().size(), 6);
+  EXPECT_EQ(fvMesh.nodes()[500].iElements()[0], 751);
+  EXPECT_EQ(fvMesh.nodes()[500].iElements()[1], 753);
+  EXPECT_EQ(fvMesh.nodes()[500].iElements()[2], 754);
+  EXPECT_EQ(fvMesh.nodes()[500].iElements()[3], 773);
+  EXPECT_EQ(fvMesh.nodes()[500].iElements()[4], 869);
+  EXPECT_EQ(fvMesh.nodes()[500].iElements()[5], 870);
+
+  // Last two elements
+  EXPECT_EQ(fvMesh.nodes()[1072].iElements().size(), 6);
+  EXPECT_EQ(fvMesh.nodes()[1072].iElements()[0], 909);
+  EXPECT_EQ(fvMesh.nodes()[1072].iElements()[1], 910);
+  EXPECT_EQ(fvMesh.nodes()[1072].iElements()[2], 911);
+  EXPECT_EQ(fvMesh.nodes()[1072].iElements()[3], 912);
+  EXPECT_EQ(fvMesh.nodes()[1072].iElements()[4], 914);
+  EXPECT_EQ(fvMesh.nodes()[1072].iElements()[5], 916);
+
+  EXPECT_EQ(fvMesh.nodes()[1073].iElements().size(), 5);
+  EXPECT_EQ(fvMesh.nodes()[1073].iElements()[0], 913);
+  EXPECT_EQ(fvMesh.nodes()[1073].iElements()[1], 914);
+  EXPECT_EQ(fvMesh.nodes()[1073].iElements()[2], 915);
+  EXPECT_EQ(fvMesh.nodes()[1073].iElements()[3], 916);
+  EXPECT_EQ(fvMesh.nodes()[1073].iElements()[4], 917);
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

@@ -18,7 +18,6 @@ private:
   double z_ = 0.0;
   std::size_t index_ = 0;
   std::vector<std::size_t> iFaces_;
-  // double *iElements_ = nullptr;
   std::vector<std::size_t> iElements_;
 };
 #endif
