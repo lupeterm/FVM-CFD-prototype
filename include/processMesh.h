@@ -5,7 +5,7 @@
 
 class processMesh {
 public:
-  void processFaceGeometry(Mesh &fvMesh);
+  void processBasicFaceGeometry(Mesh &fvMesh);
 };
 
 #endif
