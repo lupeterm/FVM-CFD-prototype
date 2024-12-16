@@ -57,8 +57,8 @@ void readMesh::readPointsFile(Mesh &fvMesh) {
   for (std::size_t i = 0; i < fvMesh.nNodes(); ++i) {
     pointsFile.ignore(1); // Discard the left parenthesis
 
-    pointsFile >> fvMesh.nodes()[i].x() >> fvMesh.nodes()[i].y() >>
-        fvMesh.nodes()[i].z();
+    pointsFile >> fvMesh.nodes()[i].centroid()[0] >>
+        fvMesh.nodes()[i].centroid()[1] >> fvMesh.nodes()[i].centroid()[2];
 
     // Discard the rest of the line
     pointsFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');

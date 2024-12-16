@@ -18,5 +18,6 @@ private:
   std::size_t index_ = 0;
   std::size_t iOwner_ = -1;
   std::size_t iNeighbor_ = -1;
+  double deltaVol = 0;
 };
 #endif
