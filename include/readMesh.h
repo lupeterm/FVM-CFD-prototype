@@ -2,12 +2,14 @@
 #define READ_MESH_H
 
 #include "Mesh.h"
+// #include "processMesh.h"
 #include <string>
 
 class readMesh {
 public:
   void readOpenFoamMesh(Mesh &fvMesh);
 
+private:
   void getDirectory(Mesh &fvMesh);
   void ifFileOpened(const std::ifstream &file, const std::string &fileName);
   void discardLines(std::ifstream &file, std::size_t nLines = 1);
