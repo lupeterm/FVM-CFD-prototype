@@ -1,4 +1,5 @@
 #include "processMesh.h"
+#include <cmath>
 #include <cstddef>
 #include <vector>
 
@@ -26,15 +27,47 @@ void processMesh::processBasicFaceGeometry(Mesh &fvMesh) {
     Using the center to compute the area and centroid of virtual
     triangles based on the center and the face nodes
     */
-    // std::vector<double> centroid(3, 0.0);
-    // std::vector<double> Sf(3, 0.0);
-    // double area = 0.0;
-    // std::vector<double> point1 = center;
-    // if (nNodes > 3) {
-    //   for (std::size_t iTriangle = 0; iTriangle < nNodes; ++iTriangle) {
-    //     std::vector<double> point2 =
-    //         fvMesh.nodes()[iNodes[iTriangle]].centroid();
-    //   }
-    // }
+
+    std::vector<double> Sf(3, 0.0);
+    double area = 0.0;
+    std::vector<double> point1 = center;
+    std::vector<double> point2(3, 0.0);
+    std::vector<double> point3(3, 0.0);
+
+    // TO DO: Should consider a special case: triangular face
+    for (std::size_t iTriangle = 0; iTriangle < nNodes; ++iTriangle) {
+      point2 = fvMesh.nodes()[iNodes[iTriangle]].centroid();
+      if (iTriangle < nNodes - 1) {
+        point3 = fvMesh.nodes()[iNodes[iTriangle + 1]].centroid();
+      } else {
+        point3 = fvMesh.nodes()[iNodes[0]].centroid();
+      }
+
+      std::vector<double> local_centroid(3, 0.0);
+      for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
+        local_centroid[iCoordinate] =
+            (point1[iCoordinate] + point2[iCoordinate] + point3[iCoordinate]) /
+            3.0;
+      }
+
+      // Calculate cross product
+      std::vector<double> local_Sf(3, 0.0);
+      local_Sf[0] = 0.5 * ((point2[1] - point1[1]) * (point3[2] - point1[2]) -
+                           (point2[2] - point1[2]) * (point3[1] - point1[1]));
+      local_Sf[1] = 0.5 * ((point2[2] - point1[2]) * (point3[0] - point1[0]) -
+                           (point2[0] - point1[0]) * (point3[2] - point1[2]));
+      local_Sf[2] = 0.5 * ((point2[0] - point1[0]) * (point3[1] - point1[1]) -
+                           (point2[1] - point1[1]) * (point3[0] - point1[0]));
+
+      double local_area =
+          std::sqrt(local_Sf[0] * local_Sf[0] + local_Sf[1] * local_Sf[1] +
+                    local_Sf[2] * local_Sf[2]);
+
+      // std::vector<double> centroid(3, 0.0);
+      // for (int j = 0; j < 3; ++j) {
+      //   centroid[j] += local_area * local_centroid[j];
+      //   Sf[j] += local_Sf[j];
+      // }
+    }
   }
 }
