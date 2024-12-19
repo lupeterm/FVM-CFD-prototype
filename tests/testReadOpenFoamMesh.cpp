@@ -427,19 +427,19 @@ TEST(ReadingOpenFoamMeshTest, setupNodeConnectivitiesPart2Works) {
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
   Mesh fvMesh(caseDirectory);
-  std::vector<std::size_t> expected_element0_nodes = {36, 573, 589,
-                                                      52, 37,  574};
-  std::vector<std::size_t> expected_element1_nodes = {41, 578, 634,
-                                                      97, 42,  579};
-  std::vector<std::size_t> expected_element449_nodes = {214, 751, 799,
-                                                        262, 402, 939};
-  std::vector<std::size_t> expected_element450_nodes = {304, 341, 878,
-                                                        841, 404, 941};
-  std::vector<std::size_t> expected_element916_nodes = {408, 535, 1072,
-                                                        945, 536, 1073};
+  std::vector<std::size_t> expected_element0_iNodes = {36, 573, 589,
+                                                       52, 37,  574};
+  std::vector<std::size_t> expected_element1_iNodes = {41, 578, 634,
+                                                       97, 42,  579};
+  std::vector<std::size_t> expected_element449_iNodes = {214, 751, 799,
+                                                         262, 402, 939};
+  std::vector<std::size_t> expected_element450_iNodes = {304, 341, 878,
+                                                         841, 404, 941};
+  std::vector<std::size_t> expected_element916_iNodes = {408, 535, 1072,
+                                                         945, 536, 1073};
 
-  std::vector<std::size_t> expected_element917_nodes = {475,  408,  945,
-                                                        1012, 1073, 536};
+  std::vector<std::size_t> expected_element917_iNodes = {475,  408,  945,
+                                                         1012, 1073, 536};
   // -- -Act-- -
   meshReader.readOpenFoamMesh(fvMesh);
 
@@ -447,28 +447,28 @@ TEST(ReadingOpenFoamMeshTest, setupNodeConnectivitiesPart2Works) {
   // *** Verify the node indices of some finite volume elements ***
   EXPECT_EQ(fvMesh.elements()[0].iNodes().size(), 6);
   EXPECT_TRUE(
-      VectorMatch(fvMesh.elements()[0].iNodes(), expected_element0_nodes, 6));
+      VectorMatch(fvMesh.elements()[0].iNodes(), expected_element0_iNodes, 6));
 
   EXPECT_EQ(fvMesh.elements()[1].iNodes().size(), 6);
   EXPECT_TRUE(
-      VectorMatch(fvMesh.elements()[1].iNodes(), expected_element1_nodes, 6));
+      VectorMatch(fvMesh.elements()[1].iNodes(), expected_element1_iNodes, 6));
 
   EXPECT_EQ(fvMesh.elements()[449].iNodes().size(), 6);
   EXPECT_TRUE(VectorMatch(fvMesh.elements()[449].iNodes(),
-                          expected_element449_nodes, 6));
+                          expected_element449_iNodes, 6));
 
   EXPECT_EQ(fvMesh.elements()[450].iNodes().size(), 6);
   EXPECT_TRUE(VectorMatch(fvMesh.elements()[450].iNodes(),
-                          expected_element450_nodes, 6));
+                          expected_element450_iNodes, 6));
 
   // Last two elements
   EXPECT_EQ(fvMesh.elements()[916].iNodes().size(), 6);
   EXPECT_TRUE(VectorMatch(fvMesh.elements()[916].iNodes(),
-                          expected_element916_nodes, 6));
+                          expected_element916_iNodes, 6));
 
   EXPECT_EQ(fvMesh.elements()[917].iNodes().size(), 6);
   EXPECT_TRUE(VectorMatch(fvMesh.elements()[917].iNodes(),
-                          expected_element917_nodes, 6));
+                          expected_element917_iNodes, 6));
 }
 
 TEST(ReadingOpenFoamMeshTest, setupNodeConnectivitiesPart3Works) {
