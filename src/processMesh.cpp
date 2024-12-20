@@ -14,8 +14,6 @@ void printOutVector(std::vector<double> &customVector) {
 }
 
 void processMesh::processBasicFaceGeometry(Mesh &fvMesh) {
-  // std::size_t nFaces = fvMesh.nFaces();
-
   for (std::size_t iFace = 0; iFace < fvMesh.nFaces(); ++iFace) {
     /*
     // Compute the geometric center of a face
@@ -35,18 +33,6 @@ void processMesh::processBasicFaceGeometry(Mesh &fvMesh) {
       center[iCoordinate] /=
           static_cast<double>(fvMesh.faces()[iFace].nNodes());
     }
-
-    //***************** Debug code ******************
-
-    if (iFace == 0) {
-      std::cout << "face 0 static cast<double>(nNode):" << "\n";
-      std::cout << static_cast<double>(fvMesh.faces()[iFace].nNodes())
-                << std::endl;
-
-      std::cout << "face 0 center = " << "\n";
-      printOutVector(center);
-    }
-    //***********************************************
 
     /*
     // Using the center to compute the area and centroid of virtual
@@ -82,24 +68,6 @@ void processMesh::processBasicFaceGeometry(Mesh &fvMesh) {
              triangleNode3[iCoordinate]) /
             3.0;
       }
-
-      //***************** Debug code ******************
-      if (iFace == 0) {
-        if (iNode == 0) {
-          std::cout << "face 0 triangle 0 centroid:" << std::endl;
-
-        } else if (iNode == 1) {
-          std::cout << "face 0 triangle 1 centroid:" << std::endl;
-
-        } else if (iNode == 2) {
-          std::cout << "face 0 triangle 2 centroid:" << std::endl;
-
-        } else if (iNode == 3) {
-          std::cout << "face 0 triangle 3 centroid:" << std::endl;
-        }
-        printOutVector(local_centroid);
-      }
-      //***********************************************
 
       // Calculate the surface area vector of a given subtriangle by cross
       // product
