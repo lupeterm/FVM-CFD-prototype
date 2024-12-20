@@ -75,6 +75,17 @@ TEST(ProcessingBasicFaceGeometryTest, ComputingFaceCentroidWorks) {
                                            -0.937738323900000};
   std::vector<double> face1648_centroid = {3.577350269333333, 1.577350269333333,
                                            0.937738323900000};
+  std::vector<double> face3285_centroid = {
+      54.832016820000010, 15.735877276666670, -0.937738323900000};
+  std::vector<double> face3286_centroid = {
+      53.686867763333346, 14.990837000000000, 0.937738323900000};
+  std::vector<double> face3287_centroid = {
+      53.686867763333325, 14.990837000000000, -0.937738323900000};
+  std::vector<double> face3288_centroid = {
+      53.340025863333340, 15.796400383333335, 0.937738323900000};
+  std::vector<double> face3289_centroid = {
+      53.340025863333340, 15.796400383333333, -0.937738323900000};
+
   const double maxDiff = 1.0e-9;
   const double maxRelativeDiff = 1.0e-4;
 
@@ -116,5 +127,25 @@ TEST(ProcessingBasicFaceGeometryTest, ComputingFaceCentroidWorks) {
 
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1648].centroid(),
                                 face1648_centroid, 3, maxDiff,
+                                maxRelativeDiff));
+
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[3285].centroid(),
+                                face3285_centroid, 3, maxDiff,
+                                maxRelativeDiff));
+
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[3286].centroid(),
+                                face3286_centroid, 3, maxDiff,
+                                maxRelativeDiff));
+
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[3287].centroid(),
+                                face3287_centroid, 3, maxDiff,
+                                maxRelativeDiff));
+
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[3288].centroid(),
+                                face3288_centroid, 3, maxDiff,
+                                maxRelativeDiff));
+
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[3289].centroid(),
+                                face3289_centroid, 3, maxDiff,
                                 maxRelativeDiff));
 }
