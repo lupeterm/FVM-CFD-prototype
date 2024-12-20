@@ -14,9 +14,9 @@ void printOutVector(std::vector<double> &customVector) {
 }
 
 void processMesh::processBasicFaceGeometry(Mesh &fvMesh) {
-  std::size_t nFaces = fvMesh.nFaces();
+  // std::size_t nFaces = fvMesh.nFaces();
 
-  for (std::size_t iFace = 0; iFace < nFaces; ++iFace) {
+  for (std::size_t iFace = 0; iFace < fvMesh.nFaces(); ++iFace) {
     /*
     // Compute the geometric center of a face
     */

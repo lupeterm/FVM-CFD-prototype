@@ -30,7 +30,7 @@ void readMesh::ifFileOpened(const std::ifstream &file,
   }
 }
 
-void readMesh::discardLines(std::ifstream &file, std::size_t nLines) {
+void readMesh::discardLines(std::ifstream &file, const std::size_t nLines) {
   std::string line;
   for (int iLine = 0; iLine < nLines; ++iLine) {
     file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -203,13 +203,11 @@ void readMesh::readBoundaryFile(Mesh &fvMesh) {
 void readMesh::constructElements(Mesh &fvMesh) {
   fvMesh.allocateElements();
 
-  const std::size_t nElements = fvMesh.nElements();
-  for (std::size_t iElement = 0; iElement < nElements; ++iElement) {
+  for (std::size_t iElement = 0; iElement < fvMesh.nElements(); ++iElement) {
     fvMesh.elements()[iElement].index() = iElement;
   }
 
-  const std::size_t nInteriorFaces = fvMesh.nInteriorFaces();
-  for (std::size_t iInteriorFace = 0; iInteriorFace < nInteriorFaces;
+  for (std::size_t iInteriorFace = 0; iInteriorFace < fvMesh.nInteriorFaces();
        ++iInteriorFace) {
     std::size_t iOwner = fvMesh.faces()[iInteriorFace].iOwner();
     std::size_t iNeighbor = fvMesh.faces()[iInteriorFace].iNeighbor();
@@ -226,26 +224,25 @@ void readMesh::constructElements(Mesh &fvMesh) {
   }
 
   // Go through boundary faces
-  std::size_t nFaces = fvMesh.nFaces();
-  for (std::size_t iBFace = nInteriorFaces; iBFace < nFaces; ++iBFace) {
+  for (std::size_t iBFace = fvMesh.nInteriorFaces(); iBFace < fvMesh.nFaces();
+       ++iBFace) {
     std::size_t iOwner = fvMesh.faces()[iBFace].iOwner();
 
     fvMesh.elements()[iOwner].iFaces().push_back(iBFace);
     fvMesh.elements()[iOwner].faceSigns().push_back(1);
   }
 
-  for (std::size_t iElement = 0; iElement < nElements; ++iElement) {
+  for (std::size_t iElement = 0; iElement < fvMesh.nElements(); ++iElement) {
     fvMesh.elements()[iElement].nNeighbors() =
         fvMesh.elements()[iElement].iNeighbors().size();
   }
 
-  fvMesh.nBElements() = nFaces - nInteriorFaces;
-  fvMesh.nBFaces() = nFaces - nInteriorFaces;
+  fvMesh.nBElements() = fvMesh.nFaces() - fvMesh.nInteriorFaces();
+  fvMesh.nBFaces() = fvMesh.nFaces() - fvMesh.nInteriorFaces();
 }
 
 void readMesh::setupNodeConnectivities(Mesh &fvMesh) {
-  const std::size_t nFaces = fvMesh.nFaces();
-  for (std::size_t iFace = 0; iFace < nFaces; ++iFace) {
+  for (std::size_t iFace = 0; iFace < fvMesh.nFaces(); ++iFace) {
 
     std::size_t *iNodes = fvMesh.faces()[iFace].iNodes();
     const std::size_t nNodes = fvMesh.faces()[iFace].nNodes();
@@ -255,8 +252,7 @@ void readMesh::setupNodeConnectivities(Mesh &fvMesh) {
     }
   }
 
-  const std::size_t nElements = fvMesh.nElements();
-  for (std::size_t iElement = 0; iElement < nElements; ++iElement) {
+  for (std::size_t iElement = 0; iElement < fvMesh.nElements(); ++iElement) {
 
     for (auto iFace : fvMesh.elements()[iElement].iFaces()) {
 
