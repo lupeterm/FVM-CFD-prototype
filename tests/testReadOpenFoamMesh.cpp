@@ -239,7 +239,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingBoundariesWorks) {
   EXPECT_EQ(fvMesh.boundaries()[5].startFace(), 1454);
 }
 
-TEST(ReadingOpenFoamMeshTest, constructingElementNeighborsWorks) {
+TEST(ConstructingElementsTest, ConstructingElementNeighborsWorks) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
@@ -277,7 +277,7 @@ TEST(ReadingOpenFoamMeshTest, constructingElementNeighborsWorks) {
                           expected_element917_iNeighbors, 3));
 }
 
-TEST(ReadingOpenFoamMeshTest, constructingElementFacesWorks) {
+TEST(ConstructingElementsTest, ConstructingElementFacesWorks) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
@@ -326,7 +326,7 @@ TEST(ReadingOpenFoamMeshTest, constructingElementFacesWorks) {
                           expected_element917_iFaces, 5));
 }
 
-TEST(ReadingOpenFoamMeshTest, constructingElementFaceSignsWorks) {
+TEST(ConstructingElementsTest, ConstructingElementFaceSignsWorks) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
@@ -360,7 +360,7 @@ TEST(ReadingOpenFoamMeshTest, constructingElementFaceSignsWorks) {
                           expected_element917_faceSigns, 5));
 }
 
-TEST(ReadingOpenFoamMeshTest, constructingElementBoundaryWorks) {
+TEST(ConstructingElementsTest, ConstructingElementBoundaryWorks) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
@@ -374,7 +374,7 @@ TEST(ReadingOpenFoamMeshTest, constructingElementBoundaryWorks) {
   EXPECT_EQ(fvMesh.nBFaces(), 1990);
 }
 
-TEST(ReadingOpenFoamMeshTest, setupNodeConnectivitiesPart1Works) {
+TEST(SettingUpNodeConnectivitiesTest, ConnectingFacesToNodeWorks) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
@@ -422,7 +422,7 @@ TEST(ReadingOpenFoamMeshTest, setupNodeConnectivitiesPart1Works) {
       VectorMatch(fvMesh.nodes()[1073].iFaces(), expected_node1073_iFaces, 10));
 }
 
-TEST(ReadingOpenFoamMeshTest, setupNodeConnectivitiesPart2Works) {
+TEST(SettingUpNodeConnectivitiesTest, ConnectingNodesToElementWorks) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
@@ -471,7 +471,7 @@ TEST(ReadingOpenFoamMeshTest, setupNodeConnectivitiesPart2Works) {
                           expected_element917_iNodes, 6));
 }
 
-TEST(ReadingOpenFoamMeshTest, setupNodeConnectivitiesPart3Works) {
+TEST(SettingUpNodeConnectivitiesTest, ConnectingElementsToNodetWorks) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
