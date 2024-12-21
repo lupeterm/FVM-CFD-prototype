@@ -3,15 +3,17 @@
 #include <cstddef>
 #include <vector>
 
-#include <iostream>
+// #include <iostream>
 
-void printOutVector(std::vector<double> &customVector) {
-  for (std::size_t iCoordinate = 0; iCoordinate < customVector.size();
-       ++iCoordinate) {
-    std::cout << customVector[iCoordinate] << "\n";
-  }
-  std::cout << std::endl;
-}
+// *** Debug code ***
+// void printOutVector(std::vector<double> &customVector) {
+//   for (std::size_t iCoordinate = 0; iCoordinate < customVector.size();
+//        ++iCoordinate) {
+//     std::cout << customVector[iCoordinate] << "\n";
+//   }
+//   std::cout << std::endl;
+// }
+// *******************
 
 void processMesh::processBasicFaceGeometry(Mesh &fvMesh) {
   for (std::size_t iFace = 0; iFace < fvMesh.nFaces(); ++iFace) {

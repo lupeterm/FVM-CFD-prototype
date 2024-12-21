@@ -4,16 +4,7 @@
 #include "readMesh.h"
 #include <cmath>
 #include <cstddef>
-#include <iostream>
 #include <string>
-
-// template <typename T> void printOutVector(std::vector<T> &customVector) {
-//   for (std::size_t iCoordinate = 0; iCoordinate < customVector.size();
-//        ++iCoordinate) {
-//     std::cout << customVector[iCoordinate] << "\n";
-//   }
-//   std::cout << std::endl;
-// }
 
 bool AlmostEqualAbsAndRelative(const double &actualValue,
                                const double &expectedValue,
@@ -53,12 +44,24 @@ VectorAlmostEqual(const T1 &actual, const T2 &expected, const std::size_t size,
   return ::testing::AssertionSuccess();
 }
 
+::testing::AssertionResult ScalarAlmostEqual(const double &actual,
+                                             const double &expected,
+                                             const double maxDiff,
+                                             const double maxRelativeDiff) {
+
+  if (!AlmostEqualAbsAndRelative(actual, expected, maxDiff, maxRelativeDiff)) {
+    return ::testing::AssertionFailure()
+           << "actual (" << actual << ") != expected (" << expected << ")";
+  }
+  return ::testing::AssertionSuccess();
+}
+
 TEST(ProcessingBasicFaceGeometryTest, ComputingFaceCentroidWorks) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
   Mesh fvMesh(caseDirectory);
-  std::vector<double> face0_centroid = {1.0, 15.0, 0.0};
+  std::vector<double> face0_centroid = {1, 14.999999999999998, 0};
   std::vector<double> face1_centroid = {53.0392360700000, -3.99307942350000,
                                         0.0};
   std::vector<double> face1644_centroid = {0.577350269333333, 3.000000000000000,
@@ -141,5 +144,44 @@ TEST(ProcessingBasicFaceGeometryTest, ComputingFaceSurfaceVectorWorks) {
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[3288].Sf(), face3288_Sf, 3,
                                 maxDiff, maxRelativeDiff));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[3289].Sf(), face3289_Sf, 3,
+                                maxDiff, maxRelativeDiff));
+}
+
+TEST(ProcessingBasicFaceGeometryTest, ComputingFaceAreaWorks) {
+  // --- Arrange ---
+  std::string caseDirectory("../../cases/elbow");
+  readMesh meshReader;
+  Mesh fvMesh(caseDirectory);
+  double face0_area = 5.304649022465577;
+  double face1_area = 2.775509733301608;
+  double face1644_area = 1.732050808000000;
+  double face1645_area = 1.732050808000000;
+  double face3288_area = 1.152196763229249;
+  double face3289_area = 1.152196763229249;
+
+  const double maxDiff = 1.0e-9;
+  const double maxRelativeDiff = 1.0e-4;
+
+  // --- Act ---
+  meshReader.readOpenFoamMesh(fvMesh);
+
+  // --- Assert ---
+  // Verify the surface areas of mesh faces
+  // The first two faces
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[0].area(), face0_area, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1].area(), face1_area, maxDiff,
+                                maxRelativeDiff));
+
+  // The middle faces
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1644].area(), face1644_area,
+                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1645].area(), face1645_area,
+                                maxDiff, maxRelativeDiff));
+
+  // The last two faces
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[3288].area(), face3288_area,
+                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[3289].area(), face3289_area,
                                 maxDiff, maxRelativeDiff));
 }
