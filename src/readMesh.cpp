@@ -15,7 +15,7 @@ void readMesh::readOpenFoamMesh(Mesh &fvMesh) {
   readBoundaryFile(fvMesh);
   constructElements(fvMesh);
   setupNodeConnectivities(fvMesh);
-  MeshProcessor.processBasicFaceGeometry(fvMesh);
+  MeshProcessor.processOpenFoamMesh(fvMesh);
 }
 
 void readMesh::getDirectory(Mesh &fvMesh) {

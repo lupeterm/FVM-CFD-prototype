@@ -5,6 +5,9 @@
 
 class processMesh {
 public:
+  void processOpenFoamMesh(Mesh &fvMesh);
+
+private:
   void processBasicFaceGeometry(Mesh &fvMesh);
 };
 

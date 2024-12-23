@@ -15,6 +15,10 @@
 // }
 // *******************
 
+void processMesh::processOpenFoamMesh(Mesh &fvMesh) {
+  processBasicFaceGeometry(fvMesh);
+}
+
 void processMesh::processBasicFaceGeometry(Mesh &fvMesh) {
   for (std::size_t iFace = 0; iFace < fvMesh.nFaces(); ++iFace) {
     /*
