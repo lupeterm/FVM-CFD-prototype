@@ -118,24 +118,80 @@ void processMesh::processBasicFaceGeometry(Mesh &fvMesh) {
 
 void processMesh::computeElementVolumeAndCentroid(Mesh &fvMesh) {
   for (std::size_t iElement = 0; iElement < fvMesh.nElements(); ++iElement) {
-    std::vector<std::size_t> &iFaces = fvMesh.elements()[iElement].iFaces();
+    const std::vector<std::size_t> &iFaces =
+        fvMesh.elements()[iElement].iFaces();
 
-    // Compute a rough center of the element
-    std::array<double, 3> center = {0.0, 0.0, 0.0};
+    // Compute the geometric center of the element
+    std::array<double, 3> elementCenter = {0.0, 0.0, 0.0};
     for (auto iFace : iFaces) {
       for (auto iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
-        center[iCoordinate] += fvMesh.faces()[iFace].centroid()[iCoordinate];
+        elementCenter[iCoordinate] +=
+            fvMesh.faces()[iFace].centroid()[iCoordinate];
       }
     }
 
     for (auto iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
-      center[iCoordinate] /= iFaces.size();
+      elementCenter[iCoordinate] /= iFaces.size();
     }
 
-    if (iElement == 0) {
-      printOutArray(center);
-    }
-    // std::array<double, 3> centroid = {0.0, 0.0, 0.0};
+    // *************** Debug code ***************
+    // if (iElement == 0) {
+    //   std::cout << "Element 0 geometric center:"
+    //             << "\n";
+    //   printOutArray(center);
+    // } else if (iElement == 1) {
+    //   std::cout << "Element 1 geometric center:"
+    //             << "\n";
+    //   printOutArray(center);
+    // } else if (iElement == 2) {
+    //   std::cout << "Element 2 geometric center:"
+    //             << "\n";
+    //   printOutArray(center);
+    // } else if (iElement == 915) {
+    //   std::cout << "Element 915 geometric center:"
+    //             << "\n";
+    //   printOutArray(center);
+    // } else if (iElement == 916) {
+    //   std::cout << "Element 916 geometric center:"
+    //             << "\n";
+    //   printOutArray(center);
+    // } else if (iElement == 917) {
+    //   std::cout << "Element 917 geometric center:"
+    //             << "\n";
+    //   printOutArray(center);
+    // }
+    // **************************************************
+
+    // Compute volume and centroid of each element
+    std::array<double, 3> elementCentroid = {0.0, 0.0, 0.0};
     // std::array<double, 3> Sf = {0.0, 0.0, 0.0};
+
+    std::array<double, 3> localVolumeCentroidSum = {0.0, 0.0, 0.0};
+    double localVolumeSum = 0.0;
+
+    for (std::size_t iFace = 0; iFace < iFaces.size(); ++iFace) {
+      Face &localFace = fvMesh.faces()[iFaces[iFace]];
+      const int localFaceSign = fvMesh.elements()[iElement].faceSigns()[iFace];
+      std::array<double, 3> Sf = {0.0, 0.0, 0.0};
+
+      for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
+        Sf[iCoordinate] = localFace.Sf()[iCoordinate] * localFaceSign;
+      }
+
+      // Calculate the distance vector from geometric center to the face
+      // centroid
+      std::array<double, 3> d_Gf = {0.0, 0.0, 0.0};
+      for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
+        d_Gf[iCoordinate] =
+            localFace.centroid()[iCoordinate] - elementCenter[iCoordinate];
+      }
+
+      // Calculate the volume of each sub-element pyramid
+      double localVolume =
+          (Sf[0] * d_Gf[0] + Sf[1] * d_Gf[1] + Sf[2] * d_Gf[2]) / 3.0;
+
+      localVolumeSum += localVolume;
+    }
+    fvMesh.elements()[iElement].volume() = localVolumeSum;
   }
 }

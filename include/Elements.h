@@ -12,15 +12,17 @@ public:
   std::vector<std::size_t> &iNeighbors() { return iNeighbors_; }
   std::size_t &nNeighbors() { return nNeighbors_; }
   std::vector<std::size_t> &iNodes() { return iNodes_; }
+  double &volume() { return volume_; }
 
 private:
   std::size_t index_ = 0;
   std::vector<std::size_t> iFaces_;
   std::vector<std::size_t> iNeighbors_;
-  double volume_ = 0;
   std::vector<int> faceSigns_;
   std::size_t nNeighbors_ = 0;
   std::vector<std::size_t> iNodes_;
+  double volume_ = 0.0;
+  // double oldVolume_ = 0.0;
 };
 
 #endif

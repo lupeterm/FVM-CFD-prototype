@@ -13,7 +13,6 @@ public:
   std::array<double, 3> &centroid() { return centroid_; }
 
 private:
-  // std::vector<double> centroid_ = {0.0, 0.0, 0.0};
   std::array<double, 3> centroid_ = {0.0, 0.0, 0.0};
   std::size_t index_ = 0;
   std::vector<std::size_t> iFaces_;

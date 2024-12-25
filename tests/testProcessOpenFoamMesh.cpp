@@ -61,16 +61,16 @@ TEST(ProcessingBasicFaceGeometryTest, ComputingFaceCentroidWorks) {
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
   Mesh fvMesh(caseDirectory);
-  std::vector<double> face0_centroid = {1, 14.999999999999998, 0};
-  std::vector<double> face1_centroid = {53.0392360700000, -3.99307942350000,
-                                        0.0};
-  std::vector<double> face1644_centroid = {0.577350269333333, 3.000000000000000,
-                                           0.937738323900000};
-  std::vector<double> face1645_centroid = {0.577350269333333, 3,
-                                           -0.937738323900000};
-  std::vector<double> face3288_centroid = {
+  std::vector<double> expected_face0_centroid = {1, 14.999999999999998, 0};
+  std::vector<double> expected_face1_centroid = {53.0392360700000,
+                                                 -3.99307942350000, 0.0};
+  std::vector<double> expected_face1644_centroid = {
+      0.577350269333333, 3.000000000000000, 0.937738323900000};
+  std::vector<double> expected_face1645_centroid = {0.577350269333333, 3,
+                                                    -0.937738323900000};
+  std::vector<double> expected_face3288_centroid = {
       53.340025863333340, 15.796400383333335, 0.937738323900000};
-  std::vector<double> face3289_centroid = {
+  std::vector<double> expected_face3289_centroid = {
       53.340025863333340, 15.796400383333333, -0.937738323900000};
 
   const double maxDiff = 1.0e-9;
@@ -82,28 +82,30 @@ TEST(ProcessingBasicFaceGeometryTest, ComputingFaceCentroidWorks) {
   // --- Assert ---
   // *** Verify the centroids of faces ***
   // The first two faces
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[0].centroid(), face0_centroid, 3,
-                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[0].centroid(),
+                                expected_face0_centroid, 3, maxDiff,
+                                maxRelativeDiff));
 
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1].centroid(), face1_centroid, 3,
-                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1].centroid(),
+                                expected_face1_centroid, 3, maxDiff,
+                                maxRelativeDiff));
 
   // The middle faces
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1644].centroid(),
-                                face1644_centroid, 3, maxDiff,
+                                expected_face1644_centroid, 3, maxDiff,
                                 maxRelativeDiff));
 
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1645].centroid(),
-                                face1645_centroid, 3, maxDiff,
+                                expected_face1645_centroid, 3, maxDiff,
                                 maxRelativeDiff));
 
   // The last two faces
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[3288].centroid(),
-                                face3288_centroid, 3, maxDiff,
+                                expected_face3288_centroid, 3, maxDiff,
                                 maxRelativeDiff));
 
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[3289].centroid(),
-                                face3289_centroid, 3, maxDiff,
+                                expected_face3289_centroid, 3, maxDiff,
                                 maxRelativeDiff));
 }
 
@@ -112,12 +114,14 @@ TEST(ProcessingBasicFaceGeometryTest, ComputingFaceSurfaceVectorWorks) {
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
   Mesh fvMesh(caseDirectory);
-  std::vector<double> face0_Sf = {3.750953295600000, -3.750953295600000, 0};
-  std::vector<double> face1_Sf = {2.045975256479117, 1.875483812120801, 0};
-  std::vector<double> face1644_Sf = {0, 0, 1.732050808000000};
-  std::vector<double> face1645_Sf = {0, 0, -1.732050808000000};
-  std::vector<double> face3288_Sf = {0, 0, 1.152196763229249};
-  std::vector<double> face3289_Sf = {0, 0, -1.152196763229249};
+  std::vector<double> expected_face0_Sf = {3.750953295600000,
+                                           -3.750953295600000, 0};
+  std::vector<double> expected_face1_Sf = {2.045975256479117, 1.875483812120801,
+                                           0};
+  std::vector<double> expected_face1644_Sf = {0, 0, 1.732050808000000};
+  std::vector<double> expected_face1645_Sf = {0, 0, -1.732050808000000};
+  std::vector<double> expected_face3288_Sf = {0, 0, 1.152196763229249};
+  std::vector<double> expected_face3289_Sf = {0, 0, -1.152196763229249};
 
   const double maxDiff = 1.0e-9;
   const double maxRelativeDiff = 1.0e-4;
@@ -128,23 +132,23 @@ TEST(ProcessingBasicFaceGeometryTest, ComputingFaceSurfaceVectorWorks) {
   // --- Assert ---
   // Verify the surface vectors of mesh faces
   // The first two faces
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[0].Sf(), face0_Sf, 3, maxDiff,
-                                maxRelativeDiff));
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1].Sf(), face1_Sf, 3, maxDiff,
-                                maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[0].Sf(), expected_face0_Sf, 3,
+                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1].Sf(), expected_face1_Sf, 3,
+                                maxDiff, maxRelativeDiff));
 
   // The middle faces
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1644].Sf(), face1644_Sf, 3,
-                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1644].Sf(), expected_face1644_Sf,
+                                3, maxDiff, maxRelativeDiff));
 
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1645].Sf(), face1645_Sf, 3,
-                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1645].Sf(), expected_face1645_Sf,
+                                3, maxDiff, maxRelativeDiff));
 
   // The last two faces
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[3288].Sf(), face3288_Sf, 3,
-                                maxDiff, maxRelativeDiff));
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[3289].Sf(), face3289_Sf, 3,
-                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[3288].Sf(), expected_face3288_Sf,
+                                3, maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[3289].Sf(), expected_face3289_Sf,
+                                3, maxDiff, maxRelativeDiff));
 }
 
 TEST(ProcessingBasicFaceGeometryTest, ComputingFaceAreaWorks) {
@@ -152,12 +156,12 @@ TEST(ProcessingBasicFaceGeometryTest, ComputingFaceAreaWorks) {
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
   Mesh fvMesh(caseDirectory);
-  double face0_area = 5.304649022465577;
-  double face1_area = 2.775509733301608;
-  double face1644_area = 1.732050808000000;
-  double face1645_area = 1.732050808000000;
-  double face3288_area = 1.152196763229249;
-  double face3289_area = 1.152196763229249;
+  double expected_face0_area = 5.304649022465577;
+  double expected_face1_area = 2.775509733301608;
+  double expected_face1644_area = 1.732050808000000;
+  double expected_face1645_area = 1.732050808000000;
+  double expected_face3288_area = 1.152196763229249;
+  double expected_face3289_area = 1.152196763229249;
 
   const double maxDiff = 1.0e-9;
   const double maxRelativeDiff = 1.0e-4;
@@ -168,20 +172,48 @@ TEST(ProcessingBasicFaceGeometryTest, ComputingFaceAreaWorks) {
   // --- Assert ---
   // Verify the surface areas of mesh faces
   // The first two faces
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[0].area(), face0_area, maxDiff,
-                                maxRelativeDiff));
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1].area(), face1_area, maxDiff,
-                                maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[0].area(), expected_face0_area,
+                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1].area(), expected_face1_area,
+                                maxDiff, maxRelativeDiff));
 
   // The middle faces
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1644].area(), face1644_area,
-                                maxDiff, maxRelativeDiff));
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1645].area(), face1645_area,
-                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1644].area(),
+                                expected_face1644_area, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1645].area(),
+                                expected_face1645_area, maxDiff,
+                                maxRelativeDiff));
 
   // The last two faces
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[3288].area(), face3288_area,
-                                maxDiff, maxRelativeDiff));
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[3289].area(), face3289_area,
-                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[3288].area(),
+                                expected_face3288_area, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[3289].area(),
+                                expected_face3289_area, maxDiff,
+                                maxRelativeDiff));
+}
+
+TEST(ComputingElementVolumeAndCentroidTest, ComputingElementVolumeWorks) {
+  // --- Arrange ---
+  std::string caseDirectory("../../cases/elbow");
+  readMesh meshReader;
+  Mesh fvMesh(caseDirectory);
+  const double expected_element0_volume = 3.750953295600002;
+  const double expected_element1_volume = 1.022987628239554;
+
+  const double maxDiff = 1.0e-9;
+  const double maxRelativeDiff = 1.0e-4;
+
+  // --- Act ---
+  meshReader.readOpenFoamMesh(fvMesh);
+
+  // --- Assert ---
+  // Verify the volumes of the first three elements
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[0].volume(),
+                                expected_element0_volume, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[1].volume(),
+                                expected_element1_volume, maxDiff,
+                                maxRelativeDiff));
 }
