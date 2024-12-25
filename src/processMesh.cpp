@@ -7,13 +7,13 @@
 #include <iostream>
 
 // *** Debug code ***
-template <typename T> void printOutArray(T &customVector) {
-  for (std::size_t iCoordinate = 0; iCoordinate < customVector.size();
-       ++iCoordinate) {
-    std::cout << customVector[iCoordinate] << "\n";
-  }
-  std::cout << std::endl;
-}
+// template <typename T> void printOutArray(T &customVector) {
+//   for (std::size_t iCoordinate = 0; iCoordinate < customVector.size();
+//        ++iCoordinate) {
+//     std::cout << customVector[iCoordinate] << "\n";
+//   }
+//   std::cout << std::endl;
+// }
 // *******************
 
 void processMesh::processOpenFoamMesh(Mesh &fvMesh) {
@@ -134,34 +134,6 @@ void processMesh::computeElementVolumeAndCentroid(Mesh &fvMesh) {
       elementCenter[iCoordinate] /= iFaces.size();
     }
 
-    // *************** Debug code ***************
-    // if (iElement == 0) {
-    //   std::cout << "Element 0 geometric center:"
-    //             << "\n";
-    //   printOutArray(center);
-    // } else if (iElement == 1) {
-    //   std::cout << "Element 1 geometric center:"
-    //             << "\n";
-    //   printOutArray(center);
-    // } else if (iElement == 2) {
-    //   std::cout << "Element 2 geometric center:"
-    //             << "\n";
-    //   printOutArray(center);
-    // } else if (iElement == 915) {
-    //   std::cout << "Element 915 geometric center:"
-    //             << "\n";
-    //   printOutArray(center);
-    // } else if (iElement == 916) {
-    //   std::cout << "Element 916 geometric center:"
-    //             << "\n";
-    //   printOutArray(center);
-    // } else if (iElement == 917) {
-    //   std::cout << "Element 917 geometric center:"
-    //             << "\n";
-    //   printOutArray(center);
-    // }
-    // **************************************************
-
     // Compute volume and centroid of each element
     std::array<double, 3> elementCentroid = {0.0, 0.0, 0.0};
     // std::array<double, 3> Sf = {0.0, 0.0, 0.0};
@@ -191,7 +163,24 @@ void processMesh::computeElementVolumeAndCentroid(Mesh &fvMesh) {
           (Sf[0] * d_Gf[0] + Sf[1] * d_Gf[1] + Sf[2] * d_Gf[2]) / 3.0;
 
       localVolumeSum += localVolume;
+
+      // Calculate volume-weighted center of sub-element pyramid (centroid)
+      std::array<double, 3> localCentroid = {0.0, 0.0, 0.0};
+      for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
+        localCentroid[iCoordinate] = 0.75 * localFace.centroid()[iCoordinate] +
+                                     0.25 * elementCenter[iCoordinate];
+      }
+
+      for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
+        localVolumeCentroidSum[iCoordinate] +=
+            localCentroid[iCoordinate] * localVolume;
+      }
+    }
+    for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
+      fvMesh.elements()[iElement].centroid()[iCoordinate] =
+          localVolumeCentroidSum[iCoordinate] / localVolumeSum;
     }
     fvMesh.elements()[iElement].volume() = localVolumeSum;
+    fvMesh.elements()[iElement].oldVolume() = localVolumeSum;
   }
 }

@@ -284,3 +284,68 @@ TEST(ComputingElementVolumeAndCentroidTest, ComputingElementVolumeWorks) {
                                 expected_element917_volume, maxDiff,
                                 maxRelativeDiff));
 }
+
+TEST(ComputingElementVolumeAndCentroidTest, ComputingElementCentroidWorks) {
+  // --- Arrange ---
+  std::string caseDirectory("../../cases/elbow");
+  readMesh meshReader;
+  Mesh fvMesh(caseDirectory);
+  const std::array<double, 3> expected_element0_centroid = {
+      0.666666666666667, 15.333333333333332, 4.439763456642422e-17};
+  const std::array<double, 3> expected_element1_centroid = {
+      52.872570040000000, -4.174897670333334, 0};
+  const std::array<double, 3> expected_element2_centroid = {
+      48.666666666666664, 63.333333333333330, 0};
+  const std::array<double, 3> expected_element458_centroid = {
+      54.201239489999990, 9.628230276666667, -1.576560775227273e-17};
+  const std::array<double, 3> expected_element459_centroid = {
+      54.087574729999990, 10.260431970999997, -1.879688832395040e-17};
+  const std::array<double, 3> expected_element460_centroid = {
+      55.180164206666674, 5.540703773666666, 2.553897419174813e-17};
+  const std::array<double, 3> expected_element915_centroid = {
+      54.832016820000014, 15.735877276666670, -3.581892410496619e-17};
+  const std::array<double, 3> expected_element916_centroid = {
+      53.686867763333330, 14.990837000000000, -2.938328563333445e-17};
+  const std::array<double, 3> expected_element917_centroid = {
+      53.340025863333330, 15.796400383333333, 2.568868789504999e-17};
+
+  const double maxDiff = 1.0e-9;
+  const double maxRelativeDiff = 1.0e-4;
+
+  // --- Act ---
+  meshReader.readOpenFoamMesh(fvMesh);
+
+  // --- Assert ---
+  // Verify the centroids of the first three elements
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[0].centroid(),
+                                expected_element0_centroid, 3, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[1].centroid(),
+                                expected_element1_centroid, 3, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[2].centroid(),
+                                expected_element2_centroid, 3, maxDiff,
+                                maxRelativeDiff));
+
+  // Verify the centroids of the middle three elements
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[458].centroid(),
+                                expected_element458_centroid, 3, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[459].centroid(),
+                                expected_element459_centroid, 3, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[460].centroid(),
+                                expected_element460_centroid, 3, maxDiff,
+                                maxRelativeDiff));
+
+  // Verify the centroids of the last three elements
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[915].centroid(),
+                                expected_element915_centroid, 3, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[916].centroid(),
+                                expected_element916_centroid, 3, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[917].centroid(),
+                                expected_element917_centroid, 3, maxDiff,
+                                maxRelativeDiff));
+}
