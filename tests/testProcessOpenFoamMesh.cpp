@@ -204,6 +204,13 @@ TEST(ComputingElementVolumeAndCentroidTest, ComputingElementVolumeWorks) {
   Mesh fvMesh(caseDirectory);
   const double expected_element0_volume = 3.750953295600002;
   const double expected_element1_volume = 1.022987628239554;
+  const double expected_element2_volume = 3.750953295599991;
+  const double expected_element458_volume = 1.760514155353620;
+  const double expected_element459_volume = 1.476604804863560;
+  const double expected_element460_volume = 1.086792891806789;
+  const double expected_element915_volume = 1.549771597510417;
+  const double expected_element916_volume = 1.889208440606863;
+  const double expected_element917_volume = 2.160918123107190;
 
   const double maxDiff = 1.0e-9;
   const double maxRelativeDiff = 1.0e-4;
@@ -212,11 +219,36 @@ TEST(ComputingElementVolumeAndCentroidTest, ComputingElementVolumeWorks) {
   meshReader.readOpenFoamMesh(fvMesh);
 
   // --- Assert ---
-  // Verify the volumes of the first three elements
+  // Verify the volumes of the first two elements
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[0].volume(),
                                 expected_element0_volume, maxDiff,
                                 maxRelativeDiff));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[1].volume(),
                                 expected_element1_volume, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[2].volume(),
+                                expected_element2_volume, maxDiff,
+                                maxRelativeDiff));
+
+  // Verify the volumes of the middle three elements
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[458].volume(),
+                                expected_element458_volume, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[459].volume(),
+                                expected_element459_volume, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[460].volume(),
+                                expected_element460_volume, maxDiff,
+                                maxRelativeDiff));
+
+  // Verify the volumes of the last three elements
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[915].volume(),
+                                expected_element915_volume, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[916].volume(),
+                                expected_element916_volume, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[917].volume(),
+                                expected_element917_volume, maxDiff,
                                 maxRelativeDiff));
 }
