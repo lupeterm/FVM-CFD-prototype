@@ -2,6 +2,7 @@
 
 #include "Mesh.h"
 #include "readMesh.h"
+#include <array>
 #include <cstddef>
 #include <string>
 
@@ -23,17 +24,18 @@ TEST(ReadingOpenFoamMeshTest, ReadingPointsWorks) {
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
   Mesh fvMesh(caseDirectory);
-  std::vector<double> expected_node0_centroid = {32.0, 16.0, 0.9377383239};
-  std::vector<double> expected_node1_centroid = {33.9429245, 16.11834526,
-                                                 0.9377383239};
-  std::vector<double> expected_node2_centroid = {35.84160614, 16.46798134,
-                                                 0.9377383239};
-  std::vector<double> expected_node1071_centroid = {47.07066231, 11.31027148,
-                                                    -0.9377383239};
-  std::vector<double> expected_node1072_centroid = {54.24871481, 14.34322867,
-                                                    -0.9377383239};
-  std::vector<double> expected_node1073_centroid = {54.15826673, 15.64273318,
-                                                    -0.9377383239};
+  const std::array<double, 3> expected_node0_centroid = {32.0, 16.0,
+                                                         0.9377383239};
+  const std::array<double, 3> expected_node1_centroid = {
+      33.9429245, 16.11834526, 0.9377383239};
+  const std::array<double, 3> expected_node2_centroid = {
+      35.84160614, 16.46798134, 0.9377383239};
+  const std::array<double, 3> expected_node1071_centroid = {
+      47.07066231, 11.31027148, -0.9377383239};
+  const std::array<double, 3> expected_node1072_centroid = {
+      54.24871481, 14.34322867, -0.9377383239};
+  const std::array<double, 3> expected_node1073_centroid = {
+      54.15826673, 15.64273318, -0.9377383239};
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
@@ -64,12 +66,12 @@ TEST(ReadingOpenFoamMeshTest, ReadingFacesWorks) {
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
   Mesh fvMesh(caseDirectory);
-  std::vector<std::size_t> expected_face0_iNodes = {36, 573, 589, 52};
-  std::vector<std::size_t> expected_face1_iNodes = {41, 578, 634, 97};
-  std::vector<std::size_t> expected_face2_iNodes = {44, 81, 618, 581};
-  std::vector<std::size_t> expected_face3287_iNodes = {1072, 945, 1073};
-  std::vector<std::size_t> expected_face3288_iNodes = {536, 475, 408};
-  std::vector<std::size_t> expected_face3289_iNodes = {1073, 945, 1012};
+  const std::array<std::size_t, 4> expected_face0_iNodes = {36, 573, 589, 52};
+  const std::array<std::size_t, 4> expected_face1_iNodes = {41, 578, 634, 97};
+  const std::array<std::size_t, 4> expected_face2_iNodes = {44, 81, 618, 581};
+  const std::array<std::size_t, 3> expected_face3287_iNodes = {1072, 945, 1073};
+  const std::array<std::size_t, 3> expected_face3288_iNodes = {536, 475, 408};
+  const std::array<std::size_t, 3> expected_face3289_iNodes = {1073, 945, 1012};
 
   // -- -Act-- -
   meshReader.readOpenFoamMesh(fvMesh);
@@ -244,10 +246,13 @@ TEST(ConstructingElementsTest, ConstructingElementNeighborsWorks) {
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
   Mesh fvMesh(caseDirectory);
-  std::vector<std::size_t> expected_element99_iNeighbors = {19, 100, 326};
-  std::vector<std::size_t> expected_element100_iNeighbors = {99, 213};
-  std::vector<std::size_t> expected_element916_iNeighbors = {912, 914, 917};
-  std::vector<std::size_t> expected_element917_iNeighbors = {802, 913, 916};
+  const std::array<std::size_t, 3> expected_element99_iNeighbors = {19, 100,
+                                                                    326};
+  const std::array<std::size_t, 3> expected_element100_iNeighbors = {99, 213};
+  const std::array<std::size_t, 3> expected_element916_iNeighbors = {912, 914,
+                                                                     917};
+  const std::array<std::size_t, 3> expected_element917_iNeighbors = {802, 913,
+                                                                     916};
 
   // -- -Act-- -
   meshReader.readOpenFoamMesh(fvMesh);
@@ -282,18 +287,18 @@ TEST(ConstructingElementsTest, ConstructingElementFacesWorks) {
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
   Mesh fvMesh(caseDirectory);
-  std::vector<std::size_t> expected_element0_iFaces = {0, 1300, 1400, 1454,
-                                                       1455};
-  std::vector<std::size_t> expected_element1_iFaces = {1, 1301, 1408, 1456,
-                                                       1457};
-  std::vector<std::size_t> expected_element99_iFaces = {32, 154, 155, 1652,
-                                                        1653};
-  std::vector<std::size_t> expected_element100_iFaces = {154, 156, 1349, 1654,
-                                                         1655};
-  std::vector<std::size_t> expected_element916_iFaces = {1294, 1298, 1299, 3286,
-                                                         3287};
-  std::vector<std::size_t> expected_element917_iFaces = {1171, 1296, 1299, 3288,
-                                                         3289};
+  const std::array<std::size_t, 5> expected_element0_iFaces = {0, 1300, 1400,
+                                                               1454, 1455};
+  const std::array<std::size_t, 5> expected_element1_iFaces = {1, 1301, 1408,
+                                                               1456, 1457};
+  const std::array<std::size_t, 5> expected_element99_iFaces = {32, 154, 155,
+                                                                1652, 1653};
+  const std::array<std::size_t, 5> expected_element100_iFaces = {154, 156, 1349,
+                                                                 1654, 1655};
+  const std::array<std::size_t, 5> expected_element916_iFaces = {
+      1294, 1298, 1299, 3286, 3287};
+  const std::array<std::size_t, 5> expected_element917_iFaces = {
+      1171, 1296, 1299, 3288, 3289};
 
   // -- -Act-- -
   meshReader.readOpenFoamMesh(fvMesh);
@@ -331,12 +336,12 @@ TEST(ConstructingElementsTest, ConstructingElementFaceSignsWorks) {
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
   Mesh fvMesh(caseDirectory);
-  std::vector<int> expected_element0_faceSigns = {1, 1, 1, 1, 1};
-  std::vector<int> expected_element1_faceSigns = {1, 1, 1, 1, 1};
-  std::vector<int> expected_element99_faceSigns = {-1, 1, 1, 1, 1};
-  std::vector<int> expected_element101_faceSigns = {-1, 1, 1, 1, 1};
-  std::vector<int> expected_element916_faceSigns = {-1, -1, 1, 1, 1};
-  std::vector<int> expected_element917_faceSigns = {-1, -1, -1, 1, 1};
+  const std::array<int, 5> expected_element0_faceSigns = {1, 1, 1, 1, 1};
+  const std::array<int, 5> expected_element1_faceSigns = {1, 1, 1, 1, 1};
+  const std::array<int, 5> expected_element99_faceSigns = {-1, 1, 1, 1, 1};
+  const std::array<int, 5> expected_element101_faceSigns = {-1, 1, 1, 1, 1};
+  const std::array<int, 5> expected_element916_faceSigns = {-1, -1, 1, 1, 1};
+  const std::array<int, 5> expected_element917_faceSigns = {-1, -1, -1, 1, 1};
 
   // -- -Act-- -
   meshReader.readOpenFoamMesh(fvMesh);
@@ -379,17 +384,17 @@ TEST(SettingUpNodeConnectivitiesTest, ConnectingFacesToNodeWorks) {
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
   Mesh fvMesh(caseDirectory);
-  std::vector<std::size_t> expected_node0_iFaces = {171,  327,  1354, 1385,
-                                                    1676, 1890, 1892};
-  std::vector<std::size_t> expected_node1_iFaces = {329,  426,  1385, 1399,
-                                                    1892, 2040, 2044};
-  std::vector<std::size_t> expected_node499_iFaces = {
+  const std::array<std::size_t, 7> expected_node0_iFaces = {
+      171, 327, 1354, 1385, 1676, 1890, 1892};
+  const std::array<std::size_t, 7> expected_node1_iFaces = {
+      329, 426, 1385, 1399, 1892, 2040, 2044};
+  const std::array<std::size_t, 10> expected_node499_iFaces = {
       1098, 1099, 1100, 1101, 1103, 2946, 2948, 2950, 2952, 2954};
-  std::vector<std::size_t> expected_node500_iFaces = {
+  const std::array<std::size_t, 12> expected_node500_iFaces = {
       1104, 1105, 1108, 1109, 1132, 1248, 2956, 2960, 2962, 3000, 3192, 3194};
-  std::vector<std::size_t> expected_node1072_iFaces = {
+  const std::array<std::size_t, 12> expected_node1072_iFaces = {
       1290, 1291, 1292, 1293, 1294, 1298, 3273, 3275, 3277, 3279, 3283, 3287};
-  std::vector<std::size_t> expected_node1073_iFaces = {
+  const std::array<std::size_t, 10> expected_node1073_iFaces = {
       1295, 1296, 1297, 1298, 1299, 3281, 3283, 3285, 3287, 3289};
 
   // -- -Act-- -
@@ -427,19 +432,19 @@ TEST(SettingUpNodeConnectivitiesTest, ConnectingNodesToElementWorks) {
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
   Mesh fvMesh(caseDirectory);
-  std::vector<std::size_t> expected_element0_iNodes = {36, 573, 589,
-                                                       52, 37,  574};
-  std::vector<std::size_t> expected_element1_iNodes = {41, 578, 634,
-                                                       97, 42,  579};
-  std::vector<std::size_t> expected_element449_iNodes = {214, 751, 799,
-                                                         262, 402, 939};
-  std::vector<std::size_t> expected_element450_iNodes = {304, 341, 878,
-                                                         841, 404, 941};
-  std::vector<std::size_t> expected_element916_iNodes = {408, 535, 1072,
-                                                         945, 536, 1073};
+  const std::array<std::size_t, 6> expected_element0_iNodes = {36, 573, 589,
+                                                               52, 37,  574};
+  const std::array<std::size_t, 6> expected_element1_iNodes = {41, 578, 634,
+                                                               97, 42,  579};
+  const std::array<std::size_t, 6> expected_element449_iNodes = {214, 751, 799,
+                                                                 262, 402, 939};
+  const std::array<std::size_t, 6> expected_element450_iNodes = {304, 341, 878,
+                                                                 841, 404, 941};
+  const std::array<std::size_t, 6> expected_element916_iNodes = {
+      408, 535, 1072, 945, 536, 1073};
 
-  std::vector<std::size_t> expected_element917_iNodes = {475,  408,  945,
-                                                         1012, 1073, 536};
+  const std::array<std::size_t, 6> expected_element917_iNodes = {
+      475, 408, 945, 1012, 1073, 536};
   // -- -Act-- -
   meshReader.readOpenFoamMesh(fvMesh);
 
@@ -476,16 +481,16 @@ TEST(SettingUpNodeConnectivitiesTest, ConnectingElementsToNodetWorks) {
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
   Mesh fvMesh(caseDirectory);
-  std::vector<std::size_t> expected_node0_iElements = {111, 218, 219};
-  std::vector<std::size_t> expected_node1_iElements = {219, 293, 295};
-  std::vector<std::size_t> expected_node499_iElements = {746, 747, 748, 749,
-                                                         750};
-  std::vector<std::size_t> expected_node500_iElements = {751, 753, 754,
-                                                         773, 869, 870};
-  std::vector<std::size_t> expected_node1072_iElements = {909, 910, 911,
-                                                          912, 914, 916};
-  std::vector<std::size_t> expected_node1073_iElements = {913, 914, 915, 916,
-                                                          917};
+  const std::array<std::size_t, 3> expected_node0_iElements = {111, 218, 219};
+  const std::array<std::size_t, 3> expected_node1_iElements = {219, 293, 295};
+  const std::array<std::size_t, 5> expected_node499_iElements = {746, 747, 748,
+                                                                 749, 750};
+  const std::array<std::size_t, 6> expected_node500_iElements = {751, 753, 754,
+                                                                 773, 869, 870};
+  const std::array<std::size_t, 6> expected_node1072_iElements = {
+      909, 910, 911, 912, 914, 916};
+  const std::array<std::size_t, 5> expected_node1073_iElements = {913, 914, 915,
+                                                                  916, 917};
   // -- -Act-- -
   meshReader.readOpenFoamMesh(fvMesh);
 

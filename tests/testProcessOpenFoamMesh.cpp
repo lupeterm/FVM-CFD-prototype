@@ -2,6 +2,7 @@
 
 #include "Mesh.h"
 #include "readMesh.h"
+#include <array>
 #include <cmath>
 #include <cstddef>
 #include <string>
@@ -56,21 +57,23 @@ VectorAlmostEqual(const T1 &actual, const T2 &expected, const std::size_t size,
   return ::testing::AssertionSuccess();
 }
 
+// ****** Tests ******
 TEST(ProcessingBasicFaceGeometryTest, ComputingFaceCentroidWorks) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
   Mesh fvMesh(caseDirectory);
-  std::vector<double> expected_face0_centroid = {1, 14.999999999999998, 0};
-  std::vector<double> expected_face1_centroid = {53.0392360700000,
-                                                 -3.99307942350000, 0.0};
-  std::vector<double> expected_face1644_centroid = {
+  const std::array<double, 3> expected_face0_centroid = {1, 14.999999999999998,
+                                                         0};
+  const std::array<double, 3> expected_face1_centroid = {
+      53.0392360700000, -3.99307942350000, 0.0};
+  const std::array<double, 3> expected_face1644_centroid = {
       0.577350269333333, 3.000000000000000, 0.937738323900000};
-  std::vector<double> expected_face1645_centroid = {0.577350269333333, 3,
-                                                    -0.937738323900000};
-  std::vector<double> expected_face3288_centroid = {
+  const std::array<double, 3> expected_face1645_centroid = {
+      0.577350269333333, 3, -0.937738323900000};
+  const std::array<double, 3> expected_face3288_centroid = {
       53.340025863333340, 15.796400383333335, 0.937738323900000};
-  std::vector<double> expected_face3289_centroid = {
+  const std::array<double, 3> expected_face3289_centroid = {
       53.340025863333340, 15.796400383333333, -0.937738323900000};
 
   const double maxDiff = 1.0e-9;
@@ -114,14 +117,14 @@ TEST(ProcessingBasicFaceGeometryTest, ComputingFaceSurfaceVectorWorks) {
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
   Mesh fvMesh(caseDirectory);
-  std::vector<double> expected_face0_Sf = {3.750953295600000,
-                                           -3.750953295600000, 0};
-  std::vector<double> expected_face1_Sf = {2.045975256479117, 1.875483812120801,
-                                           0};
-  std::vector<double> expected_face1644_Sf = {0, 0, 1.732050808000000};
-  std::vector<double> expected_face1645_Sf = {0, 0, -1.732050808000000};
-  std::vector<double> expected_face3288_Sf = {0, 0, 1.152196763229249};
-  std::vector<double> expected_face3289_Sf = {0, 0, -1.152196763229249};
+  const std::array<double, 3> expected_face0_Sf = {3.750953295600000,
+                                                   -3.750953295600000, 0};
+  const std::array<double, 3> expected_face1_Sf = {2.045975256479117,
+                                                   1.875483812120801, 0};
+  const std::array<double, 3> expected_face1644_Sf = {0, 0, 1.732050808000000};
+  const std::array<double, 3> expected_face1645_Sf = {0, 0, -1.732050808000000};
+  const std::array<double, 3> expected_face3288_Sf = {0, 0, 1.152196763229249};
+  const std::array<double, 3> expected_face3289_Sf = {0, 0, -1.152196763229249};
 
   const double maxDiff = 1.0e-9;
   const double maxRelativeDiff = 1.0e-4;
@@ -156,12 +159,12 @@ TEST(ProcessingBasicFaceGeometryTest, ComputingFaceAreaWorks) {
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
   Mesh fvMesh(caseDirectory);
-  double expected_face0_area = 5.304649022465577;
-  double expected_face1_area = 2.775509733301608;
-  double expected_face1644_area = 1.732050808000000;
-  double expected_face1645_area = 1.732050808000000;
-  double expected_face3288_area = 1.152196763229249;
-  double expected_face3289_area = 1.152196763229249;
+  const double expected_face0_area = 5.304649022465577;
+  const double expected_face1_area = 2.775509733301608;
+  const double expected_face1644_area = 1.732050808000000;
+  const double expected_face1645_area = 1.732050808000000;
+  const double expected_face3288_area = 1.152196763229249;
+  const double expected_face3289_area = 1.152196763229249;
 
   const double maxDiff = 1.0e-9;
   const double maxRelativeDiff = 1.0e-4;
