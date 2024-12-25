@@ -1,30 +1,30 @@
 #include "processMesh.h"
+#include <array>
 #include <cmath>
 #include <cstddef>
 #include <vector>
 
-// #include <iostream>
+#include <iostream>
 
 // *** Debug code ***
-// void printOutVector(std::vector<double> &customVector) {
-//   for (std::size_t iCoordinate = 0; iCoordinate < customVector.size();
-//        ++iCoordinate) {
-//     std::cout << customVector[iCoordinate] << "\n";
-//   }
-//   std::cout << std::endl;
-// }
+template <typename T> void printOutArray(T &customVector) {
+  for (std::size_t iCoordinate = 0; iCoordinate < customVector.size();
+       ++iCoordinate) {
+    std::cout << customVector[iCoordinate] << "\n";
+  }
+  std::cout << std::endl;
+}
 // *******************
 
 void processMesh::processOpenFoamMesh(Mesh &fvMesh) {
   processBasicFaceGeometry(fvMesh);
+  computeElementVolumeAndCentroid(fvMesh);
 }
 
 void processMesh::processBasicFaceGeometry(Mesh &fvMesh) {
   for (std::size_t iFace = 0; iFace < fvMesh.nFaces(); ++iFace) {
-    /*
-    // Compute the geometric center of a face
-    */
-    std::vector<double> center = {0.0, 0.0, 0.0};
+    // std::vector<double> center = {0.0, 0.0, 0.0};
+    std::array<double, 3> center = {0.0, 0.0, 0.0};
     for (std::size_t iNode = 0; iNode < fvMesh.faces()[iFace].nNodes();
          ++iNode) {
       for (std::size_t iCoordinate = 0; iCoordinate < center.size();
@@ -44,11 +44,11 @@ void processMesh::processBasicFaceGeometry(Mesh &fvMesh) {
     // Using the center to compute the area and centroid of virtual
     // triangles based on the center and the face nodes
     */
-    std::vector<double> triangleNode1 = center;
-    std::vector<double> triangleNode2(3, 0.0);
-    std::vector<double> triangleNode3(3, 0.0);
-    std::vector<double> centroid(3, 0.0);
-    std::vector<double> Sf(3, 0.0);
+    std::array<double, 3> triangleNode1 = center;
+    std::array<double, 3> triangleNode2 = {0.0, 0.0, 0.0};
+    std::array<double, 3> triangleNode3 = {0.0, 0.0, 0.0};
+    std::array<double, 3> centroid = {0.0, 0.0, 0.0};
+    std::array<double, 3> Sf = {0.0, 0.0, 0.0};
     double area = 0.0;
 
     // TO DO: Should consider a special case when the polygon is a triangle
@@ -66,7 +66,7 @@ void processMesh::processBasicFaceGeometry(Mesh &fvMesh) {
       }
 
       // Calculate the centroid of a given subtriangle
-      std::vector<double> local_centroid(3, 0.0);
+      std::array<double, 3> local_centroid = {0.0, 0.0, 0.0};
       for (std::size_t iCoordinate = 0; iCoordinate < local_centroid.size();
            ++iCoordinate) {
         local_centroid[iCoordinate] =
@@ -77,7 +77,7 @@ void processMesh::processBasicFaceGeometry(Mesh &fvMesh) {
 
       // Calculate the surface area vector of a given subtriangle by cross
       // product
-      std::vector<double> local_Sf(3, 0.0);
+      std::array<double, 3> local_Sf = {0.0, 0.0, 0.0};
       local_Sf[0] = 0.5 * ((triangleNode2[1] - triangleNode1[1]) *
                                (triangleNode3[2] - triangleNode1[2]) -
                            (triangleNode2[2] - triangleNode1[2]) *
@@ -113,5 +113,29 @@ void processMesh::processBasicFaceGeometry(Mesh &fvMesh) {
     fvMesh.faces()[iFace].centroid() = centroid;
     fvMesh.faces()[iFace].Sf() = Sf;
     fvMesh.faces()[iFace].area() = area;
+  }
+}
+
+void processMesh::computeElementVolumeAndCentroid(Mesh &fvMesh) {
+  for (std::size_t iElement = 0; iElement < fvMesh.nElements(); ++iElement) {
+    std::vector<std::size_t> &iFaces = fvMesh.elements()[iElement].iFaces();
+
+    // Compute a rough center of the element
+    std::array<double, 3> center = {0.0, 0.0, 0.0};
+    for (auto iFace : iFaces) {
+      for (auto iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
+        center[iCoordinate] += fvMesh.faces()[iFace].centroid()[iCoordinate];
+      }
+    }
+
+    for (auto iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
+      center[iCoordinate] /= iFaces.size();
+    }
+
+    if (iElement == 0) {
+      printOutArray(center);
+    }
+    // std::array<double, 3> centroid = {0.0, 0.0, 0.0};
+    // std::array<double, 3> Sf = {0.0, 0.0, 0.0};
   }
 }
