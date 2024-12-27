@@ -13,6 +13,9 @@ private:
 
   // Compute volume and centroid of each element
   void computeElementVolumeAndCentroid(Mesh &fvMesh);
+
+  // Process secondary face geometry
+  void processSecondaryFaceGeometry(Mesh &fvMesh);
 };
 
 #endif

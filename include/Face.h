@@ -16,6 +16,7 @@ public:
   std::array<double, 3> &centroid() { return centroid_; }
   std::array<double, 3> &Sf() { return Sf_; }
   double &area() { return area_; }
+  std::array<double, 3> &CN() { return CN_; }
 
 private:
   std::size_t nNodes_ = 0;
@@ -27,5 +28,6 @@ private:
   std::array<double, 3> centroid_ = {0.0, 0.0, 0.0};
   std::array<double, 3> Sf_ = {0.0, 0.0, 0.0};
   double area_ = 0.0;
+  std::array<double, 3> CN_ = {0.0, 0.0, 0.0};
 };
 #endif

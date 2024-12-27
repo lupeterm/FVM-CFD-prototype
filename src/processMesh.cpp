@@ -19,6 +19,7 @@
 void processMesh::processOpenFoamMesh(Mesh &fvMesh) {
   processBasicFaceGeometry(fvMesh);
   computeElementVolumeAndCentroid(fvMesh);
+  processSecondaryFaceGeometry(fvMesh);
 }
 
 void processMesh::processBasicFaceGeometry(Mesh &fvMesh) {
@@ -182,5 +183,27 @@ void processMesh::computeElementVolumeAndCentroid(Mesh &fvMesh) {
     }
     fvMesh.elements()[iElement].volume() = localVolumeSum;
     fvMesh.elements()[iElement].oldVolume() = localVolumeSum;
+  }
+}
+
+void processMesh::processSecondaryFaceGeometry(Mesh &fvMesh) {
+  for (std::size_t iFace = 0; iFace < fvMesh.nInteriorFaces(); ++iFace) {
+    Face &theFace = fvMesh.faces()[iFace];
+    std::array<double, 3> nf = {0.0, 0.0, 0.0};
+
+    // Compute unit normal surface vector
+    for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
+      nf[iCoordinate] = theFace.Sf()[iCoordinate] / theFace.area();
+    }
+
+    // Element &ownerElement = fvMesh.elements()[theFace.iOwner()];
+    // Element &neighborElement = fvMesh.elements()[theFace.iNeighbor()];
+
+    // // std::array<double, 3> CN = {0.0, 0.0, 0.0};
+    // // for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
+    // //   CN[iCoordinate] = neighborElement.centroid()[iCoordinate] -
+    // //                     ownerElement.centroid()[iCoordinate];
+    // // }
+    // // fvMesh.faces()[iFace].CN() = CN;
   }
 }
