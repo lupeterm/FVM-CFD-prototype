@@ -1,12 +1,12 @@
 #include "processMesh.h"
+#include "utility.h"
 #include <array>
 #include <cmath>
 #include <cstddef>
 #include <vector>
 
-#include <iostream>
-
 // *** Debug code ***
+// #include <iostream>
 // template <typename T> void printOutArray(T &customVector) {
 //   for (std::size_t iCoordinate = 0; iCoordinate < customVector.size();
 //        ++iCoordinate) {
@@ -93,9 +93,7 @@ void processMesh::processBasicFaceGeometry(Mesh &fvMesh) {
                                (triangleNode3[0] - triangleNode1[0]));
 
       // Calculate the surface area of a given subtriangle
-      double local_area =
-          std::sqrt(local_Sf[0] * local_Sf[0] + local_Sf[1] * local_Sf[1] +
-                    local_Sf[2] * local_Sf[2]);
+      double local_area = mag(local_Sf);
 
       for (std::size_t iCoordinate = 0; iCoordinate < centroid.size();
            ++iCoordinate) {
@@ -103,7 +101,7 @@ void processMesh::processBasicFaceGeometry(Mesh &fvMesh) {
         Sf[iCoordinate] += local_Sf[iCoordinate];
       }
     }
-    area = std::sqrt(Sf[0] * Sf[0] + Sf[1] * Sf[1] + Sf[2] * Sf[2]);
+    area = mag(Sf);
 
     // Compute centroid of the polygon
     for (std::size_t iCoordinate = 0; iCoordinate < centroid.size();
@@ -199,11 +197,11 @@ void processMesh::processSecondaryFaceGeometry(Mesh &fvMesh) {
     // Element &ownerElement = fvMesh.elements()[theFace.iOwner()];
     // Element &neighborElement = fvMesh.elements()[theFace.iNeighbor()];
 
-    // // std::array<double, 3> CN = {0.0, 0.0, 0.0};
-    // // for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
-    // //   CN[iCoordinate] = neighborElement.centroid()[iCoordinate] -
-    // //                     ownerElement.centroid()[iCoordinate];
-    // // }
-    // // fvMesh.faces()[iFace].CN() = CN;
+    // std::array<double, 3> CN = {0.0, 0.0, 0.0};
+    // for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
+    //   CN[iCoordinate] = neighborElement.centroid()[iCoordinate] -
+    //                     ownerElement.centroid()[iCoordinate];
+    // }
+    // fvMesh.faces()[iFace].CN() = CN;
   }
 }
