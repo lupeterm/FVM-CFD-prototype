@@ -349,3 +349,150 @@ TEST(ComputingElementVolumeAndCentroidTest, ComputingElementCentroidWorks) {
                                 expected_element917_centroid, 3, maxDiff,
                                 maxRelativeDiff));
 }
+
+TEST(ProcessingSecondaryFaceGeometryTest, ComputingInteriorFaceGeometryWorks) {
+  // --- Arrange ---
+  std::string caseDirectory("../../cases/elbow");
+  readMesh meshReader;
+  Mesh fvMesh(caseDirectory);
+
+  // Expected data of face 0
+  const std::array<double, 3> expected_face0_CN = {1, -0.577350270000000,
+                                                   -4.439763456642422e-17};
+  const std::array<double, 3> expected_face0_eCN = {
+      0.866025403480548, -0.500000000526354, -3.844947938896947e-17};
+  const double expected_face0_gDiff = 4.593960810003448;
+  const std::array<double, 3> expected_face0_T = {
+      -0.843007514403448, -1.098628781575090, 2.039609932550072e-16};
+  const double expected_face0_gf = 0.422649730593235;
+
+  // Expected data of face 1
+  const std::array<double, 3> expected_face1_CN = {0.314917596666646,
+                                                   0.545453520000002, 0};
+  const std::array<double, 3> expected_face1_eCN = {0.499999833366236,
+                                                    0.866025499990466, 0};
+  const double expected_face1_gDiff = 4.406722326241328;
+  const std::array<double, 3> expected_face1_T = {0.658220852321946,
+                                                  -0.528178392390128, 0};
+  const double expected_face1_gf = 0.409038915177910;
+
+  // Expected data of face 2
+  const std::array<double, 3> expected_face2_CN = {1, -0.577350270000004, 0};
+  const std::array<double, 3> expected_face2_eCN = {0.866025403480547,
+                                                    -0.500000000526356, 0};
+  const double expected_face2_gDiff = 4.593960810003440;
+  const std::array<double, 3> expected_face2_T = {-0.843007514403440,
+                                                  -1.098628781575078, 0};
+  const double expected_face2_gf = 0.422649730593228;
+
+  // Expected data of face 1297
+  const std::array<double, 3> expected_face1297_CN = {
+      0.269753156666688, 0.747177926666671, -3.581892410496619e-17};
+  const std::array<double, 3> expected_face1297_eCN = {
+      0.339576426475559, 0.940578465935771, -4.509034258602882e-17};
+  const double expected_face1297_gDiff = 3.075458468219738;
+  const std::array<double, 3> expected_face1297_T = {
+      0.413070532893232, -0.194487500963785, 1.101596134611384e-16};
+  const double expected_face1297_gf = 0.458174658010263;
+
+  // Expected data of face 1298
+  const std::array<double, 3> expected_face1298_CN = {
+      -0.875395899999994, 0.002137650000002, -2.938328563333445e-17};
+  const std::array<double, 3> expected_face1298_eCN = {
+      -0.999997018517642, 0.002441916425055, -3.356561074547747e-17};
+  const double expected_face1298_gDiff = 2.790827956580083;
+  const std::array<double, 3> expected_face1298_T = {
+      0.005888988579783, -0.175599075259737, 8.200369500168770e-17};
+  const double expected_face1298_gf = 0.409569915714403;
+
+  // Expected data of face 1299
+  const std::array<double, 3> expected_face1299_CN = {
+      -0.346841900000001, 0.805563383333332, 5.507197352838444e-17};
+  const std::array<double, 3> expected_face1299_eCN = {
+      -0.395460379704894, 0.918483036361402, 6.279167413923381e-17};
+  const double expected_face1299_gDiff = 3.510143869024400;
+  const std::array<double, 3> expected_face1299_T = {
+      -0.013192856118518, -0.005716847898548, -1.933105502357327e-16};
+  const double expected_face1299_gf = 0.466456642993007;
+
+  const double maxDiff = 1.0e-9;
+  const double maxRelativeDiff = 1.0e-4;
+
+  // --- Act ---
+  meshReader.readOpenFoamMesh(fvMesh);
+
+  // --- Assert ---
+  // Verify the geometric quantities of the first interior three faces
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[0].CN(), expected_face0_CN, 3,
+                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[0].eCN(), expected_face0_eCN, 3,
+                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[0].gDiff(), expected_face0_gDiff,
+                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[0].T(), expected_face0_T, 3,
+                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[0].gf(), expected_face0_gf,
+                                maxDiff, maxRelativeDiff));
+
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1].CN(), expected_face1_CN, 3,
+                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1].eCN(), expected_face1_eCN, 3,
+                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1].gDiff(), expected_face1_gDiff,
+                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1].T(), expected_face1_T, 3,
+                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1].gf(), expected_face1_gf,
+                                maxDiff, maxRelativeDiff));
+
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[2].CN(), expected_face2_CN, 3,
+                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[2].eCN(), expected_face2_eCN, 3,
+                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[2].gDiff(), expected_face2_gDiff,
+                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[2].T(), expected_face2_T, 3,
+                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[2].gf(), expected_face2_gf,
+                                maxDiff, maxRelativeDiff));
+
+  // Verify the geometric quantities of the last three interior faces
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1297].CN(), expected_face1297_CN,
+                                3, maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1297].eCN(),
+                                expected_face1297_eCN, 3, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1297].gDiff(),
+                                expected_face1297_gDiff, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1297].T(), expected_face1297_T,
+                                3, maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1297].gf(), expected_face1297_gf,
+                                maxDiff, maxRelativeDiff));
+
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1298].CN(), expected_face1298_CN,
+                                3, maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1298].eCN(),
+                                expected_face1298_eCN, 3, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1298].gDiff(),
+                                expected_face1298_gDiff, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1298].T(), expected_face1298_T,
+                                3, maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1298].gf(), expected_face1298_gf,
+                                maxDiff, maxRelativeDiff));
+
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1299].CN(), expected_face1299_CN,
+                                3, maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1299].eCN(),
+                                expected_face1299_eCN, 3, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1299].gDiff(),
+                                expected_face1299_gDiff, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1299].T(), expected_face1299_T,
+                                3, maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1299].gf(), expected_face1299_gf,
+                                maxDiff, maxRelativeDiff));
+}

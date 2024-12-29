@@ -17,6 +17,11 @@ public:
   std::array<double, 3> &Sf() { return Sf_; }
   double &area() { return area_; }
   std::array<double, 3> &CN() { return CN_; }
+  std::array<double, 3> &eCN() { return eCN_; }
+  double &gDiff() { return gDiff_; }
+  std::array<double, 3> &T() { return T_; }
+  double &gf() { return gf_; }
+  double &walldist() { return walldist_; }
 
 private:
   std::size_t nNodes_ = 0;
@@ -29,5 +34,10 @@ private:
   std::array<double, 3> Sf_ = {0.0, 0.0, 0.0};
   double area_ = 0.0;
   std::array<double, 3> CN_ = {0.0, 0.0, 0.0};
+  std::array<double, 3> eCN_ = {0.0, 0.0, 0.0};
+  double gDiff_ = 0.0;
+  std::array<double, 3> T_ = {0.0, 0.0, 0.0};
+  double gf_ = 0.0;
+  double walldist_ = 0.0;
 };
 #endif

@@ -194,14 +194,48 @@ void processMesh::processSecondaryFaceGeometry(Mesh &fvMesh) {
       nf[iCoordinate] = theFace.Sf()[iCoordinate] / theFace.area();
     }
 
-    // Element &ownerElement = fvMesh.elements()[theFace.iOwner()];
-    // Element &neighborElement = fvMesh.elements()[theFace.iNeighbor()];
+    Element &ownerElement = fvMesh.elements()[theFace.iOwner()];
+    Element &neighborElement = fvMesh.elements()[theFace.iNeighbor()];
 
-    // std::array<double, 3> CN = {0.0, 0.0, 0.0};
-    // for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
-    //   CN[iCoordinate] = neighborElement.centroid()[iCoordinate] -
-    //                     ownerElement.centroid()[iCoordinate];
-    // }
-    // fvMesh.faces()[iFace].CN() = CN;
+    std::array<double, 3> CN = {0.0, 0.0, 0.0};
+    for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
+      CN[iCoordinate] = neighborElement.centroid()[iCoordinate] -
+                        ownerElement.centroid()[iCoordinate];
+    }
+    fvMesh.faces()[iFace].CN() = CN;
+
+    std::array<double, 3> eCN = {0.0, 0.0, 0.0};
+    const double magCN = mag(CN);
+    for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
+      eCN[iCoordinate] = CN[iCoordinate] / magCN;
+    }
+    fvMesh.faces()[iFace].eCN() = eCN;
+
+    std::array<double, 3> E = {0.0, 0.0, 0.0};
+    for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
+      E[iCoordinate] = theFace.area() * eCN[iCoordinate];
+    }
+
+    fvMesh.faces()[iFace].gDiff() = mag(E) / magCN;
+    for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
+      fvMesh.faces()[iFace].T()[iCoordinate] =
+          theFace.Sf()[iCoordinate] - E[iCoordinate];
+    }
+
+    std::array<double, 3> Cf = {0.0, 0.0, 0.0};
+    for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
+      Cf[iCoordinate] = theFace.centroid()[iCoordinate] -
+                        ownerElement.centroid()[iCoordinate];
+    }
+
+    std::array<double, 3> fF = {0.0, 0.0, 0.0};
+    for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
+      fF[iCoordinate] = neighborElement.centroid()[iCoordinate] -
+                        theFace.centroid()[iCoordinate];
+    }
+    fvMesh.faces()[iFace].gf() =
+        dot_product(Cf, nf) / (dot_product(Cf, nf) + dot_product(fF, nf));
+
+    fvMesh.faces()[iFace].walldist() = 0.0;
   }
 }
