@@ -730,3 +730,24 @@ TEST(ProcessingSecondaryFaceGeometryTest,
   EXPECT_EQ(fvMesh.faces()[1296].iNeighborOwnerCoef(), 2);
   EXPECT_EQ(fvMesh.faces()[1299].iNeighborOwnerCoef(), 3);
 }
+
+TEST(SortingBoundaryNodesFromInteriorNodesTest, LabelingInteriorNodesWorks) {
+  // --- Arrange ---
+  std::string caseDirectory("../../cases/elbow");
+  readMesh meshReader;
+  Mesh fvMesh(caseDirectory);
+
+  // --- Act ---
+  meshReader.readOpenFoamMesh(fvMesh);
+
+  // --- Assert ---
+  // Verify the first three interior faces
+  EXPECT_EQ(fvMesh.faces()[0].patchIndex(), 0);
+  EXPECT_EQ(fvMesh.faces()[1].patchIndex(), 0);
+  EXPECT_EQ(fvMesh.faces()[2].patchIndex(), 0);
+
+  // Verify the last three interior faces
+  EXPECT_EQ(fvMesh.faces()[1297].patchIndex(), 0);
+  EXPECT_EQ(fvMesh.faces()[1298].patchIndex(), 0);
+  EXPECT_EQ(fvMesh.faces()[1299].patchIndex(), 0);
+}

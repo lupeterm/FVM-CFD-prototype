@@ -20,6 +20,7 @@ void processMesh::processOpenFoamMesh(Mesh &fvMesh) {
   processBasicFaceGeometry(fvMesh);
   computeElementVolumeAndCentroid(fvMesh);
   processSecondaryFaceGeometry(fvMesh);
+  sortBoundaryNodesFromInteriorNodes(fvMesh);
 }
 
 void processMesh::processBasicFaceGeometry(Mesh &fvMesh) {
@@ -305,6 +306,62 @@ void processMesh::processSecondaryFaceGeometry(Mesh &fvMesh) {
         fvMesh.faces()[iFace].iNeighborOwnerCoef() = kf;
       }
       kf++;
+    }
+  }
+}
+
+void processMesh::sortBoundaryNodesFromInteriorNodes(Mesh &fvMesh) {
+  for (std::size_t iFace = 0; iFace < fvMesh.nInteriorFaces(); ++iFace) {
+    fvMesh.faces()[iFace].patchIndex() = 0;
+
+    std::size_t *iNodes = fvMesh.faces()[iFace].iNodes();
+    std::size_t nNodes = fvMesh.faces()[iFace].nNodes();
+    for (std::size_t iNode = 0; iNode < nNodes; ++iNode) {
+      fvMesh.nodes()[iNodes[iNode]].Flag() = 1;
+    }
+  }
+
+  for (std::size_t iBoundary = 0; iBoundary < fvMesh.nBoundaries();
+       ++iBoundary) {
+    const std::size_t &startFace = fvMesh.boundaries()[iBoundary].startFace();
+    const std::size_t &nBFaces = fvMesh.boundaries()[iBoundary].nFaces();
+
+    bool s1 = (fvMesh.boundaries()[iBoundary].userName() == "frontAndBack");
+    bool s2 =
+        (fvMesh.boundaries()[iBoundary].userName() == "frontAndBackPlanes");
+    if (s1 || s2) {
+      for (std::size_t iFace = startFace; iFace < startFace + nBFaces - 1;
+           ++iFace) {
+        std::size_t *iNodes = fvMesh.faces()[iFace].iNodes();
+        const std::size_t &nNodes = fvMesh.faces()[iFace].nNodes();
+
+        for (std::size_t iNode = 0; iNode < nNodes; ++iNode) {
+          fvMesh.nodes()[iNodes[iNode]].Flag() = 1;
+        }
+      }
+    }
+  }
+
+  for (std::size_t iBoundary = 0; iBoundary < fvMesh.nBoundaries();
+       ++iBoundary) {
+    const std::size_t &startFace = fvMesh.boundaries()[iBoundary].startFace();
+    const std::size_t &nBFaces = fvMesh.boundaries()[iBoundary].nFaces();
+
+    bool s1 = (fvMesh.boundaries()[iBoundary].userName() == "frontAndBack");
+    bool s2 =
+        (fvMesh.boundaries()[iBoundary].userName() == "frontAndBackPlanes");
+    if (!s1 && !s2) {
+      for (std::size_t iFace = startFace; iFace < startFace + nBFaces - 1;
+           ++iFace) {
+        fvMesh.faces()[iFace].patchIndex() = iBoundary;
+
+        std::size_t *iNodes = fvMesh.faces()[iFace].iNodes();
+        const std::size_t &nNodes = fvMesh.faces()[iFace].nNodes();
+
+        for (std::size_t iNode = 0; iNode < nNodes; ++iNode) {
+          fvMesh.nodes()[iNodes[iNode]].Flag() = 0;
+        }
+      }
     }
   }
 }

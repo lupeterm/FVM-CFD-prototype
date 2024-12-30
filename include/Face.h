@@ -24,6 +24,7 @@ public:
   double &walldist() { return walldist_; }
   std::size_t &iOwnerNeighborCoef() { return iOwnerNeighborCoef_; }
   std::size_t &iNeighborOwnerCoef() { return iNeighborOwnerCoef_; }
+  std::size_t &patchIndex() { return patchIndex_; }
 
 private:
   std::size_t nNodes_ = 0;
@@ -43,5 +44,6 @@ private:
   double walldist_ = 0.0;
   std::size_t iOwnerNeighborCoef_ = 0;
   std::size_t iNeighborOwnerCoef_ = 0;
+  std::size_t patchIndex_ = 0;
 };
 #endif
