@@ -676,3 +676,22 @@ TEST(ProcessingSecondaryFaceGeometryTest, ComputingBoundaryFaceGeometryWorks) {
                                 expected_face3289_walldist, maxDiff,
                                 maxRelativeDiff));
 }
+
+TEST(ProcessingSecondaryFaceGeometryTest,
+     ComputingElementInteriorFaceGeometryWorks) {
+  // --- Arrange ---
+  std::string caseDirectory("../../cases/elbow");
+  readMesh meshReader;
+  Mesh fvMesh(caseDirectory);
+
+  // --- Act ---
+  meshReader.readOpenFoamMesh(fvMesh);
+
+  // --- Assert ---
+  // Verify the geometric quantities of the first three elements
+  // EXPECT_EQ(fvMesh.elements()[0].iFaces()[0], 1);
+
+  // Verify the geometric quantities of the middle three elements
+
+  // Verify the geometric quantities of the last three elements
+}

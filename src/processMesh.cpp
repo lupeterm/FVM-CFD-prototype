@@ -286,4 +286,25 @@ void processMesh::processSecondaryFaceGeometry(Mesh &fvMesh) {
     fvMesh.faces()[iBFace].walldist() =
         dot_product(CN, theBFace.Sf()) / mag(theBFace.Sf());
   }
+
+  // Loop over elements
+  for (std::size_t iElement = 0; iElement < fvMesh.nElements(); ++iElement) {
+    std::vector<std::size_t> &iFaces = fvMesh.elements()[iElement].iFaces();
+    std::vector<std::size_t> &iNeighbors =
+        fvMesh.elements()[iElement].iNeighbors();
+
+    std::size_t kf = 1;
+
+    // Loop over local interior faces of an element
+    for (std::size_t i = 0; i < iNeighbors.size(); ++i) {
+      const std::size_t iFace = iFaces[i];
+      if (fvMesh.faces()[iFace].iOwner() == iElement) {
+        fvMesh.faces()[iFace].iOwnerNeighborCoef() = kf;
+
+      } else if (fvMesh.faces()[iFace].iNeighbor() == iElement) {
+        fvMesh.faces()[iFace].iNeighborOwnerCoef() = kf;
+      }
+      kf++;
+    }
+  }
 }

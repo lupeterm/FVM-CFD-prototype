@@ -10,7 +10,10 @@ public:
   std::size_t &index() { return index_; }
   std::vector<int> &faceSigns() { return faceSigns_; }
   std::vector<std::size_t> &iFaces() { return iFaces_; }
+
+  // Neighbor element indices
   std::vector<std::size_t> &iNeighbors() { return iNeighbors_; }
+
   std::size_t &nNeighbors() { return nNeighbors_; }
   std::vector<std::size_t> &iNodes() { return iNodes_; }
   double &volume() { return volume_; }
