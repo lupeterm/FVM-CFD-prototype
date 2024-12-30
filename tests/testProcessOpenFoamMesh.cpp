@@ -415,6 +415,7 @@ TEST(ProcessingSecondaryFaceGeometryTest, ComputingInteriorFaceGeometryWorks) {
       -0.013192856118518, -0.005716847898548, -1.933105502357327e-16};
   const double expected_face1299_gf = 0.466456642993007;
 
+  // Set tolerance
   const double maxDiff = 1.0e-9;
   const double maxRelativeDiff = 1.0e-4;
 
@@ -495,4 +496,183 @@ TEST(ProcessingSecondaryFaceGeometryTest, ComputingInteriorFaceGeometryWorks) {
                                 3, maxDiff, maxRelativeDiff));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1299].gf(), expected_face1299_gf,
                                 maxDiff, maxRelativeDiff));
+}
+
+TEST(ProcessingSecondaryFaceGeometryTest, ComputingBoundaryFaceGeometryWorks) {
+  // --- Arrange ---
+  std::string caseDirectory("../../cases/elbow");
+  readMesh meshReader;
+  Mesh fvMesh(caseDirectory);
+
+  // Expected data of face 1300
+  const std::array<double, 3> expected_face1300_CN = {
+      0.333333333333333, 0.666666666666668, -4.439763456642422e-17};
+  const std::array<double, 3> expected_face1300_eCN = {
+      0.447213595499957, 0.894427190999916, -5.956567735843130e-17};
+  const double expected_face1300_gDiff = 5.626429943399991;
+  const std::array<double, 3> expected_face1300_T = {
+      -1.677477309877689, 0.395998675844613, 2.234280737922542e-16};
+  const double expected_face1300_gf = 1.0;
+  const double expected_face1300_walldist = 0.666666666666668;
+
+  // Expected data of face 1301
+  const std::array<double, 3> expected_face1301_CN = {-0.333333969999998,
+                                                      0.181818246833335, 0};
+  const std::array<double, 3> expected_face1301_eCN = {-0.877895885416575,
+                                                       0.478851557759447, 0};
+  const double expected_face1301_gDiff = 6.137925769512658;
+  const std::array<double, 3> expected_face1301_T = {-0.249821997140967,
+                                                     -0.979725603029117, 0};
+  const double expected_face1301_gf = 1.0;
+  const double expected_face1301_walldist = 0.333333333331287;
+
+  // Expected data of face 1302
+  const std::array<double, 3> expected_face1302_CN = {-0.666666666666664,
+                                                      -0.333333333333329, 0};
+  const std::array<double, 3> expected_face1302_eCN = {-0.894427190999918,
+                                                       -0.447213595499954, 0};
+  const double expected_face1302_gDiff = 5.626429943400020;
+  const std::array<double, 3> expected_face1302_T = {-0.395998675844608,
+                                                     1.677477309877678, 0};
+  const double expected_face1302_gf = 1.0;
+  const double expected_face1302_walldist = 0.666666666666664;
+
+  // Expected data of face 3287
+  const std::array<double, 3> expected_face3287_CN = {-7.105427357601002e-15, 0,
+                                                      -0.937738323900000};
+  const std::array<double, 3> expected_face3287_eCN = {-7.577196299336403e-15,
+                                                       0, -1};
+  const double expected_face3287_gDiff = 1.074203470068408;
+  const std::array<double, 3> expected_face3287_T = {7.632674723853998e-15, 0,
+                                                     0};
+  const double expected_face3287_gf = 1.0;
+  const double expected_face3287_walldist = 0.937738323900000;
+
+  // Expected data of face 3288
+  const std::array<double, 3> expected_face3288_CN = {
+      7.105427357601002e-15, 1.776356839400251e-15, 0.937738323900000};
+  const std::array<double, 3> expected_face3288_eCN = {
+      7.577196299336403e-15, 1.894299074834101e-15, 1};
+  const double expected_face3288_gDiff = 1.228697530924542;
+  const std::array<double, 3> expected_face3288_T = {-8.730421050448046e-15,
+                                                     -2.182605262612011e-15, 0};
+  const double expected_face3288_gf = 1.0;
+  const double expected_face3288_walldist = 0.937738323900000;
+
+  // Expected data of face 3289
+  const std::array<double, 3> expected_face3289_CN = {7.105427357601002e-15, 0,
+                                                      -0.937738323900000};
+  const std::array<double, 3> expected_face3289_eCN = {7.577196299336405e-15, 0,
+                                                       -1};
+  const double expected_face3289_gDiff = 1.228697530924543;
+  const std::array<double, 3> expected_face3289_T = {-8.730421050448049e-15, 0,
+                                                     0};
+  const double expected_face3289_gf = 1.0;
+  const double expected_face3289_walldist = 0.937738323900000;
+
+  // Set tolerance
+  const double maxDiff = 1.0e-9;
+  const double maxRelativeDiff = 1.0e-4;
+
+  // --- Act ---
+  meshReader.readOpenFoamMesh(fvMesh);
+
+  // --- Assert ---
+  // Verify the geometric quantities of the first boundary three faces
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1300].CN(), expected_face1300_CN,
+                                3, maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1300].eCN(),
+                                expected_face1300_eCN, 3, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1300].gDiff(),
+                                expected_face1300_gDiff, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1300].T(), expected_face1300_T,
+                                3, maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1300].gf(), expected_face1300_gf,
+                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1300].walldist(),
+                                expected_face1300_walldist, maxDiff,
+                                maxRelativeDiff));
+
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1301].CN(), expected_face1301_CN,
+                                3, maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1301].eCN(),
+                                expected_face1301_eCN, 3, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1301].gDiff(),
+                                expected_face1301_gDiff, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1301].T(), expected_face1301_T,
+                                3, maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1301].gf(), expected_face1301_gf,
+                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1301].walldist(),
+                                expected_face1301_walldist, maxDiff,
+                                maxRelativeDiff));
+
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1302].CN(), expected_face1302_CN,
+                                3, maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1302].eCN(),
+                                expected_face1302_eCN, 3, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1302].gDiff(),
+                                expected_face1302_gDiff, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1302].T(), expected_face1302_T,
+                                3, maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1302].gf(), expected_face1302_gf,
+                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1302].walldist(),
+                                expected_face1302_walldist, maxDiff,
+                                maxRelativeDiff));
+
+  // Verify the geometric quantities of the last boundary three faces
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[3287].CN(), expected_face3287_CN,
+                                3, maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[3287].eCN(),
+                                expected_face3287_eCN, 3, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[3287].gDiff(),
+                                expected_face3287_gDiff, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[3287].T(), expected_face3287_T,
+                                3, maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[3287].gf(), expected_face3287_gf,
+                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[3287].walldist(),
+                                expected_face3287_walldist, maxDiff,
+                                maxRelativeDiff));
+
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[3288].CN(), expected_face3288_CN,
+                                3, maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[3288].eCN(),
+                                expected_face3288_eCN, 3, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[3288].gDiff(),
+                                expected_face3288_gDiff, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[3288].T(), expected_face3288_T,
+                                3, maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[3288].gf(), expected_face3288_gf,
+                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[3288].walldist(),
+                                expected_face3288_walldist, maxDiff,
+                                maxRelativeDiff));
+
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[3289].CN(), expected_face3289_CN,
+                                3, maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[3289].eCN(),
+                                expected_face3289_eCN, 3, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[3289].gDiff(),
+                                expected_face3289_gDiff, maxDiff,
+                                maxRelativeDiff));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[3289].T(), expected_face3289_T,
+                                3, maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[3289].gf(), expected_face3289_gf,
+                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[3289].walldist(),
+                                expected_face3289_walldist, maxDiff,
+                                maxRelativeDiff));
 }
