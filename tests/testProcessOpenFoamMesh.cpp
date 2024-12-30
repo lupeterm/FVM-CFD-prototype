@@ -689,22 +689,44 @@ TEST(ProcessingSecondaryFaceGeometryTest,
 
   // --- Assert ---
   // Verify the geometric quantities of the first three elements
-  // face 0 is on element 0; face 1 is on element 1; face 2 is on element 2
+  //  element 0: face 0 is the only local interior face
   EXPECT_EQ(fvMesh.faces()[0].iOwnerNeighborCoef(), 1);
+
+  //  element 1: face 1 is the only local interior face
   EXPECT_EQ(fvMesh.faces()[1].iOwnerNeighborCoef(), 1);
+
+  //  element 2: face 2 is only local interior face
   EXPECT_EQ(fvMesh.faces()[2].iOwnerNeighborCoef(), 1);
 
   // Verify the geometric quantities of the middle three elements
-
-  // face 672, 680, and 681 are local interior faces of element 458
+  // element 458: face 672, 680, and 681 are local interior faces
   EXPECT_EQ(fvMesh.faces()[672].iNeighborOwnerCoef(), 1);
   EXPECT_EQ(fvMesh.faces()[680].iNeighborOwnerCoef(), 2);
   EXPECT_EQ(fvMesh.faces()[681].iOwnerNeighborCoef(), 3);
 
-  // face 678, 681, and 682 are local interior faces of element 459
+  // element 459: face 678, 681, and 682 are local interior faces
   EXPECT_EQ(fvMesh.faces()[678].iNeighborOwnerCoef(), 1);
   EXPECT_EQ(fvMesh.faces()[681].iNeighborOwnerCoef(), 2);
   EXPECT_EQ(fvMesh.faces()[682].iOwnerNeighborCoef(), 3);
 
+  // element 460: face 338, 683, 684 are local interior faces
+  EXPECT_EQ(fvMesh.faces()[338].iNeighborOwnerCoef(), 1);
+  EXPECT_EQ(fvMesh.faces()[683].iOwnerNeighborCoef(), 2);
+  EXPECT_EQ(fvMesh.faces()[684].iOwnerNeighborCoef(), 3);
+
   // Verify the geometric quantities of the last three elements
+  // element 915: face 978, 1295, 1297 are local interior faces
+  EXPECT_EQ(fvMesh.faces()[978].iNeighborOwnerCoef(), 1);
+  EXPECT_EQ(fvMesh.faces()[1295].iNeighborOwnerCoef(), 2);
+  EXPECT_EQ(fvMesh.faces()[1297].iNeighborOwnerCoef(), 3);
+
+  // element 916: face 1294, 1298, 1299 are local interior faces
+  EXPECT_EQ(fvMesh.faces()[1294].iNeighborOwnerCoef(), 1);
+  EXPECT_EQ(fvMesh.faces()[1298].iNeighborOwnerCoef(), 2);
+  EXPECT_EQ(fvMesh.faces()[1299].iOwnerNeighborCoef(), 3);
+
+  // element 917: face 1171, 1296, 1299 are local interior faces
+  EXPECT_EQ(fvMesh.faces()[1171].iNeighborOwnerCoef(), 1);
+  EXPECT_EQ(fvMesh.faces()[1296].iNeighborOwnerCoef(), 2);
+  EXPECT_EQ(fvMesh.faces()[1299].iNeighborOwnerCoef(), 3);
 }
