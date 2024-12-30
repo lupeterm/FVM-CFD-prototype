@@ -689,9 +689,22 @@ TEST(ProcessingSecondaryFaceGeometryTest,
 
   // --- Assert ---
   // Verify the geometric quantities of the first three elements
-  // EXPECT_EQ(fvMesh.elements()[0].iFaces()[0], 1);
+  // face 0 is on element 0; face 1 is on element 1; face 2 is on element 2
+  EXPECT_EQ(fvMesh.faces()[0].iOwnerNeighborCoef(), 1);
+  EXPECT_EQ(fvMesh.faces()[1].iOwnerNeighborCoef(), 1);
+  EXPECT_EQ(fvMesh.faces()[2].iOwnerNeighborCoef(), 1);
 
   // Verify the geometric quantities of the middle three elements
+
+  // face 672, 680, and 681 are local interior faces of element 458
+  EXPECT_EQ(fvMesh.faces()[672].iNeighborOwnerCoef(), 1);
+  EXPECT_EQ(fvMesh.faces()[680].iNeighborOwnerCoef(), 2);
+  EXPECT_EQ(fvMesh.faces()[681].iOwnerNeighborCoef(), 3);
+
+  // face 678, 681, and 682 are local interior faces of element 459
+  EXPECT_EQ(fvMesh.faces()[678].iNeighborOwnerCoef(), 1);
+  EXPECT_EQ(fvMesh.faces()[681].iNeighborOwnerCoef(), 2);
+  EXPECT_EQ(fvMesh.faces()[682].iOwnerNeighborCoef(), 3);
 
   // Verify the geometric quantities of the last three elements
 }
