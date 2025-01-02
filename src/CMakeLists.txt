@@ -2,6 +2,8 @@
 add_library(
     MyLibrary
     readMesh.cpp
+    processMesh.cpp
+    utility.cpp
 )
 
 target_include_directories(

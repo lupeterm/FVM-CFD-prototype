@@ -2,14 +2,40 @@
 
 #include "Mesh.h"
 #include "readMesh.h"
+#include <array>
+#include <cstddef>
 #include <string>
 
-TEST(ReadingOpenFoamMeshTest, ReadingPointsWorks) {
+template <typename T1, typename T2>
+::testing::AssertionResult VectorMatch(const T1 &actual, const T2 &expected,
+                                       const std::size_t size) {
+  for (std::size_t i = 0; i < size; ++i) {
+    if (expected[i] != actual[i]) {
+      return ::testing::AssertionFailure()
+             << "actual[" << i << "] (" << actual[i] << ") != expected[" << i
+             << "] (" << expected[i] << ")";
+    }
+  }
+  return ::testing::AssertionSuccess();
+}
 
+TEST(ReadingOpenFoamMeshTest, ReadingPointsWorks) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  const std::array<double, 3> expected_node0_centroid = {32.0, 16.0,
+                                                         0.9377383239};
+  const std::array<double, 3> expected_node1_centroid = {
+      33.9429245, 16.11834526, 0.9377383239};
+  const std::array<double, 3> expected_node2_centroid = {
+      35.84160614, 16.46798134, 0.9377383239};
+  const std::array<double, 3> expected_node1071_centroid = {
+      47.07066231, 11.31027148, -0.9377383239};
+  const std::array<double, 3> expected_node1072_centroid = {
+      54.24871481, 14.34322867, -0.9377383239};
+  const std::array<double, 3> expected_node1073_centroid = {
+      54.15826673, 15.64273318, -0.9377383239};
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
@@ -19,38 +45,33 @@ TEST(ReadingOpenFoamMeshTest, ReadingPointsWorks) {
   EXPECT_EQ(fvMesh.nNodes(), 1074);
 
   // Verify the first 3 nodes
-  EXPECT_EQ(fvMesh.nodes()[0].x(), 32);
-  EXPECT_EQ(fvMesh.nodes()[0].y(), 16);
-  EXPECT_EQ(fvMesh.nodes()[0].z(), 0.9377383239);
-
-  EXPECT_EQ(fvMesh.nodes()[1].x(), 33.9429245);
-  EXPECT_EQ(fvMesh.nodes()[1].y(), 16.11834526);
-  EXPECT_EQ(fvMesh.nodes()[1].z(), 0.9377383239);
-
-  EXPECT_EQ(fvMesh.nodes()[2].x(), 35.84160614);
-  EXPECT_EQ(fvMesh.nodes()[2].y(), 16.46798134);
-  EXPECT_EQ(fvMesh.nodes()[2].z(), 0.9377383239);
+  EXPECT_TRUE(
+      VectorMatch(fvMesh.nodes()[0].centroid(), expected_node0_centroid, 3));
+  EXPECT_TRUE(
+      VectorMatch(fvMesh.nodes()[1].centroid(), expected_node1_centroid, 3));
+  EXPECT_TRUE(
+      VectorMatch(fvMesh.nodes()[2].centroid(), expected_node2_centroid, 3));
 
   // Verify the last 3 nodes
-  EXPECT_EQ(fvMesh.nodes()[1071].x(), 47.07066231);
-  EXPECT_EQ(fvMesh.nodes()[1071].y(), 11.31027148);
-  EXPECT_EQ(fvMesh.nodes()[1071].z(), -0.9377383239);
-
-  EXPECT_EQ(fvMesh.nodes()[1072].x(), 54.24871481);
-  EXPECT_EQ(fvMesh.nodes()[1072].y(), 14.34322867);
-  EXPECT_EQ(fvMesh.nodes()[1072].z(), -0.9377383239);
-
-  EXPECT_EQ(fvMesh.nodes()[1073].x(), 54.15826673);
-  EXPECT_EQ(fvMesh.nodes()[1073].y(), 15.64273318);
-  EXPECT_EQ(fvMesh.nodes()[1073].z(), -0.9377383239);
+  EXPECT_TRUE(VectorMatch(fvMesh.nodes()[1071].centroid(),
+                          expected_node1071_centroid, 3));
+  EXPECT_TRUE(VectorMatch(fvMesh.nodes()[1072].centroid(),
+                          expected_node1072_centroid, 3));
+  EXPECT_TRUE(VectorMatch(fvMesh.nodes()[1073].centroid(),
+                          expected_node1073_centroid, 3));
 }
 
 TEST(ReadingOpenFoamMeshTest, ReadingFacesWorks) {
-
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  const std::array<std::size_t, 4> expected_face0_iNodes = {36, 573, 589, 52};
+  const std::array<std::size_t, 4> expected_face1_iNodes = {41, 578, 634, 97};
+  const std::array<std::size_t, 4> expected_face2_iNodes = {44, 81, 618, 581};
+  const std::array<std::size_t, 3> expected_face3287_iNodes = {1072, 945, 1073};
+  const std::array<std::size_t, 3> expected_face3288_iNodes = {536, 475, 408};
+  const std::array<std::size_t, 3> expected_face3289_iNodes = {1073, 945, 1012};
 
   // -- -Act-- -
   meshReader.readOpenFoamMesh(fvMesh);
@@ -61,42 +82,33 @@ TEST(ReadingOpenFoamMeshTest, ReadingFacesWorks) {
 
   // Verify the 1st face
   EXPECT_EQ(fvMesh.faces()[0].nNodes(), 4);
-  EXPECT_EQ(fvMesh.faces()[0].iNodes()[0], 36);
-  EXPECT_EQ(fvMesh.faces()[0].iNodes()[1], 573);
-  EXPECT_EQ(fvMesh.faces()[0].iNodes()[2], 589);
-  EXPECT_EQ(fvMesh.faces()[0].iNodes()[3], 52);
+  EXPECT_TRUE(
+      VectorMatch(fvMesh.faces()[0].iNodes(), expected_face0_iNodes, 4));
 
   // Verify the 2nd face
   EXPECT_EQ(fvMesh.faces()[1].nNodes(), 4);
-  EXPECT_EQ(fvMesh.faces()[1].iNodes()[0], 41);
-  EXPECT_EQ(fvMesh.faces()[1].iNodes()[1], 578);
-  EXPECT_EQ(fvMesh.faces()[1].iNodes()[2], 634);
-  EXPECT_EQ(fvMesh.faces()[1].iNodes()[3], 97);
+  EXPECT_TRUE(
+      VectorMatch(fvMesh.faces()[1].iNodes(), expected_face1_iNodes, 4));
 
   // Verify the 3rd face
   EXPECT_EQ(fvMesh.faces()[2].nNodes(), 4);
-  EXPECT_EQ(fvMesh.faces()[2].iNodes()[0], 44);
-  EXPECT_EQ(fvMesh.faces()[2].iNodes()[1], 81);
-  EXPECT_EQ(fvMesh.faces()[2].iNodes()[2], 618);
-  EXPECT_EQ(fvMesh.faces()[2].iNodes()[3], 581);
+  EXPECT_TRUE(
+      VectorMatch(fvMesh.faces()[2].iNodes(), expected_face2_iNodes, 4));
 
   // Verify the third from the last face
   EXPECT_EQ(fvMesh.faces()[3287].nNodes(), 3);
-  EXPECT_EQ(fvMesh.faces()[3287].iNodes()[0], 1072);
-  EXPECT_EQ(fvMesh.faces()[3287].iNodes()[1], 945);
-  EXPECT_EQ(fvMesh.faces()[3287].iNodes()[2], 1073);
+  EXPECT_TRUE(
+      VectorMatch(fvMesh.faces()[3287].iNodes(), expected_face3287_iNodes, 3));
 
   // Verify the third from the last face
   EXPECT_EQ(fvMesh.faces()[3288].nNodes(), 3);
-  EXPECT_EQ(fvMesh.faces()[3288].iNodes()[0], 536);
-  EXPECT_EQ(fvMesh.faces()[3288].iNodes()[1], 475);
-  EXPECT_EQ(fvMesh.faces()[3288].iNodes()[2], 408);
+  EXPECT_TRUE(
+      VectorMatch(fvMesh.faces()[3288].iNodes(), expected_face3288_iNodes, 3));
 
   // Verify the third from the last face
   EXPECT_EQ(fvMesh.faces()[3289].nNodes(), 3);
-  EXPECT_EQ(fvMesh.faces()[3289].iNodes()[0], 1073);
-  EXPECT_EQ(fvMesh.faces()[3289].iNodes()[1], 945);
-  EXPECT_EQ(fvMesh.faces()[3289].iNodes()[2], 1012);
+  EXPECT_TRUE(
+      VectorMatch(fvMesh.faces()[3289].iNodes(), expected_face3289_iNodes, 3));
 }
 
 TEST(ReadingOpenFoamMeshTest, ReadingOwnersWorks) {
@@ -227,6 +239,287 @@ TEST(ReadingOpenFoamMeshTest, ReadingBoundariesWorks) {
   EXPECT_EQ(fvMesh.boundaries()[5].type(), "empty");
   EXPECT_EQ(fvMesh.boundaries()[5].nFaces(), 1836);
   EXPECT_EQ(fvMesh.boundaries()[5].startFace(), 1454);
+}
+
+TEST(ConstructingElementsTest, ConstructingElementNeighborsWorks) {
+  // --- Arrange ---
+  std::string caseDirectory("../../cases/elbow");
+  readMesh meshReader;
+  Mesh fvMesh(caseDirectory);
+  const std::array<std::size_t, 3> expected_element99_iNeighbors = {19, 100,
+                                                                    326};
+  const std::array<std::size_t, 3> expected_element100_iNeighbors = {99, 213};
+  const std::array<std::size_t, 3> expected_element916_iNeighbors = {912, 914,
+                                                                     917};
+  const std::array<std::size_t, 3> expected_element917_iNeighbors = {802, 913,
+                                                                     916};
+
+  // -- -Act-- -
+  meshReader.readOpenFoamMesh(fvMesh);
+
+  // --- Assert ---
+  // *** Verify neighbors for the given finite volume elements ***
+  EXPECT_EQ(fvMesh.elements()[0].nNeighbors(), 1);
+  EXPECT_EQ(fvMesh.elements()[0].iNeighbors()[0], 22);
+
+  EXPECT_EQ(fvMesh.elements()[1].nNeighbors(), 1);
+  EXPECT_EQ(fvMesh.elements()[1].iNeighbors()[0], 68);
+
+  EXPECT_EQ(fvMesh.elements()[99].nNeighbors(), 3);
+  EXPECT_TRUE(VectorMatch(fvMesh.elements()[99].iNeighbors(),
+                          expected_element99_iNeighbors, 3));
+
+  EXPECT_EQ(fvMesh.elements()[100].nNeighbors(), 2);
+  EXPECT_TRUE(VectorMatch(fvMesh.elements()[100].iNeighbors(),
+                          expected_element100_iNeighbors, 2));
+  // Last two elements
+  EXPECT_EQ(fvMesh.elements()[916].nNeighbors(), 3);
+  EXPECT_TRUE(VectorMatch(fvMesh.elements()[916].iNeighbors(),
+                          expected_element916_iNeighbors, 3));
+
+  EXPECT_EQ(fvMesh.elements()[917].nNeighbors(), 3);
+  EXPECT_TRUE(VectorMatch(fvMesh.elements()[917].iNeighbors(),
+                          expected_element917_iNeighbors, 3));
+}
+
+TEST(ConstructingElementsTest, ConstructingElementFacesWorks) {
+  // --- Arrange ---
+  std::string caseDirectory("../../cases/elbow");
+  readMesh meshReader;
+  Mesh fvMesh(caseDirectory);
+  const std::array<std::size_t, 5> expected_element0_iFaces = {0, 1300, 1400,
+                                                               1454, 1455};
+  const std::array<std::size_t, 5> expected_element1_iFaces = {1, 1301, 1408,
+                                                               1456, 1457};
+  const std::array<std::size_t, 5> expected_element99_iFaces = {32, 154, 155,
+                                                                1652, 1653};
+  const std::array<std::size_t, 5> expected_element100_iFaces = {154, 156, 1349,
+                                                                 1654, 1655};
+  const std::array<std::size_t, 5> expected_element916_iFaces = {
+      1294, 1298, 1299, 3286, 3287};
+  const std::array<std::size_t, 5> expected_element917_iFaces = {
+      1171, 1296, 1299, 3288, 3289};
+
+  // -- -Act-- -
+  meshReader.readOpenFoamMesh(fvMesh);
+
+  // --- Assert ---
+  // *** Verify face indices for the given finite volume elements ***
+  EXPECT_EQ(fvMesh.elements()[0].iFaces().size(), 5);
+  EXPECT_TRUE(
+      VectorMatch(fvMesh.elements()[0].iFaces(), expected_element0_iFaces, 5));
+
+  EXPECT_EQ(fvMesh.elements()[1].iFaces().size(), 5);
+  EXPECT_TRUE(
+      VectorMatch(fvMesh.elements()[1].iFaces(), expected_element1_iFaces, 5));
+
+  EXPECT_EQ(fvMesh.elements()[99].iFaces().size(), 5);
+  EXPECT_TRUE(VectorMatch(fvMesh.elements()[99].iFaces(),
+                          expected_element99_iFaces, 5));
+
+  EXPECT_EQ(fvMesh.elements()[100].iFaces().size(), 5);
+  EXPECT_TRUE(VectorMatch(fvMesh.elements()[100].iFaces(),
+                          expected_element100_iFaces, 5));
+
+  // Last two elements
+  EXPECT_EQ(fvMesh.elements()[916].iFaces().size(), 5);
+  EXPECT_TRUE(VectorMatch(fvMesh.elements()[916].iFaces(),
+                          expected_element916_iFaces, 5));
+
+  EXPECT_EQ(fvMesh.elements()[917].iFaces().size(), 5);
+  EXPECT_TRUE(VectorMatch(fvMesh.elements()[917].iFaces(),
+                          expected_element917_iFaces, 5));
+}
+
+TEST(ConstructingElementsTest, ConstructingElementFaceSignsWorks) {
+  // --- Arrange ---
+  std::string caseDirectory("../../cases/elbow");
+  readMesh meshReader;
+  Mesh fvMesh(caseDirectory);
+  const std::array<int, 5> expected_element0_faceSigns = {1, 1, 1, 1, 1};
+  const std::array<int, 5> expected_element1_faceSigns = {1, 1, 1, 1, 1};
+  const std::array<int, 5> expected_element99_faceSigns = {-1, 1, 1, 1, 1};
+  const std::array<int, 5> expected_element101_faceSigns = {-1, 1, 1, 1, 1};
+  const std::array<int, 5> expected_element916_faceSigns = {-1, -1, 1, 1, 1};
+  const std::array<int, 5> expected_element917_faceSigns = {-1, -1, -1, 1, 1};
+
+  // -- -Act-- -
+  meshReader.readOpenFoamMesh(fvMesh);
+
+  // --- Assert ---
+  // *** Verify face signs for the given finite volume elements ***
+  EXPECT_TRUE(VectorMatch(fvMesh.elements()[0].faceSigns(),
+                          expected_element0_faceSigns, 5));
+  EXPECT_TRUE(VectorMatch(fvMesh.elements()[1].faceSigns(),
+                          expected_element1_faceSigns, 5));
+  EXPECT_TRUE(VectorMatch(fvMesh.elements()[99].faceSigns(),
+                          expected_element99_faceSigns, 5));
+  EXPECT_TRUE(VectorMatch(fvMesh.elements()[101].faceSigns(),
+                          expected_element101_faceSigns, 5));
+
+  // Last two elements
+  EXPECT_TRUE(VectorMatch(fvMesh.elements()[916].faceSigns(),
+                          expected_element916_faceSigns, 5));
+
+  EXPECT_TRUE(VectorMatch(fvMesh.elements()[917].faceSigns(),
+                          expected_element917_faceSigns, 5));
+}
+
+TEST(ConstructingElementsTest, ConstructingElementBoundaryWorks) {
+  // --- Arrange ---
+  std::string caseDirectory("../../cases/elbow");
+  readMesh meshReader;
+  Mesh fvMesh(caseDirectory);
+
+  // -- -Act-- -
+  meshReader.readOpenFoamMesh(fvMesh);
+
+  // --- Assert ---
+  EXPECT_EQ(fvMesh.nBElements(), 1990);
+  EXPECT_EQ(fvMesh.nBFaces(), 1990);
+}
+
+TEST(SettingUpNodeConnectivitiesTest, ConnectingFacesToNodeWorks) {
+  // --- Arrange ---
+  std::string caseDirectory("../../cases/elbow");
+  readMesh meshReader;
+  Mesh fvMesh(caseDirectory);
+  const std::array<std::size_t, 7> expected_node0_iFaces = {
+      171, 327, 1354, 1385, 1676, 1890, 1892};
+  const std::array<std::size_t, 7> expected_node1_iFaces = {
+      329, 426, 1385, 1399, 1892, 2040, 2044};
+  const std::array<std::size_t, 10> expected_node499_iFaces = {
+      1098, 1099, 1100, 1101, 1103, 2946, 2948, 2950, 2952, 2954};
+  const std::array<std::size_t, 12> expected_node500_iFaces = {
+      1104, 1105, 1108, 1109, 1132, 1248, 2956, 2960, 2962, 3000, 3192, 3194};
+  const std::array<std::size_t, 12> expected_node1072_iFaces = {
+      1290, 1291, 1292, 1293, 1294, 1298, 3273, 3275, 3277, 3279, 3283, 3287};
+  const std::array<std::size_t, 10> expected_node1073_iFaces = {
+      1295, 1296, 1297, 1298, 1299, 3281, 3283, 3285, 3287, 3289};
+
+  // -- -Act-- -
+  meshReader.readOpenFoamMesh(fvMesh);
+
+  // --- Assert ---
+  EXPECT_EQ(fvMesh.nodes()[0].iFaces().size(), 7);
+  EXPECT_TRUE(
+      VectorMatch(fvMesh.nodes()[0].iFaces(), expected_node0_iFaces, 7));
+
+  EXPECT_EQ(fvMesh.nodes()[1].iFaces().size(), 7);
+  EXPECT_TRUE(
+      VectorMatch(fvMesh.nodes()[1].iFaces(), expected_node1_iFaces, 7));
+
+  EXPECT_EQ(fvMesh.nodes()[499].iFaces().size(), 10);
+  EXPECT_TRUE(
+      VectorMatch(fvMesh.nodes()[499].iFaces(), expected_node499_iFaces, 10));
+
+  EXPECT_EQ(fvMesh.nodes()[500].iFaces().size(), 12);
+  EXPECT_TRUE(
+      VectorMatch(fvMesh.nodes()[500].iFaces(), expected_node500_iFaces, 12));
+
+  // Last two nodes
+  EXPECT_EQ(fvMesh.nodes()[1072].iFaces().size(), 12);
+  EXPECT_TRUE(
+      VectorMatch(fvMesh.nodes()[1072].iFaces(), expected_node1072_iFaces, 12));
+
+  EXPECT_EQ(fvMesh.nodes()[1073].iFaces().size(), 10);
+  EXPECT_TRUE(
+      VectorMatch(fvMesh.nodes()[1073].iFaces(), expected_node1073_iFaces, 10));
+}
+
+TEST(SettingUpNodeConnectivitiesTest, ConnectingNodesToElementWorks) {
+  // --- Arrange ---
+  std::string caseDirectory("../../cases/elbow");
+  readMesh meshReader;
+  Mesh fvMesh(caseDirectory);
+  const std::array<std::size_t, 6> expected_element0_iNodes = {36, 573, 589,
+                                                               52, 37,  574};
+  const std::array<std::size_t, 6> expected_element1_iNodes = {41, 578, 634,
+                                                               97, 42,  579};
+  const std::array<std::size_t, 6> expected_element449_iNodes = {214, 751, 799,
+                                                                 262, 402, 939};
+  const std::array<std::size_t, 6> expected_element450_iNodes = {304, 341, 878,
+                                                                 841, 404, 941};
+  const std::array<std::size_t, 6> expected_element916_iNodes = {
+      408, 535, 1072, 945, 536, 1073};
+
+  const std::array<std::size_t, 6> expected_element917_iNodes = {
+      475, 408, 945, 1012, 1073, 536};
+  // -- -Act-- -
+  meshReader.readOpenFoamMesh(fvMesh);
+
+  // --- Assert ---
+  // *** Verify the node indices of some finite volume elements ***
+  EXPECT_EQ(fvMesh.elements()[0].iNodes().size(), 6);
+  EXPECT_TRUE(
+      VectorMatch(fvMesh.elements()[0].iNodes(), expected_element0_iNodes, 6));
+
+  EXPECT_EQ(fvMesh.elements()[1].iNodes().size(), 6);
+  EXPECT_TRUE(
+      VectorMatch(fvMesh.elements()[1].iNodes(), expected_element1_iNodes, 6));
+
+  EXPECT_EQ(fvMesh.elements()[449].iNodes().size(), 6);
+  EXPECT_TRUE(VectorMatch(fvMesh.elements()[449].iNodes(),
+                          expected_element449_iNodes, 6));
+
+  EXPECT_EQ(fvMesh.elements()[450].iNodes().size(), 6);
+  EXPECT_TRUE(VectorMatch(fvMesh.elements()[450].iNodes(),
+                          expected_element450_iNodes, 6));
+
+  // Last two elements
+  EXPECT_EQ(fvMesh.elements()[916].iNodes().size(), 6);
+  EXPECT_TRUE(VectorMatch(fvMesh.elements()[916].iNodes(),
+                          expected_element916_iNodes, 6));
+
+  EXPECT_EQ(fvMesh.elements()[917].iNodes().size(), 6);
+  EXPECT_TRUE(VectorMatch(fvMesh.elements()[917].iNodes(),
+                          expected_element917_iNodes, 6));
+}
+
+TEST(SettingUpNodeConnectivitiesTest, ConnectingElementsToNodetWorks) {
+  // --- Arrange ---
+  std::string caseDirectory("../../cases/elbow");
+  readMesh meshReader;
+  Mesh fvMesh(caseDirectory);
+  const std::array<std::size_t, 3> expected_node0_iElements = {111, 218, 219};
+  const std::array<std::size_t, 3> expected_node1_iElements = {219, 293, 295};
+  const std::array<std::size_t, 5> expected_node499_iElements = {746, 747, 748,
+                                                                 749, 750};
+  const std::array<std::size_t, 6> expected_node500_iElements = {751, 753, 754,
+                                                                 773, 869, 870};
+  const std::array<std::size_t, 6> expected_node1072_iElements = {
+      909, 910, 911, 912, 914, 916};
+  const std::array<std::size_t, 5> expected_node1073_iElements = {913, 914, 915,
+                                                                  916, 917};
+  // -- -Act-- -
+  meshReader.readOpenFoamMesh(fvMesh);
+
+  // --- Assert ---
+  // *** Verify the element indices of some nodes ***
+  EXPECT_EQ(fvMesh.nodes()[0].iElements().size(), 3);
+  EXPECT_TRUE(
+      VectorMatch(fvMesh.nodes()[0].iElements(), expected_node0_iElements, 3));
+
+  EXPECT_EQ(fvMesh.nodes()[1].iElements().size(), 3);
+  EXPECT_TRUE(
+      VectorMatch(fvMesh.nodes()[1].iElements(), expected_node1_iElements, 3));
+
+  EXPECT_EQ(fvMesh.nodes()[499].iElements().size(), 5);
+  EXPECT_TRUE(VectorMatch(fvMesh.nodes()[499].iElements(),
+                          expected_node499_iElements, 5));
+
+  EXPECT_EQ(fvMesh.nodes()[500].iElements().size(), 6);
+  EXPECT_TRUE(VectorMatch(fvMesh.nodes()[500].iElements(),
+                          expected_node500_iElements, 6));
+
+  // Last two elements
+  EXPECT_EQ(fvMesh.nodes()[1072].iElements().size(), 6);
+  EXPECT_TRUE(VectorMatch(fvMesh.nodes()[1072].iElements(),
+                          expected_node1072_iElements, 6));
+
+  EXPECT_EQ(fvMesh.nodes()[1073].iElements().size(), 5);
+  EXPECT_TRUE(VectorMatch(fvMesh.nodes()[1073].iElements(),
+                          expected_node1073_iElements, 5));
 }
 
 int main(int argc, char **argv) {

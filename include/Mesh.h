@@ -27,6 +27,8 @@ public:
   void allocateBoundaries() { boundaries_ = new Boundary[nBoundaries_]; }
   Element *elements() { return elements_; }
   void allocateElements() { elements_ = new Element[nElements_]; }
+  std::size_t &nBElements() { return nBElements_; }
+  std::size_t &nBFaces() { return nBFaces_; }
 
 private:
   std::string caseDir_ = "";
@@ -41,5 +43,7 @@ private:
   Face *faces_ = nullptr;
   Boundary *boundaries_ = nullptr;
   Element *elements_ = nullptr;
+  std::size_t nBElements_ = 0;
+  std::size_t nBFaces_ = 0;
 };
 #endif

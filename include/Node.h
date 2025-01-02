@@ -1,21 +1,25 @@
 #ifndef NODE_H
 #define NODE_H
 
+#include <array>
 #include <cstddef>
+#include <vector>
 
 class Node {
 public:
-  double &x() { return x_; }
-  double &y() { return y_; }
-  double &z() { return z_; }
   std::size_t &index() { return index_; }
+  std::vector<std::size_t> &iFaces() { return iFaces_; }
+  std::vector<std::size_t> &iElements() { return iElements_; }
+  std::array<double, 3> &centroid() { return centroid_; }
+
+  // Return flag which is used to sort boundary nodes from interior nodes
+  int &Flag() { return Flag_; }
 
 private:
-  double x_ = 0.0;
-  double y_ = 0.0;
-  double z_ = 0.0;
+  std::array<double, 3> centroid_ = {0.0, 0.0, 0.0};
   std::size_t index_ = 0;
-  double *iFaces_ = nullptr;
-  double *iElements_ = nullptr;
+  std::vector<std::size_t> iFaces_;
+  std::vector<std::size_t> iElements_;
+  int Flag_ = 0;
 };
 #endif
