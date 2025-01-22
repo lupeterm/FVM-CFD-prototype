@@ -25,7 +25,7 @@ void processMesh::processOpenFoamMesh(Mesh &fvMesh) {
 
 void processMesh::processBasicFaceGeometry(Mesh &fvMesh) {
   for (std::size_t iFace = 0; iFace < fvMesh.nFaces(); ++iFace) {
-    // std::vector<double> center = {0.0, 0.0, 0.0};
+
     std::array<double, 3> center = {0.0, 0.0, 0.0};
     for (std::size_t iNode = 0; iNode < fvMesh.faces()[iFace].nNodes();
          ++iNode) {
