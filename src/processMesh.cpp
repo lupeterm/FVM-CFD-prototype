@@ -169,8 +169,6 @@ void processMesh::computeElementVolumeAndCentroid(Mesh &fvMesh) {
 
     // Compute volume and centroid of each element
     std::array<double, 3> elementCentroid = {0.0, 0.0, 0.0};
-    // std::array<double, 3> Sf = {0.0, 0.0, 0.0};
-
     std::array<double, 3> localVolumeCentroidSum = {0.0, 0.0, 0.0};
     double localVolumeSum = 0.0;
 
