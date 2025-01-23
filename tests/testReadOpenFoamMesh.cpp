@@ -124,7 +124,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingOwnersWorks) {
   EXPECT_EQ(fvMesh.nOwners(), 3290);
   EXPECT_EQ(fvMesh.nElements(), 918);
 
-  // Verify the first 10 entries in the owner file
+  // Verify the first 10 entries in the owner file (interior faces)
   EXPECT_EQ(fvMesh.faces()[0].iOwner(), 0);
   EXPECT_EQ(fvMesh.faces()[1].iOwner(), 1);
   EXPECT_EQ(fvMesh.faces()[2].iOwner(), 2);
@@ -136,7 +136,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingOwnersWorks) {
   EXPECT_EQ(fvMesh.faces()[8].iOwner(), 7);
   EXPECT_EQ(fvMesh.faces()[9].iOwner(), 7);
 
-  // Verify the last 10 entries in the owner file
+  // Verify the last 10 entries in the owner file (boundary faces)
   EXPECT_EQ(fvMesh.faces()[3280].iOwner(), 913);
   EXPECT_EQ(fvMesh.faces()[3281].iOwner(), 913);
   EXPECT_EQ(fvMesh.faces()[3282].iOwner(), 914);
@@ -161,7 +161,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingNeighborsWorks) {
   // --- Assert ---
   EXPECT_EQ(fvMesh.nInteriorFaces(), 1300);
 
-  // Verify the first 10 entries in the neighbor file
+  // Verify the first 10 entries in the neighbor file (interior faces)
   EXPECT_EQ(fvMesh.faces()[0].iNeighbor(), 22);
   EXPECT_EQ(fvMesh.faces()[1].iNeighbor(), 68);
   EXPECT_EQ(fvMesh.faces()[2].iNeighbor(), 29);
@@ -173,7 +173,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingNeighborsWorks) {
   EXPECT_EQ(fvMesh.faces()[8].iNeighbor(), 42);
   EXPECT_EQ(fvMesh.faces()[9].iNeighbor(), 45);
 
-  // Verify the last 10 entries in the neighbor file
+  // Verify the last 10 entries in the neighbor file (interior faces)
   EXPECT_EQ(fvMesh.faces()[1290].iNeighbor(), 910);
   EXPECT_EQ(fvMesh.faces()[1291].iNeighbor(), 911);
   EXPECT_EQ(fvMesh.faces()[1292].iNeighbor(), 914);
