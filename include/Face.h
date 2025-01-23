@@ -36,12 +36,23 @@ private:
   std::array<double, 3> centroid_ = {0.0, 0.0, 0.0};
   std::array<double, 3> Sf_ = {0.0, 0.0, 0.0};
   double area_ = 0.0;
+
+  // The distance vector from the owner element centroid to the surface centroid
   std::array<double, 3> CN_ = {0.0, 0.0, 0.0};
+
   std::array<double, 3> eCN_ = {0.0, 0.0, 0.0};
   double gDiff_ = 0.0;
+
+  // The distance vector joining the centroids of the owner and neighbor
+  // elements
   std::array<double, 3> T_ = {0.0, 0.0, 0.0};
+
+  // The geometric factor
   double gf_ = 0.0;
+
+  // The normal distance to the wall of the owner element centroid
   double walldist_ = 0.0;
+
   std::size_t iOwnerNeighborCoef_ = 0;
   std::size_t iNeighborOwnerCoef_ = 0;
   std::size_t patchIndex_ = 0;

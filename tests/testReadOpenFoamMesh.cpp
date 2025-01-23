@@ -184,6 +184,17 @@ TEST(ReadingOpenFoamMeshTest, ReadingNeighborsWorks) {
   EXPECT_EQ(fvMesh.faces()[1297].iNeighbor(), 915);
   EXPECT_EQ(fvMesh.faces()[1298].iNeighbor(), 916);
   EXPECT_EQ(fvMesh.faces()[1299].iNeighbor(), 917);
+
+  // Verify the boundary faces have -1 as the neighbor index
+  // The first 10 boundary faces
+  EXPECT_EQ(fvMesh.faces()[1300].iNeighbor(), -1);
+  EXPECT_EQ(fvMesh.faces()[1301].iNeighbor(), -1);
+  EXPECT_EQ(fvMesh.faces()[1302].iNeighbor(), -1);
+
+  // The last 3 boundary faces
+  EXPECT_EQ(fvMesh.faces()[3287].iNeighbor(), -1);
+  EXPECT_EQ(fvMesh.faces()[3288].iNeighbor(), -1);
+  EXPECT_EQ(fvMesh.faces()[3289].iNeighbor(), -1);
 }
 
 TEST(ReadingOpenFoamMeshTest, ReadingBoundariesWorks) {
