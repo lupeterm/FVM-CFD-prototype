@@ -62,7 +62,7 @@ void processMesh::processBasicFaceGeometry(Mesh &fvMesh) {
                          (triangleNode3[0] - triangleNode1[0]));
       area = mag(Sf);
 
-    } else {
+    } else { // General case where the polygon is not a triangle
       std::array<double, 3> center = {0.0, 0.0, 0.0};
       for (std::size_t iNode = 0; iNode < fvMesh.faces()[iFace].nNodes();
            ++iNode) {
@@ -86,9 +86,6 @@ void processMesh::processBasicFaceGeometry(Mesh &fvMesh) {
       std::array<double, 3> triangleNode1 = center;
       std::array<double, 3> triangleNode2 = {0.0, 0.0, 0.0};
       std::array<double, 3> triangleNode3 = {0.0, 0.0, 0.0};
-      // std::array<double, 3> centroid = {0.0, 0.0, 0.0};
-      // std::array<double, 3> Sf = {0.0, 0.0, 0.0};
-      // double area = 0.0;
 
       for (std::size_t iNode = 0; iNode < fvMesh.faces()[iFace].nNodes();
            ++iNode) {
