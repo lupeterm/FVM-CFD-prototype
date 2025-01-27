@@ -47,19 +47,10 @@ void processMesh::processBasicFaceGeometry(Mesh &fvMesh) {
             3.0;
       }
 
-      // Calculate the area of a given triangle
-      Sf[0] = 0.5 * ((triangleNode2[1] - triangleNode1[1]) *
-                         (triangleNode3[2] - triangleNode1[2]) -
-                     (triangleNode2[2] - triangleNode1[2]) *
-                         (triangleNode3[1] - triangleNode1[1]));
-      Sf[1] = 0.5 * ((triangleNode2[2] - triangleNode1[2]) *
-                         (triangleNode3[0] - triangleNode1[0]) -
-                     (triangleNode2[0] - triangleNode1[0]) *
-                         (triangleNode3[2] - triangleNode1[2]));
-      Sf[2] = 0.5 * ((triangleNode2[0] - triangleNode1[0]) *
-                         (triangleNode3[1] - triangleNode1[1]) -
-                     (triangleNode2[1] - triangleNode1[1]) *
-                         (triangleNode3[0] - triangleNode1[0]));
+      // Calculate the surface area vector of a given triangle by cross
+      // product
+      Sf = 0.5 * cross_product(triangleNode2 - triangleNode1,
+                               triangleNode3 - triangleNode1);
       area = mag(Sf);
 
     } else { // General case where the polygon is not a triangle
@@ -113,18 +104,9 @@ void processMesh::processBasicFaceGeometry(Mesh &fvMesh) {
         // Calculate the surface area vector of a given subtriangle by cross
         // product
         std::array<double, 3> local_Sf = {0.0, 0.0, 0.0};
-        local_Sf[0] = 0.5 * ((triangleNode2[1] - triangleNode1[1]) *
-                                 (triangleNode3[2] - triangleNode1[2]) -
-                             (triangleNode2[2] - triangleNode1[2]) *
-                                 (triangleNode3[1] - triangleNode1[1]));
-        local_Sf[1] = 0.5 * ((triangleNode2[2] - triangleNode1[2]) *
-                                 (triangleNode3[0] - triangleNode1[0]) -
-                             (triangleNode2[0] - triangleNode1[0]) *
-                                 (triangleNode3[2] - triangleNode1[2]));
-        local_Sf[2] = 0.5 * ((triangleNode2[0] - triangleNode1[0]) *
-                                 (triangleNode3[1] - triangleNode1[1]) -
-                             (triangleNode2[1] - triangleNode1[1]) *
-                                 (triangleNode3[0] - triangleNode1[0]));
+
+        local_Sf = 0.5 * cross_product(triangleNode2 - triangleNode1,
+                                       triangleNode3 - triangleNode1);
 
         // Calculate the surface area of a given subtriangle
         double local_area = mag(local_Sf);
