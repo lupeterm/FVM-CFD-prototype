@@ -1,8 +1,8 @@
 #ifndef READ_MESH_H
 #define READ_MESH_H
 
-#include "Mesh.h"
-#include "processMesh.h"
+#include "Mesh.hpp"
+#include "processMesh.hpp"
 #include <string>
 
 class readMesh {

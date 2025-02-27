@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
-#include "Mesh.h"
-#include "readMesh.h"
+#include "Mesh.hpp"
+#include "readMesh.hpp"
 #include <array>
 #include <cstddef>
 #include <string>

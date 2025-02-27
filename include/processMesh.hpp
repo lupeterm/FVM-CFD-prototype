@@ -1,7 +1,7 @@
 #ifndef PROCESS_MESH
 #define PROCESS_MESH
 
-#include "Mesh.h"
+#include "Mesh.hpp"
 
 class processMesh {
 public:

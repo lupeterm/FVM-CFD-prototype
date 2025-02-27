@@ -1,10 +1,10 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include "Boundary.h"
-#include "Elements.h"
-#include "Face.h"
-#include "Node.h"
+#include "Boundary.hpp"
+#include "Elements.hpp"
+#include "Face.hpp"
+#include "Node.hpp"
 #include <cstddef>
 #include <string>
 
