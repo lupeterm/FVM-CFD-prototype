@@ -3,10 +3,10 @@
 #include "Mesh.hpp"
 #include "readMesh.hpp"
 #include "testUtility.hpp"
-// #include <array>
+#include <array>
 // #include <cmath>
 // #include <cstddef>
-// #include <string>
+#include <string>
 
 // ****** Tests ******
 TEST(ProcessingBasicFaceGeometryTest,

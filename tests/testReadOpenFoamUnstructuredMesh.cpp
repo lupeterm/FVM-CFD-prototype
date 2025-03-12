@@ -3,9 +3,9 @@
 #include "Mesh.hpp"
 #include "readMesh.hpp"
 #include "testUtility.hpp"
-// #include <array>
+#include <array>
 // #include <cstddef>
-// #include <string>
+#include <string>
 
 // ****** Tests ******
 TEST(ReadingOpenFoamMeshTest, ReadingPointsWorksForUnstructuredMesh) {

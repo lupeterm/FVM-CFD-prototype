@@ -1,11 +1,11 @@
 #ifndef TEST_UTILITY_HPP
 #define TEST_UTILITY_HPP
 
-#include <array>
+// #include <array>
 #include <cmath>
 #include <cstddef>
 #include <gtest/gtest.h>
-#include <string>
+// #include <string>
 
 template <typename T1, typename T2>
 inline ::testing::AssertionResult
