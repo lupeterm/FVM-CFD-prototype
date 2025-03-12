@@ -1,24 +1,13 @@
-#include <gtest/gtest.h>
+// #include <gtest/gtest.h>
 
 #include "Mesh.hpp"
 #include "readMesh.hpp"
-#include <array>
-#include <cstddef>
-#include <string>
+#include "testUtility.hpp"
+// #include <array>
+// #include <cstddef>
+// #include <string>
 
-template <typename T1, typename T2>
-::testing::AssertionResult VectorMatch(const T1 &actual, const T2 &expected,
-                                       const std::size_t size) {
-  for (std::size_t i = 0; i < size; ++i) {
-    if (expected[i] != actual[i]) {
-      return ::testing::AssertionFailure()
-             << "actual[" << i << "] (" << actual[i] << ") != expected[" << i
-             << "] (" << expected[i] << ")";
-    }
-  }
-  return ::testing::AssertionSuccess();
-}
-
+// ****** Tests ******
 TEST(ReadingOpenFoamMeshTest, ReadingPointsWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
