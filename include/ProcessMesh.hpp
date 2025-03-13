@@ -1,9 +1,9 @@
-#ifndef PROCESS_MESH
-#define PROCESS_MESH
+#ifndef PROCESS_MESH_HPP
+#define PROCESS_MESH_HPP
 
 #include "Mesh.hpp"
 
-class processMesh {
+class ProcessMesh {
 public:
   void processOpenFoamMesh(Mesh &fvMesh);
 

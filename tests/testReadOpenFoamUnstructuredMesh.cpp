@@ -1,7 +1,7 @@
 // #include <gtest/gtest.h>
 
 #include "Mesh.hpp"
-#include "readMesh.hpp"
+#include "ReadMesh.hpp"
 #include "testUtility.hpp"
 #include <array>
 // #include <cstddef>
@@ -11,7 +11,7 @@
 TEST(ReadingOpenFoamMeshTest, ReadingPointsWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
-  readMesh meshReader;
+  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const std::array<double, 3> expected_node0_centroid = {32.0, 16.0,
                                                          0.9377383239};
@@ -53,7 +53,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingPointsWorksForUnstructuredMesh) {
 TEST(ReadingOpenFoamMeshTest, ReadingFacesWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
-  readMesh meshReader;
+  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const std::array<std::size_t, 4> expected_face0_iNodes = {36, 573, 589, 52};
   const std::array<std::size_t, 4> expected_face1_iNodes = {41, 578, 634, 97};
@@ -103,7 +103,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingFacesWorksForUnstructuredMesh) {
 TEST(ReadingOpenFoamMeshTest, ReadingOwnersWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
-  readMesh meshReader;
+  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
 
   // -- -Act-- -
@@ -141,7 +141,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingOwnersWorksForUnstructuredMesh) {
 TEST(ReadingOpenFoamMeshTest, ReadingNeighborsWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
-  readMesh meshReader;
+  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
 
   // -- -Act-- -
@@ -189,7 +189,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingNeighborsWorksForUnstructuredMesh) {
 TEST(ReadingOpenFoamMeshTest, ReadingBoundariesWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
-  readMesh meshReader;
+  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
 
   // -- -Act-- -
@@ -245,7 +245,7 @@ TEST(ConstructingElementsTest,
      ConstructingElementNeighborsWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
-  readMesh meshReader;
+  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const std::array<std::size_t, 3> expected_element99_iNeighbors = {19, 100,
                                                                     326};
@@ -287,7 +287,7 @@ TEST(ConstructingElementsTest,
      ConstructingElementFacesWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
-  readMesh meshReader;
+  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const std::array<std::size_t, 5> expected_element0_iFaces = {0, 1300, 1400,
                                                                1454, 1455};
@@ -337,7 +337,7 @@ TEST(ConstructingElementsTest,
      ConstructingElementFaceSignsWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
-  readMesh meshReader;
+  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const std::array<int, 5> expected_element0_faceSigns = {1, 1, 1, 1, 1};
   const std::array<int, 5> expected_element1_faceSigns = {1, 1, 1, 1, 1};
@@ -372,7 +372,7 @@ TEST(ConstructingElementsTest,
      ConstructingElementBoundaryWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
-  readMesh meshReader;
+  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
 
   // -- -Act-- -
@@ -387,7 +387,7 @@ TEST(SettingUpNodeConnectivitiesTest,
      ConnectingFacesToNodeWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
-  readMesh meshReader;
+  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const std::array<std::size_t, 7> expected_node0_iFaces = {
       171, 327, 1354, 1385, 1676, 1890, 1892};
@@ -436,7 +436,7 @@ TEST(SettingUpNodeConnectivitiesTest,
      ConnectingNodesToElementWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
-  readMesh meshReader;
+  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const std::array<std::size_t, 6> expected_element0_iNodes = {36, 573, 589,
                                                                52, 37,  574};
@@ -486,7 +486,7 @@ TEST(SettingUpNodeConnectivitiesTest,
      ConnectingElementsToNodetWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
-  readMesh meshReader;
+  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const std::array<std::size_t, 3> expected_node0_iElements = {111, 218, 219};
   const std::array<std::size_t, 3> expected_node1_iElements = {219, 293, 295};

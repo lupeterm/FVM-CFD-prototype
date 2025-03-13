@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "Mesh.hpp"
-#include "readMesh.hpp"
+#include "ReadMesh.hpp"
 #include "testUtility.hpp"
 #include <array>
 // #include <cmath>
@@ -13,7 +13,7 @@ TEST(ProcessingBasicFaceGeometryTest,
      ComputingFaceCentroidWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
-  readMesh meshReader;
+  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const std::array<double, 3> expected_face0_centroid = {1, 14.999999999999998,
                                                          0};
@@ -80,7 +80,7 @@ TEST(ProcessingBasicFaceGeometryTest,
      ComputingFaceSurfaceVectorWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
-  readMesh meshReader;
+  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const std::array<double, 3> expected_face0_Sf = {3.750953295600000,
                                                    -3.750953295600000, 0};
@@ -132,7 +132,7 @@ TEST(ProcessingBasicFaceGeometryTest,
      ComputingFaceAreaWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
-  readMesh meshReader;
+  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const double expected_face0_area = 5.304649022465577;
   const double expected_face1_area = 2.775509733301608;
@@ -187,7 +187,7 @@ TEST(ComputingElementVolumeAndCentroidTest,
      ComputingElementVolumeWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
-  readMesh meshReader;
+  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const double expected_element0_volume = 3.750953295600002;
   const double expected_element1_volume = 1.022987628239554;
@@ -244,7 +244,7 @@ TEST(ComputingElementVolumeAndCentroidTest,
      ComputingElementCentroidWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
-  readMesh meshReader;
+  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const std::array<double, 3> expected_element0_centroid = {
       0.666666666666667, 15.333333333333332, 4.439763456642422e-17};
@@ -310,7 +310,7 @@ TEST(ProcessingSecondaryFaceGeometryTest,
      ComputingInteriorFaceGeometryWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
-  readMesh meshReader;
+  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
 
   // Expected data of face 0
@@ -459,7 +459,7 @@ TEST(ProcessingSecondaryFaceGeometryTest,
      ComputingBoundaryFaceGeometryWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
-  readMesh meshReader;
+  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
 
   // Expected data of face 1300
@@ -639,7 +639,7 @@ TEST(ProcessingSecondaryFaceGeometryTest,
      ComputingElementInteriorFaceGeometryWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
-  readMesh meshReader;
+  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
 
   // --- Act ---
@@ -693,7 +693,7 @@ TEST(SortingBoundaryNodesFromInteriorNodesTest,
      LabelingInteriorNodesWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
-  readMesh meshReader;
+  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
 
   // --- Act ---

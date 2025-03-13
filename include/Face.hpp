@@ -1,5 +1,5 @@
-#ifndef FACE_H
-#define FACE_H
+#ifndef FACE_HPP
+#define FACE_HPP
 
 #include <array>
 #include <cstddef>

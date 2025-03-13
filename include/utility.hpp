@@ -1,5 +1,5 @@
-#ifndef UTILITY
-#define UTILITY
+#ifndef UTILITY_HPP
+#define UTILITY_HPP
 
 #include <array>
 
