@@ -6,6 +6,7 @@ add_executable(
   testReadOpenFoamUnstructuredMesh.cpp
   testProcessOpenFoamUnstructuredMesh.cpp
   testReadOpenFoamStructuredMesh.cpp
+  testProcessOpenFoamStructuredMesh.cpp
 )
 
 target_link_libraries(
