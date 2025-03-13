@@ -28,8 +28,7 @@ TEST(AssembleDiffusionTermTest, AssembleDiffusionTermWorksForStructuredMesh) {
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
   Field elementScalarField(fvMesh.nElements());
-  AssembleDiffusionTerm assembler;
-  assembler.setValues(elementScalarField);
+  elementScalarField.setValues();
 
   // --- Assert ---
   // *** Verify the scalar field values of elements ***
