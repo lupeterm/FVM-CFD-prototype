@@ -4,8 +4,6 @@
 #include "ReadMesh.hpp"
 #include "testUtility.hpp"
 #include <array>
-// #include <cmath>
-// #include <cstddef>
 #include <string>
 
 // ****** Tests ******

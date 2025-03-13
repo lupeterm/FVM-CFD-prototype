@@ -1,10 +1,8 @@
-// #include <gtest/gtest.h>
-
 #include "Mesh.hpp"
 #include "ReadMesh.hpp"
 #include "testUtility.hpp"
 #include <array>
-// #include <cstddef>
+#include <gtest/gtest.h>
 #include <string>
 
 // ****** Tests ******
