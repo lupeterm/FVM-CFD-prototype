@@ -3,8 +3,10 @@ enable_testing()
 
 add_executable(
   test_readAndProcessOpenFoamMesh
-  testReadOpenFoamMesh.cpp
-  testProcessOpenFoamMesh.cpp
+  testReadOpenFoamUnstructuredMesh.cpp
+  testProcessOpenFoamUnstructuredMesh.cpp
+  testReadOpenFoamStructuredMesh.cpp
+  testProcessOpenFoamStructuredMesh.cpp
 )
 
 target_link_libraries(

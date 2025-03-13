@@ -2,63 +2,15 @@
 
 #include "Mesh.hpp"
 #include "readMesh.hpp"
+#include "testUtility.hpp"
 #include <array>
-#include <cmath>
-#include <cstddef>
+// #include <cmath>
+// #include <cstddef>
 #include <string>
 
-bool AlmostEqualAbsAndRelative(const double &actualValue,
-                               const double &expectedValue,
-                               const double maxDiff,
-                               const double maxRelativeDiff) {
-
-  // Check if the numbers are really close when comparing not very small numbers
-  // or comparing against zero
-  double absDiff = std::fabs(actualValue - expectedValue);
-  if (absDiff <= maxDiff) {
-    return true;
-  }
-
-  // Check if the numbers are really close when comparing very small non-zero
-  // numbers
-  auto expectedAbsValue = std::fabs(expectedValue);
-  auto actualAbsValue = std::fabs(actualValue);
-
-  if (absDiff <= expectedAbsValue * maxRelativeDiff) {
-    return true;
-  }
-  return false;
-}
-
-template <typename T1, typename T2>
-::testing::AssertionResult
-VectorAlmostEqual(const T1 &actual, const T2 &expected, const std::size_t size,
-                  const double maxDiff, const double maxRelativeDiff) {
-  for (std::size_t i = 0; i < size; ++i) {
-    if (!AlmostEqualAbsAndRelative(actual[i], expected[i], maxDiff,
-                                   maxRelativeDiff)) {
-      return ::testing::AssertionFailure()
-             << "actual[" << i << "] (" << actual[i] << ") != expected[" << i
-             << "] (" << expected[i] << ")";
-    }
-  }
-  return ::testing::AssertionSuccess();
-}
-
-::testing::AssertionResult ScalarAlmostEqual(const double &actual,
-                                             const double &expected,
-                                             const double maxDiff,
-                                             const double maxRelativeDiff) {
-
-  if (!AlmostEqualAbsAndRelative(actual, expected, maxDiff, maxRelativeDiff)) {
-    return ::testing::AssertionFailure()
-           << "actual (" << actual << ") != expected (" << expected << ")";
-  }
-  return ::testing::AssertionSuccess();
-}
-
 // ****** Tests ******
-TEST(ProcessingBasicFaceGeometryTest, ComputingFaceCentroidWorks) {
+TEST(ProcessingBasicFaceGeometryTest,
+     ComputingFaceCentroidWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
@@ -124,7 +76,8 @@ TEST(ProcessingBasicFaceGeometryTest, ComputingFaceCentroidWorks) {
                                 maxRelativeDiff));
 }
 
-TEST(ProcessingBasicFaceGeometryTest, ComputingFaceSurfaceVectorWorks) {
+TEST(ProcessingBasicFaceGeometryTest,
+     ComputingFaceSurfaceVectorWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
@@ -175,7 +128,8 @@ TEST(ProcessingBasicFaceGeometryTest, ComputingFaceSurfaceVectorWorks) {
                                 3, maxDiff, maxRelativeDiff));
 }
 
-TEST(ProcessingBasicFaceGeometryTest, ComputingFaceAreaWorks) {
+TEST(ProcessingBasicFaceGeometryTest,
+     ComputingFaceAreaWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
@@ -229,7 +183,8 @@ TEST(ProcessingBasicFaceGeometryTest, ComputingFaceAreaWorks) {
                                 maxRelativeDiff));
 }
 
-TEST(ComputingElementVolumeAndCentroidTest, ComputingElementVolumeWorks) {
+TEST(ComputingElementVolumeAndCentroidTest,
+     ComputingElementVolumeWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
@@ -285,7 +240,8 @@ TEST(ComputingElementVolumeAndCentroidTest, ComputingElementVolumeWorks) {
                                 maxRelativeDiff));
 }
 
-TEST(ComputingElementVolumeAndCentroidTest, ComputingElementCentroidWorks) {
+TEST(ComputingElementVolumeAndCentroidTest,
+     ComputingElementCentroidWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
@@ -350,7 +306,8 @@ TEST(ComputingElementVolumeAndCentroidTest, ComputingElementCentroidWorks) {
                                 maxRelativeDiff));
 }
 
-TEST(ProcessingSecondaryFaceGeometryTest, ComputingInteriorFaceGeometryWorks) {
+TEST(ProcessingSecondaryFaceGeometryTest,
+     ComputingInteriorFaceGeometryWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
@@ -498,7 +455,8 @@ TEST(ProcessingSecondaryFaceGeometryTest, ComputingInteriorFaceGeometryWorks) {
                                 maxDiff, maxRelativeDiff));
 }
 
-TEST(ProcessingSecondaryFaceGeometryTest, ComputingBoundaryFaceGeometryWorks) {
+TEST(ProcessingSecondaryFaceGeometryTest,
+     ComputingBoundaryFaceGeometryWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
@@ -678,7 +636,7 @@ TEST(ProcessingSecondaryFaceGeometryTest, ComputingBoundaryFaceGeometryWorks) {
 }
 
 TEST(ProcessingSecondaryFaceGeometryTest,
-     ComputingElementInteriorFaceGeometryWorks) {
+     ComputingElementInteriorFaceGeometryWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
@@ -731,7 +689,8 @@ TEST(ProcessingSecondaryFaceGeometryTest,
   EXPECT_EQ(fvMesh.faces()[1299].iNeighborOwnerCoef(), 3);
 }
 
-TEST(SortingBoundaryNodesFromInteriorNodesTest, LabelingInteriorNodesWorks) {
+TEST(SortingBoundaryNodesFromInteriorNodesTest,
+     LabelingInteriorNodesWorksForUnstructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   readMesh meshReader;
