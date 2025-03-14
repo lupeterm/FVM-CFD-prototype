@@ -10,7 +10,7 @@
 TEST(ProcessingBasicFaceGeometryTest,
      ComputingFaceCentroidWorksForStructuredMesh) {
   // --- Arrange ---
-  std::string caseDirectory("../../cases/Mycavity");
+  std::string caseDirectory("../../cases/cavity");
   ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const std::array<double, 3> expected_face0_centroid = {
@@ -64,7 +64,7 @@ TEST(ProcessingBasicFaceGeometryTest,
 TEST(ProcessingBasicFaceGeometryTest,
      ComputingFaceSurfaceVectorWorksForStructuredMesh) {
   // --- Arrange ---
-  std::string caseDirectory("../../cases/Mycavity");
+  std::string caseDirectory("../../cases/cavity");
   ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const std::array<double, 3> expected_face0_Sf = {5.00000000000000e-05, 0, 0};
@@ -109,7 +109,7 @@ TEST(ProcessingBasicFaceGeometryTest,
 
 TEST(ProcessingBasicFaceGeometryTest, ComputingFaceAreaWorksForStructuredMesh) {
   // --- Arrange ---
-  std::string caseDirectory("../../cases/Mycavity");
+  std::string caseDirectory("../../cases/cavity");
   ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const double expected_face0_area = 5.00000000000000e-05;
@@ -153,7 +153,7 @@ TEST(ProcessingBasicFaceGeometryTest, ComputingFaceAreaWorksForStructuredMesh) {
 TEST(ComputingElementVolumeAndCentroidTest,
      ComputingElementVolumeWorksForStructuredMesh) {
   // --- Arrange ---
-  std::string caseDirectory("../../cases/Mycavity");
+  std::string caseDirectory("../../cases/cavity");
   ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const double expected_element0_volume = 2.50000000000000e-07;
@@ -200,7 +200,7 @@ TEST(ComputingElementVolumeAndCentroidTest,
 TEST(ComputingElementVolumeAndCentroidTest,
      ComputingElementCentroidWorksForStructuredMesh) {
   // --- Arrange ---
-  std::string caseDirectory("../../cases/Mycavity");
+  std::string caseDirectory("../../cases/cavity");
   ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const std::array<double, 3> expected_element0_centroid = {
@@ -253,7 +253,7 @@ TEST(ComputingElementVolumeAndCentroidTest,
 TEST(ProcessingSecondaryFaceGeometryTest,
      ComputingInteriorFaceGeometryWorksForStructuredMesh) {
   // --- Arrange ---
-  std::string caseDirectory("../../cases/Mycavity");
+  std::string caseDirectory("../../cases/cavity");
   ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
 
@@ -349,7 +349,7 @@ TEST(ProcessingSecondaryFaceGeometryTest,
 TEST(ProcessingSecondaryFaceGeometryTest,
      ComputingBoundaryFaceGeometryWorksForStructuredMesh) {
   // --- Arrange ---
-  std::string caseDirectory("../../cases/Mycavity");
+  std::string caseDirectory("../../cases/cavity");
   ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
 
@@ -468,7 +468,7 @@ TEST(ProcessingSecondaryFaceGeometryTest,
 // TEST(ProcessingSecondaryFaceGeometryTest,
 //      ComputingElementInteriorFaceGeometryWorksForStructuredMesh) {
 //   // --- Arrange ---
-//   std::string caseDirectory("../../cases/Mycavity");
+//   std::string caseDirectory("../../cases/cavity");
 //   ReadMesh meshReader;
 //   Mesh fvMesh(caseDirectory);
 

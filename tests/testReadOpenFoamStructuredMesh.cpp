@@ -9,7 +9,7 @@
 // ****** Tests ******
 TEST(ReadingOpenFoamMeshTest, ReadingPointsWorksForStructuredMesh) {
   // --- Arrange ---
-  std::string caseDirectory("../../cases/Mycavity");
+  std::string caseDirectory("../../cases/cavity");
   ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const std::array<double, 3> expected_node0_centroid = {0.0, 0.0, 0.0};
@@ -47,7 +47,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingPointsWorksForStructuredMesh) {
 
 TEST(ReadingOpenFoamMeshTest, ReadingFacesWorksForStructuredMesh) {
   // --- Arrange ---
-  std::string caseDirectory("../../cases/Mycavity");
+  std::string caseDirectory("../../cases/cavity");
   ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const std::array<std::size_t, 4> expected_face0_iNodes = {1, 22, 463, 442};
@@ -100,7 +100,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingFacesWorksForStructuredMesh) {
 
 TEST(ReadingOpenFoamMeshTest, ReadingOwnersWorksForStructuredMesh) {
   // --- Arrange ---
-  std::string caseDirectory("../../cases/Mycavity");
+  std::string caseDirectory("../../cases/cavity");
   ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
 
@@ -133,7 +133,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingOwnersWorksForStructuredMesh) {
 
 TEST(ReadingOpenFoamMeshTest, ReadingNeighborsWorksForStructuredMesh) {
   // --- Arrange ---
-  std::string caseDirectory("../../cases/Mycavity");
+  std::string caseDirectory("../../cases/cavity");
   ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
 
@@ -176,7 +176,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingNeighborsWorksForStructuredMesh) {
 
 TEST(ReadingOpenFoamMeshTest, ReadingBoundariesWorksForStructuredMesh) {
   // --- Arrange ---
-  std::string caseDirectory("../../cases/Mycavity");
+  std::string caseDirectory("../../cases/cavity");
   ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
 
@@ -211,7 +211,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingBoundariesWorksForStructuredMesh) {
 TEST(ConstructingElementsTest,
      ConstructingElementNeighborsWorksForStructuredMesh) {
   // --- Arrange ---
-  std::string caseDirectory("../../cases/Mycavity");
+  std::string caseDirectory("../../cases/cavity");
   ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const std::array<std::size_t, 2> expected_element0_iNeighbors = {1, 20};
@@ -256,7 +256,7 @@ TEST(ConstructingElementsTest,
 
 TEST(ConstructingElementsTest, ConstructingElementFacesWorksForStructuredMesh) {
   // --- Arrange ---
-  std::string caseDirectory("../../cases/Mycavity");
+  std::string caseDirectory("../../cases/cavity");
   ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const std::size_t expected_element_nFaces = 6;
@@ -307,7 +307,7 @@ TEST(ConstructingElementsTest, ConstructingElementFacesWorksForStructuredMesh) {
 TEST(ConstructingElementsTest,
      ConstructingElementFaceSignsWorksForStructuredMesh) {
   // --- Arrange ---
-  std::string caseDirectory("../../cases/Mycavity");
+  std::string caseDirectory("../../cases/cavity");
   ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const std::size_t expected_element_nFaces = 6;
@@ -349,7 +349,7 @@ TEST(ConstructingElementsTest,
 TEST(ConstructingElementsTest,
      ConstructingElementBoundaryWorksForStructuredMesh) {
   // --- Arrange ---
-  std::string caseDirectory("../../cases/Mycavity");
+  std::string caseDirectory("../../cases/cavity");
   ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
 
@@ -364,7 +364,7 @@ TEST(ConstructingElementsTest,
 TEST(SettingUpNodeConnectivitiesTest,
      ConnectingFacesToNodeWorksForStructuredMesh) {
   // --- Arrange ---
-  std::string caseDirectory("../../cases/Mycavity");
+  std::string caseDirectory("../../cases/cavity");
   ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const size_t expected_node0_nFaces = 3;
@@ -418,7 +418,7 @@ TEST(SettingUpNodeConnectivitiesTest,
 TEST(SettingUpNodeConnectivitiesTest,
      ConnectingNodesToElementWorksForStructuredMesh) {
   // --- Arrange ---
-  std::string caseDirectory("../../cases/Mycavity");
+  std::string caseDirectory("../../cases/cavity");
   ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const std::size_t expected_element_nNodes = 8;
@@ -469,7 +469,7 @@ TEST(SettingUpNodeConnectivitiesTest,
 TEST(SettingUpNodeConnectivitiesTest,
      ConnectingElementsToNodetWorksForStructuredMesh) {
   // --- Arrange ---
-  std::string caseDirectory("../../cases/Mycavity");
+  std::string caseDirectory("../../cases/cavity");
   ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
   const size_t expected_node0_nElements = 1;
