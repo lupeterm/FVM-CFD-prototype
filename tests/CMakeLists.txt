@@ -7,7 +7,7 @@ add_executable(
   testProcessOpenFoamUnstructuredMesh.cpp
   testReadOpenFoamStructuredMesh.cpp
   testProcessOpenFoamStructuredMesh.cpp
-  testAssembleDiffusionTerm.cpp
+  testField.cpp
 )
 
 target_link_libraries(
