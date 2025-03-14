@@ -1,4 +1,4 @@
-#include "AssembleDiffusionTerm.hpp"
+// #include "AssembleDiffusionTerm.hpp"
 #include "Field.hpp"
 #include "Mesh.hpp"
 #include "ReadMesh.hpp"
@@ -8,7 +8,7 @@
 #include <string>
 
 // ****** Tests ******
-TEST(AssembleDiffusionTermTest, AssembleDiffusionTermWorksForStructuredMesh) {
+TEST(FieldTest, SettingScalarFieldWorksForMesh) {
 
   // --- Arrange ---
   std::string caseDirectory("../../cases/Mycavity");
