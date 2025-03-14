@@ -1,5 +1,5 @@
 #include "ProcessMesh.hpp"
-#include "utility.hpp"
+#include "utilities.hpp"
 #include <array>
 #include <cmath>
 #include <cstddef>

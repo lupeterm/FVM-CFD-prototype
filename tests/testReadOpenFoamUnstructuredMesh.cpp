@@ -1,6 +1,6 @@
 #include "Mesh.hpp"
 #include "ReadMesh.hpp"
-#include "testUtility.hpp"
+#include "utilitiesForTesting.hpp"
 #include <array>
 #include <gtest/gtest.h>
 #include <string>

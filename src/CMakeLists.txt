@@ -3,7 +3,7 @@ add_library(
     MyLibrary
     ReadMesh.cpp
     ProcessMesh.cpp
-    utility.cpp
+    utilities.cpp
     AssembleDiffusionTerm.cpp
 )
 
