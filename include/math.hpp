@@ -1,5 +1,5 @@
-#ifndef UTILITIES_HPP
-#define UTILITIES_HPP
+#ifndef MATH_HPP
+#define MATH_HPP
 
 #include <array>
 
