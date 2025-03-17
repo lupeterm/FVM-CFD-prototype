@@ -4,8 +4,8 @@ add_library(
     ReadMesh.cpp
     IO.cpp
     ProcessMesh.cpp
-    math.cpp
-    AssembleDiffusionTerm.cpp
+    arrayOperations.cpp
+    ReadInitialBoundaryConditions.cpp
 )
 
 target_include_directories(
