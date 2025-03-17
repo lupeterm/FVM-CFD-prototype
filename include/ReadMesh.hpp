@@ -11,9 +11,6 @@ public:
 
 private:
   ProcessMesh MeshProcessor;
-  void getDirectory(Mesh &fvMesh);
-  void ifFileOpened(const std::ifstream &file, const std::string &fileName);
-  void discardLines(std::ifstream &file, std::size_t nLines = 1);
   void readPointsFile(Mesh &fvMesh);
   void readFacesFile(Mesh &fvMesh);
   void readOwnersFile(Mesh &fvMesh);

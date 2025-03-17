@@ -1,12 +1,12 @@
 #include "ReadMesh.hpp"
+#include "IO.hpp"
 #include <algorithm>
 #include <fstream>
-#include <iostream>
 #include <limits>
 
 void ReadMesh::readOpenFoamMesh(Mesh &fvMesh) {
   if (fvMesh.caseDir().empty()) {
-    getDirectory(fvMesh);
+    IO::getDirectory(fvMesh);
   }
   readPointsFile(fvMesh);
   readFacesFile(fvMesh);
@@ -18,38 +18,19 @@ void ReadMesh::readOpenFoamMesh(Mesh &fvMesh) {
   MeshProcessor.processOpenFoamMesh(fvMesh);
 }
 
-void ReadMesh::getDirectory(Mesh &fvMesh) {
-  std::cout << "Enter the case directory: ";
-  std::getline(std::cin, fvMesh.caseDir());
-}
-
-void ReadMesh::ifFileOpened(const std::ifstream &file,
-                            const std::string &fileName) {
-  if (!file.is_open()) {
-    std::cerr << "Error opening file: " << fileName << std::endl;
-  }
-}
-
-void ReadMesh::discardLines(std::ifstream &file, const std::size_t nLines) {
-  std::string line;
-  for (int iLine = 0; iLine < nLines; ++iLine) {
-    file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-  }
-}
-
 void ReadMesh::readPointsFile(Mesh &fvMesh) {
   std::string pointsFileName = fvMesh.caseDir() + "/constant/polyMesh/points";
   std::ifstream pointsFile(pointsFileName);
-  ifFileOpened(pointsFile, pointsFileName);
+  IO::IO::ifFileOpened(pointsFile, pointsFileName);
 
   // Discard the file header
-  discardLines(pointsFile, 18);
+  IO::discardLines(pointsFile, 18);
 
   // --- Start to read points data from the file ---
   pointsFile >> fvMesh.nNodes();
 
   // Discard the rest of the line and the next line
-  discardLines(pointsFile, 2);
+  IO::discardLines(pointsFile, 2);
 
   fvMesh.allocateNodes();
 
@@ -73,16 +54,16 @@ void ReadMesh::readPointsFile(Mesh &fvMesh) {
 void ReadMesh::readFacesFile(Mesh &fvMesh) {
   std::string facesFileName = fvMesh.caseDir() + "/constant/polyMesh/faces";
   std::ifstream facesFile(facesFileName);
-  ifFileOpened(facesFile, facesFileName);
+  IO::ifFileOpened(facesFile, facesFileName);
 
   // Discard the file header
-  discardLines(facesFile, 18);
+  IO::discardLines(facesFile, 18);
 
   // --- Start to read faces data from the file ---
   facesFile >> fvMesh.nFaces();
 
   // Discard the rest of the line and the next line
-  discardLines(facesFile, 2);
+  IO::discardLines(facesFile, 2);
 
   fvMesh.allocateFaces();
 
@@ -107,15 +88,15 @@ void ReadMesh::readFacesFile(Mesh &fvMesh) {
 void ReadMesh::readOwnersFile(Mesh &fvMesh) {
   std::string ownersFileName = fvMesh.caseDir() + "/constant/polyMesh/owner";
   std::ifstream ownersFile(ownersFileName);
-  ifFileOpened(ownersFile, ownersFileName);
+  IO::ifFileOpened(ownersFile, ownersFileName);
 
   // Discard the file header
-  discardLines(ownersFile, 18);
+  IO::discardLines(ownersFile, 18);
 
   ownersFile >> fvMesh.nOwners();
 
   // Discard the rest of the line and the next line
-  discardLines(ownersFile, 2);
+  IO::discardLines(ownersFile, 2);
 
   std::size_t maxOwnerIdx{0};
   std::size_t ownerIdx{0};
@@ -135,16 +116,16 @@ void ReadMesh::readNeighborsFile(Mesh &fvMesh) {
   std::string neighborsFileName =
       fvMesh.caseDir() + "/constant/polyMesh/neighbour";
   std::ifstream neighborsFile(neighborsFileName);
-  ifFileOpened(neighborsFile, neighborsFileName);
+  IO::ifFileOpened(neighborsFile, neighborsFileName);
 
   // Discard the file header
-  discardLines(neighborsFile, 18);
+  IO::discardLines(neighborsFile, 18);
 
   std::size_t nNeighbors{0};
   neighborsFile >> nNeighbors;
 
   // Discard the rest of the line and the next line
-  discardLines(neighborsFile, 2);
+  IO::discardLines(neighborsFile, 2);
 
   for (std::size_t iNeighbor = 0; iNeighbor < nNeighbors; ++iNeighbor) {
     neighborsFile >> fvMesh.faces()[iNeighbor].iNeighbor();
@@ -159,16 +140,16 @@ void ReadMesh::readBoundaryFile(Mesh &fvMesh) {
       fvMesh.caseDir() + "/constant/polyMesh/boundary";
 
   std::ifstream boundaryFile(boundaryFileName);
-  ifFileOpened(boundaryFile, boundaryFileName);
+  IO::ifFileOpened(boundaryFile, boundaryFileName);
 
   // Discard the file header
-  discardLines(boundaryFile, 17);
+  IO::discardLines(boundaryFile, 17);
 
   boundaryFile >> fvMesh.nBoundaries();
   fvMesh.nPatches() = fvMesh.nBoundaries();
 
   // Discard the rest of the line and the next line
-  discardLines(boundaryFile, 2);
+  IO::discardLines(boundaryFile, 2);
 
   fvMesh.allocateBoundaries();
 
@@ -178,7 +159,7 @@ void ReadMesh::readBoundaryFile(Mesh &fvMesh) {
     boundaryFile >> fvMesh.boundaries()[iBoundary].userName();
     fvMesh.boundaries()[iBoundary].index() = iBoundary;
 
-    discardLines(boundaryFile, 2);
+    IO::discardLines(boundaryFile, 2);
     std::string token{""};
     boundaryFile >> token;
     while (token.compare("}") != 0) {
@@ -193,7 +174,7 @@ void ReadMesh::readBoundaryFile(Mesh &fvMesh) {
       } else if (token.compare("startFace") == 0) {
         boundaryFile >> fvMesh.boundaries()[iBoundary].startFace();
       }
-      discardLines(boundaryFile);
+      IO::discardLines(boundaryFile);
       boundaryFile >> token;
     }
   }
