@@ -35,10 +35,9 @@ void ReadInitialBoundaryConditions::readVelocityField(
   // Read the internal velocity field
   std::string word;
   UFile >> word;
-  std::cout << word << std::endl;
+
   if (word.compare("internalField") == 0) {
     UFile >> word;
-    std::cout << word << std::endl;
     if (word.compare("uniform") == 0) {
       UFile.ignore(2); // Discard the space and the left parenthesis
       std::array<double, 3> U = {0.0, 0.0, 0.0};
