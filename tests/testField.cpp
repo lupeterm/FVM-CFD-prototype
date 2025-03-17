@@ -53,16 +53,22 @@ TEST(FieldTest, SettingVectorVolFieldWorks) {
   // --- Assert ---
   // *** Verify the scalar field values of elements ***
   // The first two elements
-  VectorMatch(elementVolField.values()[0], expected_element_vector_field, 3);
-  VectorMatch(elementVolField.values()[1], expected_element_vector_field, 3);
+  EXPECT_TRUE(VectorMatch(elementVolField.values()[0],
+                          expected_element_vector_field, 3));
+  EXPECT_TRUE(VectorMatch(elementVolField.values()[1],
+                          expected_element_vector_field, 3));
 
   // // The middle two faces
-  VectorMatch(elementVolField.values()[198], expected_element_vector_field, 3);
-  VectorMatch(elementVolField.values()[199], expected_element_vector_field, 3);
+  EXPECT_TRUE(VectorMatch(elementVolField.values()[198],
+                          expected_element_vector_field, 3));
+  EXPECT_TRUE(VectorMatch(elementVolField.values()[199],
+                          expected_element_vector_field, 3));
 
   // // The last two faces
-  VectorMatch(elementVolField.values()[398], expected_element_vector_field, 3);
-  VectorMatch(elementVolField.values()[399], expected_element_vector_field, 3);
+  EXPECT_TRUE(VectorMatch(elementVolField.values()[398],
+                          expected_element_vector_field, 3));
+  EXPECT_TRUE(VectorMatch(elementVolField.values()[399],
+                          expected_element_vector_field, 3));
 }
 
 TEST(FieldTest, UsingDefaultVectorVolFieldWorks) {
@@ -81,14 +87,20 @@ TEST(FieldTest, UsingDefaultVectorVolFieldWorks) {
   // --- Assert ---
   // *** Verify the scalar field values of elements ***
   // The first two elements
-  VectorMatch(elementVolField.values()[0], expected_element_vector_field, 3);
-  VectorMatch(elementVolField.values()[1], expected_element_vector_field, 3);
+  EXPECT_TRUE(VectorMatch(elementVolField.values()[0],
+                          expected_element_vector_field, 3));
+  EXPECT_TRUE(VectorMatch(elementVolField.values()[1],
+                          expected_element_vector_field, 3));
 
   // // The middle two faces
-  VectorMatch(elementVolField.values()[198], expected_element_vector_field, 3);
-  VectorMatch(elementVolField.values()[199], expected_element_vector_field, 3);
+  EXPECT_TRUE(VectorMatch(elementVolField.values()[198],
+                          expected_element_vector_field, 3));
+  EXPECT_TRUE(VectorMatch(elementVolField.values()[199],
+                          expected_element_vector_field, 3));
 
   // // The last two faces
-  VectorMatch(elementVolField.values()[398], expected_element_vector_field, 3);
-  VectorMatch(elementVolField.values()[399], expected_element_vector_field, 3);
+  EXPECT_TRUE(VectorMatch(elementVolField.values()[398],
+                          expected_element_vector_field, 3));
+  EXPECT_TRUE(VectorMatch(elementVolField.values()[399],
+                          expected_element_vector_field, 3));
 }

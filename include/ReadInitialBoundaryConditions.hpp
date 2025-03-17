@@ -7,12 +7,14 @@
 class ReadInitialBoundaryConditions {
 public:
   void readOpenFoamInitialBoundaryConditions(
-      Mesh &fvMesh, Field<std::array<double, 3>> &velocityVolField);
-  void readPressureField(Mesh &fvMesh);
-  void
-  readInternalVelocityVolField(Mesh &fvMesh,
-                               Field<std::array<double, 3>> &velocityVolField);
-  void readTemperatureField(Mesh &fvMesh);
+      Mesh &fvMesh, Field<std::array<double, 3>> &internalVelocityField,
+      std::vector<Field<std::array<double, 3>>> boundaryVelocityFields);
+  //   void readPressureField(Mesh &fvMesh);
+  void readVelocityField(
+      Mesh &fvMesh, Field<std::array<double, 3>> &internalVelocityField,
+      std::vector<Field<std::array<double, 3>>> boundaryVelocityFields);
+
+  //   void readTemperatureField(Mesh &fvMesh);
 };
 
 #endif // READ_INITIAL_BOUNDARY_CONDITIONS_HPP
