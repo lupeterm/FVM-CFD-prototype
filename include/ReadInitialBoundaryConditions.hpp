@@ -9,8 +9,9 @@ public:
   void readOpenFoamInitialBoundaryConditions(
       Mesh &fvMesh, Field<std::array<double, 3>> &velocityVolField);
   void readPressureField(Mesh &fvMesh);
-  void readVelocityVolField(Mesh &fvMesh,
-                            Field<std::array<double, 3>> &velocityVolField);
+  void
+  readInternalVelocityVolField(Mesh &fvMesh,
+                               Field<std::array<double, 3>> &velocityVolField);
   void readTemperatureField(Mesh &fvMesh);
 };
 

@@ -43,7 +43,6 @@ TEST(FieldTest, SettingVectorVolFieldWorks) {
   ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
 
-  // const double expected_element_scalar_field = 1.0;
   const std::array<double, 3> expected_element_vector_field = {1.0, 2.0, 3.0};
 
   // --- Act ---

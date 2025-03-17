@@ -8,7 +8,7 @@ void ReadInitialBoundaryConditions::readOpenFoamInitialBoundaryConditions(
   std::cout << "Reading initial and boundary conditions..." << std::endl;
 
   //   readPressureField(fvMesh);
-  readVelocityVolField(fvMesh, velocityVolField);
+  readInternalVelocityVolField(fvMesh, velocityVolField);
   //   readTemperatureField(fvMesh);
 }
 
@@ -18,7 +18,7 @@ void ReadInitialBoundaryConditions::readOpenFoamInitialBoundaryConditions(
 //   IO::ifFileOpened(pFile, pFileName);
 // }
 
-void ReadInitialBoundaryConditions::readVelocityVolField(
+void ReadInitialBoundaryConditions::readInternalVelocityVolField(
     Mesh &fvMesh, Field<std::array<double, 3>> &velocityVolField) {
   std::string UFileName = fvMesh.caseDir() + "/0/U";
   std::ifstream UFile(UFileName);
