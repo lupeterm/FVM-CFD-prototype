@@ -42,7 +42,6 @@ void ReadInitialBoundaryConditions::readVelocityField(
       UFile.ignore(2); // Discard the space and the left parenthesis
       std::array<double, 3> U = {0.0, 0.0, 0.0};
       UFile >> U[0] >> U[1] >> U[2];
-      std::cout << U[0] << " " << U[1] << " " << U[2] << std::endl;
       internalVelocityField.set(U);
     }
   }
