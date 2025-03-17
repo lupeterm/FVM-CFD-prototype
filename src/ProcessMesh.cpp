@@ -1,5 +1,5 @@
-#include "processMesh.hpp"
-#include "utility.hpp"
+#include "ProcessMesh.hpp"
+#include "utilities.hpp"
 #include <array>
 #include <cmath>
 #include <cstddef>
@@ -16,14 +16,14 @@
 // }
 // *******************
 
-void processMesh::processOpenFoamMesh(Mesh &fvMesh) {
+void ProcessMesh::processOpenFoamMesh(Mesh &fvMesh) {
   processBasicFaceGeometry(fvMesh);
   computeElementVolumeAndCentroid(fvMesh);
   processSecondaryFaceGeometry(fvMesh);
   sortBoundaryNodesFromInteriorNodes(fvMesh);
 }
 
-void processMesh::processBasicFaceGeometry(Mesh &fvMesh) {
+void ProcessMesh::processBasicFaceGeometry(Mesh &fvMesh) {
   for (std::size_t iFace = 0; iFace < fvMesh.nFaces(); ++iFace) {
 
     std::array<double, 3> centroid = {0.0, 0.0, 0.0};
@@ -131,7 +131,7 @@ void processMesh::processBasicFaceGeometry(Mesh &fvMesh) {
   }
 }
 
-void processMesh::computeElementVolumeAndCentroid(Mesh &fvMesh) {
+void ProcessMesh::computeElementVolumeAndCentroid(Mesh &fvMesh) {
   for (std::size_t iElement = 0; iElement < fvMesh.nElements(); ++iElement) {
     const std::vector<std::size_t> &iFaces =
         fvMesh.elements()[iElement].iFaces();
@@ -198,7 +198,7 @@ void processMesh::computeElementVolumeAndCentroid(Mesh &fvMesh) {
   }
 }
 
-void processMesh::processSecondaryFaceGeometry(Mesh &fvMesh) {
+void ProcessMesh::processSecondaryFaceGeometry(Mesh &fvMesh) {
   // Loop over interiror faces
   for (std::size_t iFace = 0; iFace < fvMesh.nInteriorFaces(); ++iFace) {
     Face &theFace = fvMesh.faces()[iFace];
@@ -323,7 +323,7 @@ void processMesh::processSecondaryFaceGeometry(Mesh &fvMesh) {
   }
 }
 
-void processMesh::sortBoundaryNodesFromInteriorNodes(Mesh &fvMesh) {
+void ProcessMesh::sortBoundaryNodesFromInteriorNodes(Mesh &fvMesh) {
   for (std::size_t iFace = 0; iFace < fvMesh.nInteriorFaces(); ++iFace) {
     fvMesh.faces()[iFace].patchIndex() = 0;
 

@@ -1,9 +1,10 @@
 # Source directory
 add_library(
     MyLibrary
-    readMesh.cpp
-    processMesh.cpp
-    utility.cpp
+    ReadMesh.cpp
+    ProcessMesh.cpp
+    utilities.cpp
+    AssembleDiffusionTerm.cpp
 )
 
 target_include_directories(
