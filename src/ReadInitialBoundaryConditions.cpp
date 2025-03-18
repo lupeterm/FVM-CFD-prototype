@@ -47,77 +47,45 @@ void ReadInitialBoundaryConditions::readVelocityField(
   }
 
   // Read the boundary velocity field
-  //   std::string boundaryFileName =
-  //       fvMesh.caseDir() + "/constant/polyMesh/boundary";
+  const std::size_t nBoundaries = fvMesh.nBoundaries();
+  boundaryVelocityFields.resize(nBoundaries);
 
-  //   std::ifstream boundaryFile(boundaryFileName);
-  //   IO::ifFileOpened(boundaryFile, boundaryFileName);
+  // Discard the rest of the line and the next line
+  IO::discardLines(UFile, 2);
+  UFile >> word;
+  if (word.compare("boundaryField") == 0) {
 
-  //   // Discard the file header
-  //   IO::discardLines(boundaryFile, 17);
+    IO::discardLines(UFile, 2);
+    for (std::size_t iBoundary = 0; iBoundary < fvMesh.nBoundaries();
+         ++iBoundary) {
 
-  //   boundaryFile >> fvMesh.nBoundaries();
-  //   fvMesh.nPatches() = fvMesh.nBoundaries();
+      UFile >> word;
+      if (word.compare(fvMesh.boundaries()[iBoundary].userName()) == 0) {
 
-  //===========================================================================
-  //   const std::size_t nBoundaries = fvMesh.nBoundaries();
-  //   boundaryVelocityFields.reserve(nBoundaries);
+        IO::discardLines(UFile, 2);
+        std::string token{""};
+        UFile >> token;
 
-  //   // Discard the rest of the line and the next line
-  //   IO::discardLines(UFile, 2);
-  //   UFile >> word;
-  //   if (word.compare("boundaryField") == 0) {
+        while (token.compare("}") != 0) {
+          if (token.compare("type") == 0) {
+            UFile >> boundaryVelocityFields[iBoundary].boundaryType();
+            boundaryVelocityFields[iBoundary].boundaryType().pop_back();
 
-  //     //   fvMesh.allocateBoundaries();
-  //     IO::discardLines(UFile, 2);
-
-  //     for (std::size_t iBoundary = 0; iBoundary < fvMesh.nBoundaries();
-  //          ++iBoundary) {
-
-  //       UFile >> word;
-  //       if (word.compare(fvMesh.boundaries()[iBoundary].userName()) == 0) {
-
-  //         IO::discardLines(UFile, 2);
-  //         std::string token{""};
-  //         UFile >> token;
-  //         while (token.compare("}") != 0) {
-
-  //           if (token.compare("type") == 0) {
-  //             //   boundaryFile >> fvMesh.boundaries()[iBoundary].type();
-  //             //   fvMesh.boundaries()[iBoundary].type().pop_back();
-
-  //             UFile >> boundaryVelocityFields[iBoundary].boundaryType();
-  //             boundaryVelocityFields[iBoundary].boundaryType().pop_back();
-  //             if (boundaryVelocityFields[iBoundary].boundaryType().compare(
-  //                     "fixedValue") == 0) {
-  //               IO::discardLines(UFile, 1);
-  //               UFile >> word;
-  //               if (word.compare("value") == 0) {
-  //                 UFile >> word;
-  //                 if (word.compare("uniform") == 0) {
-  //                   UFile.ignore(1); // Discard the left parenthesis
-  //                   std::array<double, 3> U = {0.0, 0.0, 0.0};
-  //                   UFile >> U[0] >> U[1] >> U[2];
-  //                   //   boundaryVelocityFields[iBoundary].set(U);
-  //                 }
-
-  //                 //   } else if (token.compare("nFaces") == 0) {
-  //                 //     boundaryFile >>
-  //                 fvMesh.boundaries()[iBoundary].nFaces();
-
-  //                 //   } else if (token.compare("startFace") == 0) {
-  //                 //     boundaryFile >>
-  //                 //     fvMesh.boundaries()[iBoundary].startFace();
-  //                 //   }
-  //                 IO::discardLines(boundaryFile);
-  //                 boundaryFile >> token;
-  //               }
-  //             }
-
-  //             //   boundaryFile >> fvMesh.boundaries()[iBoundary].userName();
-  //             //   fvMesh.boundaries()[iBoundary].index() = iBoundary;
-  //           }
-  //         }
+          } else if (token.compare("value") == 0) {
+            UFile >> token;
+            if (token.compare("uniform") == 0) {
+              UFile.ignore(2); // Discard the space and the left parenthesis
+              std::array<double, 3> U = {0.0, 0.0, 0.0};
+              UFile >> U[0] >> U[1] >> U[2];
+              boundaryVelocityFields[iBoundary].set(U);
+            }
+          }
+          IO::discardLines(UFile);
+          UFile >> token;
+        }
+      }
+    }
+  }
   UFile.close();
 }
 // void ReadInitialBoundaryConditions::readTemperatureField(Mesh &fvMesh) {
