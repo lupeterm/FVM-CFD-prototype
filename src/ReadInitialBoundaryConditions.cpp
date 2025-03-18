@@ -49,7 +49,6 @@ void ReadInitialBoundaryConditions::readVelocityField(
   // Read the boundary velocity field
   const std::size_t nBoundaries = fvMesh.nBoundaries();
   boundaryVelocityFields.resize(nBoundaries);
-  std::cout << "nBoundaries: " << boundaryVelocityFields.size() << std::endl;
 
   // Discard the rest of the line and the next line
   IO::discardLines(UFile, 2);
