@@ -112,3 +112,42 @@ TEST(ReadInitialBoundaryConditionsTest, ReadingBoundaryVelocityFieldWorks) {
   EXPECT_TRUE(VectorMatch(boundaryVelocityFields[1].values()[59],
                           expected_boundary_velocity_Fields[1], 3));
 }
+
+TEST(ReadInitialBoundaryConditionsTest, ReadingInternalTemperatureFieldWorks) {
+
+  // --- Arrange ---
+  std::string caseDirectory("../../cases/testReadInitialBoundaryConditions");
+  ReadMesh meshReader;
+  Mesh fvMesh(caseDirectory);
+
+  const double expected_internal_temperature_field = 239.0;
+
+  // --- Act ---
+  meshReader.readOpenFoamMesh(fvMesh);
+  Field<double> internalTemperatureField(fvMesh.nElements());
+  std::vector<Field<double>> boundaryTemperatureFields;
+  ReadInitialBoundaryConditions initialBoundaryConditionsReader;
+  initialBoundaryConditionsReader.readTemperatureField(
+      fvMesh, internalTemperatureField, boundaryTemperatureFields);
+
+  // --- Assert ---
+  EXPECT_EQ(internalTemperatureField.size(), fvMesh.nElements());
+
+  // The first two internal elements
+  EXPECT_EQ(internalTemperatureField.values()[0],
+            expected_internal_temperature_field);
+  EXPECT_EQ(internalTemperatureField.values()[1],
+            expected_internal_temperature_field);
+
+  // The middle two internal elements
+  EXPECT_EQ(internalTemperatureField.values()[198],
+            expected_internal_temperature_field);
+  EXPECT_EQ(internalTemperatureField.values()[199],
+            expected_internal_temperature_field);
+
+  // The last two internal elements
+  EXPECT_EQ(internalTemperatureField.values()[398],
+            expected_internal_temperature_field);
+  EXPECT_EQ(internalTemperatureField.values()[399],
+            expected_internal_temperature_field);
+}
