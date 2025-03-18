@@ -5,7 +5,7 @@
 
 void ReadInitialBoundaryConditions::readOpenFoamInitialBoundaryConditions(
     Mesh &fvMesh, Field<std::array<double, 3>> &internalVelocityField,
-    std::vector<Field<std::array<double, 3>>> boundaryVelocityFields) {
+    std::vector<Field<std::array<double, 3>>> &boundaryVelocityFields) {
 
   std::cout << "Reading initial and boundary conditions..." << std::endl;
 
@@ -23,7 +23,7 @@ void ReadInitialBoundaryConditions::readOpenFoamInitialBoundaryConditions(
 
 void ReadInitialBoundaryConditions::readVelocityField(
     Mesh &fvMesh, Field<std::array<double, 3>> &internalVelocityField,
-    std::vector<Field<std::array<double, 3>>> boundaryVelocityFields) {
+    std::vector<Field<std::array<double, 3>>> &boundaryVelocityFields) {
 
   std::string UFileName = fvMesh.caseDir() + "/0/U";
   std::ifstream UFile(UFileName);
@@ -49,6 +49,7 @@ void ReadInitialBoundaryConditions::readVelocityField(
   // Read the boundary velocity field
   const std::size_t nBoundaries = fvMesh.nBoundaries();
   boundaryVelocityFields.resize(nBoundaries);
+  std::cout << "nBoundaries: " << boundaryVelocityFields.size() << std::endl;
 
   // Discard the rest of the line and the next line
   IO::discardLines(UFile, 2);
@@ -61,6 +62,13 @@ void ReadInitialBoundaryConditions::readVelocityField(
 
       UFile >> word;
       if (word.compare(fvMesh.boundaries()[iBoundary].userName()) == 0) {
+
+        boundaryVelocityFields[iBoundary].values().resize(
+            fvMesh.boundaries()[iBoundary].nFaces());
+
+        // std::cout << "Boundary velocity field size: "
+        //           << boundaryVelocityFields[iBoundary].values().size()
+        //           << std::endl;
 
         IO::discardLines(UFile, 2);
         std::string token{""};
@@ -77,7 +85,17 @@ void ReadInitialBoundaryConditions::readVelocityField(
               UFile.ignore(2); // Discard the space and the left parenthesis
               std::array<double, 3> U = {0.0, 0.0, 0.0};
               UFile >> U[0] >> U[1] >> U[2];
+              // std::cout << "Boundary velocity: " << U[0] << " " << U[1] << "
+              // "
+              //           << U[2] << std::endl;
               boundaryVelocityFields[iBoundary].set(U);
+              // std::cout << "Boundary velocity: "
+              //           << boundaryVelocityFields[iBoundary].values()[0][0]
+              //           << " "
+              //           << boundaryVelocityFields[iBoundary].values()[0][1]
+              //           << " "
+              //           << boundaryVelocityFields[iBoundary].values()[0][2]
+              //           << std::endl;
             }
           }
           IO::discardLines(UFile);
