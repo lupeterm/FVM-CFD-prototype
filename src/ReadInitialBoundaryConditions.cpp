@@ -119,54 +119,54 @@ void ReadInitialBoundaryConditions::readTemperatureField(
     }
   }
 
-  // // Read the boundary velocity field
-  // const std::size_t nBoundaries = fvMesh.nBoundaries();
-  // boundaryVelocityFields.resize(nBoundaries);
+  // Read the boundary temperature field
+  const std::size_t nBoundaries = fvMesh.nBoundaries();
+  boundaryTemperatureFields.resize(nBoundaries);
 
-  // // Discard the rest of the line and the next line
-  // IO::discardLines(UFile, 2);
-  // UFile >> word;
-  // if (word.compare("boundaryField") == 0) {
+  // Discard the rest of the line and the next line
+  IO::discardLines(TFile, 2);
+  TFile >> word;
+  if (word.compare("boundaryField") == 0) {
 
-  //   IO::discardLines(UFile, 2);
-  //   for (std::size_t iBoundary = 0; iBoundary < fvMesh.nBoundaries();
-  //        ++iBoundary) {
+    IO::discardLines(TFile, 2);
+    for (std::size_t iBoundary = 0; iBoundary < fvMesh.nBoundaries();
+         ++iBoundary) {
 
-  //     UFile >> word;
-  //     if (word.compare(fvMesh.boundaries()[iBoundary].userName()) == 0) {
+      TFile >> word;
+      if (word.compare(fvMesh.boundaries()[iBoundary].userName()) == 0) {
 
-  //       boundaryVelocityFields[iBoundary].values().resize(
-  //           fvMesh.boundaries()[iBoundary].nFaces());
+        boundaryTemperatureFields[iBoundary].values().resize(
+            fvMesh.boundaries()[iBoundary].nFaces());
 
-  //       IO::discardLines(UFile, 2);
-  //       std::string token{""};
-  //       UFile >> token;
+        IO::discardLines(TFile, 2);
+        std::string token{""};
+        TFile >> token;
 
-  //       while (token.compare("}") != 0) {
-  //         if (token.compare("type") == 0) {
-  //           UFile >> boundaryVelocityFields[iBoundary].boundaryType();
-  //           boundaryVelocityFields[iBoundary].boundaryType().pop_back();
+        while (token.compare("}") != 0) {
+          if (token.compare("type") == 0) {
+            TFile >> boundaryTemperatureFields[iBoundary].boundaryType();
+            boundaryTemperatureFields[iBoundary].boundaryType().pop_back();
 
-  //           if (boundaryVelocityFields[iBoundary].boundaryType().compare(
-  //                   "noSlip") == 0) {
-  //             boundaryVelocityFields[iBoundary].set({0.0, 0.0, 0.0});
-  //           }
+            // if (boundaryTemperatureFields[iBoundary].boundaryType().compare(
+            //         "noSlip") == 0) {
+            //   boundaryTemperatureFields[iBoundary].set(0.0);
+            // }
 
-  //         } else if (token.compare("value") == 0) {
-  //           UFile >> token;
-  //           if (token.compare("uniform") == 0) {
-  //             UFile.ignore(2); // Discard the space and the left parenthesis
-  //             std::array<double, 3> U = {0.0, 0.0, 0.0};
-  //             UFile >> U[0] >> U[1] >> U[2];
-  //             boundaryVelocityFields[iBoundary].set(U);
-  //           }
-  //         }
-  //         IO::discardLines(UFile);
-  //         UFile >> token;
-  //       }
-  //     }
-  //   }
-  // }
+          } else if (token.compare("value") == 0) {
+            TFile >> token;
+            if (token.compare("uniform") == 0) {
+              // TFile.ignore(2); // Discard the space and the left parenthesis
+              double temperature = 0.0;
+              TFile >> temperature;
+              boundaryTemperatureFields[iBoundary].set(temperature);
+            }
+          }
+          IO::discardLines(TFile);
+          TFile >> token;
+        }
+      }
+    }
+  }
   TFile.close();
 }
 
