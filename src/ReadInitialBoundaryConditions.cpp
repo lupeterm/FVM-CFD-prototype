@@ -15,7 +15,8 @@ void ReadInitialBoundaryConditions::readOpenFoamInitialBoundaryConditions(
   readTemperatureField(fvMesh, internalTemperatureField,
                        boundaryTemperatureFields);
 
-  //   readPressureField(fvMesh);
+  // TO DO:
+  // readPressureField(fvMesh);
 }
 
 void ReadInitialBoundaryConditions::readVelocityField(
@@ -112,7 +113,6 @@ void ReadInitialBoundaryConditions::readTemperatureField(
   if (word.compare("internalField") == 0) {
     TFile >> word;
     if (word.compare("uniform") == 0) {
-      // TFile.ignore(2); // Discard the space and the left parenthesis
       double temperature = 0.0;
       TFile >> temperature;
       internalTemperatureField.set(temperature);
@@ -150,7 +150,6 @@ void ReadInitialBoundaryConditions::readTemperatureField(
           } else if (token.compare("value") == 0) {
             TFile >> token;
             if (token.compare("uniform") == 0) {
-              // TFile.ignore(2); // Discard the space and the left parenthesis
               double temperature = 0.0;
               TFile >> temperature;
               boundaryTemperatureFields[iBoundary].set(temperature);
@@ -165,6 +164,7 @@ void ReadInitialBoundaryConditions::readTemperatureField(
   TFile.close();
 }
 
+// TO DO:
 // void ReadInitialBoundaryConditions::readPressureField(Mesh &fvMesh) {
 //   std::string pFileName = fvMesh.caseDir() + "/0/p";
 //   std::ifstream pFile(pFileName);
