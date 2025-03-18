@@ -66,10 +66,6 @@ void ReadInitialBoundaryConditions::readVelocityField(
         boundaryVelocityFields[iBoundary].values().resize(
             fvMesh.boundaries()[iBoundary].nFaces());
 
-        // std::cout << "Boundary velocity field size: "
-        //           << boundaryVelocityFields[iBoundary].values().size()
-        //           << std::endl;
-
         IO::discardLines(UFile, 2);
         std::string token{""};
         UFile >> token;
@@ -79,23 +75,18 @@ void ReadInitialBoundaryConditions::readVelocityField(
             UFile >> boundaryVelocityFields[iBoundary].boundaryType();
             boundaryVelocityFields[iBoundary].boundaryType().pop_back();
 
+            if (boundaryVelocityFields[iBoundary].boundaryType().compare(
+                    "noSlip") == 0) {
+              boundaryVelocityFields[iBoundary].set({0.0, 0.0, 0.0});
+            }
+
           } else if (token.compare("value") == 0) {
             UFile >> token;
             if (token.compare("uniform") == 0) {
               UFile.ignore(2); // Discard the space and the left parenthesis
               std::array<double, 3> U = {0.0, 0.0, 0.0};
               UFile >> U[0] >> U[1] >> U[2];
-              // std::cout << "Boundary velocity: " << U[0] << " " << U[1] << "
-              // "
-              //           << U[2] << std::endl;
               boundaryVelocityFields[iBoundary].set(U);
-              // std::cout << "Boundary velocity: "
-              //           << boundaryVelocityFields[iBoundary].values()[0][0]
-              //           << " "
-              //           << boundaryVelocityFields[iBoundary].values()[0][1]
-              //           << " "
-              //           << boundaryVelocityFields[iBoundary].values()[0][2]
-              //           << std::endl;
             }
           }
           IO::discardLines(UFile);
