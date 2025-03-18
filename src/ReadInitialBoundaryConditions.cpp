@@ -147,11 +147,6 @@ void ReadInitialBoundaryConditions::readTemperatureField(
             TFile >> boundaryTemperatureFields[iBoundary].boundaryType();
             boundaryTemperatureFields[iBoundary].boundaryType().pop_back();
 
-            // if (boundaryTemperatureFields[iBoundary].boundaryType().compare(
-            //         "noSlip") == 0) {
-            //   boundaryTemperatureFields[iBoundary].set(0.0);
-            // }
-
           } else if (token.compare("value") == 0) {
             TFile >> token;
             if (token.compare("uniform") == 0) {
