@@ -21,7 +21,7 @@ TEST(ReadInitialBoundaryConditionsTest, ReadingInternalVelocityFieldWorks) {
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
   Field<std::array<double, 3>> internalVelocityField(fvMesh.nElements());
-  std::vector<Field<std::array<double, 3>>> boundaryVelocityFields;
+  std::vector<boundaryField<std::array<double, 3>>> boundaryVelocityFields;
   ReadInitialBoundaryConditions initialBoundaryConditionsReader;
   initialBoundaryConditionsReader.readVelocityField(
       fvMesh, internalVelocityField, boundaryVelocityFields);
@@ -71,7 +71,7 @@ TEST(ReadInitialBoundaryConditionsTest, ReadingBoundaryVelocityFieldWorks) {
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
   Field<std::array<double, 3>> internalVelocityField(fvMesh.nElements());
-  std::vector<Field<std::array<double, 3>>> boundaryVelocityFields;
+  std::vector<boundaryField<std::array<double, 3>>> boundaryVelocityFields;
   ReadInitialBoundaryConditions initialBoundaryConditionsReader;
   initialBoundaryConditionsReader.readVelocityField(
       fvMesh, internalVelocityField, boundaryVelocityFields);
@@ -131,7 +131,7 @@ TEST(ReadInitialBoundaryConditionsTest, ReadingInternalTemperatureFieldWorks) {
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
   Field<double> internalTemperatureField(fvMesh.nElements());
-  std::vector<Field<double>> boundaryTemperatureFields;
+  std::vector<boundaryField<double>> boundaryTemperatureFields;
   ReadInitialBoundaryConditions initialBoundaryConditionsReader;
   initialBoundaryConditionsReader.readTemperatureField(
       fvMesh, internalTemperatureField, boundaryTemperatureFields);
@@ -180,7 +180,7 @@ TEST(ReadInitialBoundaryConditionsTest, ReadingBoundaryTemperatureFieldWorks) {
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
   Field<double> internalTemperatureField(fvMesh.nElements());
-  std::vector<Field<double>> boundaryTemperatureFields;
+  std::vector<boundaryField<double>> boundaryTemperatureFields;
   ReadInitialBoundaryConditions initialBoundaryConditionsReader;
   initialBoundaryConditionsReader.readTemperatureField(
       fvMesh, internalTemperatureField, boundaryTemperatureFields);

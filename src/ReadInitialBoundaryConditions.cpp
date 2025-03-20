@@ -5,9 +5,9 @@
 
 void ReadInitialBoundaryConditions::readOpenFoamInitialBoundaryConditions(
     Mesh &fvMesh, Field<std::array<double, 3>> &internalVelocityField,
-    std::vector<Field<std::array<double, 3>>> &boundaryVelocityFields,
+    std::vector<boundaryField<std::array<double, 3>>> &boundaryVelocityFields,
     Field<double> &internalTemperatureField,
-    std::vector<Field<double>> &boundaryTemperatureFields) {
+    std::vector<boundaryField<double>> &boundaryTemperatureFields) {
 
   std::cout << "Reading initial and boundary conditions..." << std::endl;
 
@@ -21,7 +21,7 @@ void ReadInitialBoundaryConditions::readOpenFoamInitialBoundaryConditions(
 
 void ReadInitialBoundaryConditions::readVelocityField(
     Mesh &fvMesh, Field<std::array<double, 3>> &internalVelocityField,
-    std::vector<Field<std::array<double, 3>>> &boundaryVelocityFields) {
+    std::vector<boundaryField<std::array<double, 3>>> &boundaryVelocityFields) {
 
   std::string UFileName = fvMesh.caseDir() + "/0/U";
   std::ifstream UFile(UFileName);
@@ -97,7 +97,7 @@ void ReadInitialBoundaryConditions::readVelocityField(
 
 void ReadInitialBoundaryConditions::readTemperatureField(
     Mesh &fvMesh, Field<double> &internalTemperatureField,
-    std::vector<Field<double>> &boundaryTemperatureFields) {
+    std::vector<boundaryField<double>> &boundaryTemperatureFields) {
 
   std::string TFileName = fvMesh.caseDir() + "/0/T";
   std::ifstream TFile(TFileName);

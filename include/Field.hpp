@@ -17,10 +17,19 @@ public:
   // Set all the values of a field to a given value
   void set(const T &value) { values_.assign(values_.size(), value); }
 
+protected:
+  std::vector<T> values_;
+};
+
+template <typename T> class boundaryField : public Field<T> {
+public:
+  boundaryField() = default;
+  boundaryField(std::size_t nElements) : Field<T>(nElements) {}
+
+  void set(const T &value) { Field<T>::set(value); }
   std::string &boundaryType() { return boundaryType_; }
 
 private:
-  std::vector<T> values_;
   std::string boundaryType_{""};
 };
 
