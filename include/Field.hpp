@@ -26,7 +26,6 @@ public:
   boundaryField() = default;
   boundaryField(std::size_t nElements) : Field<T>(nElements) {}
 
-  void set(const T &value) { Field<T>::set(value); }
   std::string &boundaryType() { return boundaryType_; }
 
 private:
