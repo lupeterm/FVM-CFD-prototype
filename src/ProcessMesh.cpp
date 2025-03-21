@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <vector>
 
+using namespace std::string_literals;
 // *** Debug code ***
 // #include <iostream>
 // template <typename T> void printOutArray(T &customVector) {
@@ -339,9 +340,9 @@ void ProcessMesh::sortBoundaryNodesFromInteriorNodes(Mesh &fvMesh) {
     const std::size_t &startFace = fvMesh.boundaries()[iBoundary].startFace();
     const std::size_t &nBFaces = fvMesh.boundaries()[iBoundary].nFaces();
 
-    bool s1 = (fvMesh.boundaries()[iBoundary].userName() == "frontAndBack");
+    bool s1 = (fvMesh.boundaries()[iBoundary].userName() == "frontAndBack"s);
     bool s2 =
-        (fvMesh.boundaries()[iBoundary].userName() == "frontAndBackPlanes");
+        (fvMesh.boundaries()[iBoundary].userName() == "frontAndBackPlanes"s);
     if (s1 || s2) {
       for (std::size_t iFace = startFace; iFace < startFace + nBFaces - 1;
            ++iFace) {
@@ -360,9 +361,9 @@ void ProcessMesh::sortBoundaryNodesFromInteriorNodes(Mesh &fvMesh) {
     const std::size_t &startFace = fvMesh.boundaries()[iBoundary].startFace();
     const std::size_t &nBFaces = fvMesh.boundaries()[iBoundary].nFaces();
 
-    bool s1 = (fvMesh.boundaries()[iBoundary].userName() == "frontAndBack");
+    bool s1 = (fvMesh.boundaries()[iBoundary].userName() == "frontAndBack"s);
     bool s2 =
-        (fvMesh.boundaries()[iBoundary].userName() == "frontAndBackPlanes");
+        (fvMesh.boundaries()[iBoundary].userName() == "frontAndBackPlanes"s);
     if (!s1 && !s2) {
       for (std::size_t iFace = startFace; iFace < startFace + nBFaces - 1;
            ++iFace) {
