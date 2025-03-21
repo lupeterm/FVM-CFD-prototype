@@ -1,28 +1,35 @@
 #ifndef FIELD_HPP
 #define FIELD_HPP
 
+#include <array>
+#include <string>
 #include <vector>
 
-class Field {
+template <typename T> class Field {
 
 public:
-  Field(std::size_t nElement)
-      : size_(nElement),
-        values_(nElement) { // Assumption: The default values of a Field are 0
-  }
-  std::vector<double> &values() { return values_; }
-  const std::size_t size() { return size_; }
+  Field() = default;
+  Field(std::size_t nElements) : values_(nElements) {}
 
-  // Set all the values of a scalar field to a given value (default is 1.0)
-  void setValues(const double value = 1.0) {
-    for (std::size_t iElement = 0; iElement < size(); ++iElement) {
-      values()[iElement] = value;
-    }
-  }
+  std::vector<T> &values() { return values_; }
+  const std::size_t size() { return values_.size(); }
+
+  // Set all the values of a field to a given value
+  void set(const T &value) { values_.assign(values_.size(), value); }
+
+protected:
+  std::vector<T> values_;
+};
+
+template <typename T> class boundaryField : public Field<T> {
+public:
+  boundaryField() = default;
+  boundaryField(std::size_t nElements) : Field<T>(nElements) {}
+
+  std::string &boundaryType() { return boundaryType_; }
 
 private:
-  std::size_t size_;
-  std::vector<double> values_;
+  std::string boundaryType_{""};
 };
 
 #endif // FIELD_HPP

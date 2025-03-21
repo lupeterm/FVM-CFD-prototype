@@ -2,9 +2,10 @@
 add_library(
     MyLibrary
     ReadMesh.cpp
+    IO.cpp
     ProcessMesh.cpp
-    utilities.cpp
-    AssembleDiffusionTerm.cpp
+    arrayOperations.cpp
+    ReadInitialBoundaryConditions.cpp
 )
 
 target_include_directories(

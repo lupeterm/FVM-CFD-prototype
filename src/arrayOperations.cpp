@@ -1,4 +1,4 @@
-#include "utilities.hpp"
+#include "arrayOperations.hpp"
 #include <cmath>
 #include <numeric>
 

@@ -10,6 +10,7 @@
 
 class Mesh {
 public:
+  Mesh() = default;
   Mesh(std::string caseDir) : caseDir_(caseDir) {}
   std::string &caseDir() { return caseDir_; }
   std::size_t &nNodes() { return nNodes_; }

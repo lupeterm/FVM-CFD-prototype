@@ -8,6 +8,8 @@ add_executable(
   testReadOpenFoamStructuredMesh.cpp
   testProcessOpenFoamStructuredMesh.cpp
   testField.cpp
+  testReadInitialBoundaryConditions.cpp
+  # testIO.cpp  // Don't include this file for automatic testing
 )
 
 target_link_libraries(
