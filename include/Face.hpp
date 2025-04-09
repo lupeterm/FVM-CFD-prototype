@@ -25,6 +25,7 @@ public:
   std::size_t &iOwnerNeighborCoef() { return iOwnerNeighborCoef_; }
   std::size_t &iNeighborOwnerCoef() { return iNeighborOwnerCoef_; }
   std::size_t &patchIndex() { return patchIndex_; }
+  ~Face() { delete[] iNodes_; }
 
 private:
   std::size_t nNodes_ = 0;
