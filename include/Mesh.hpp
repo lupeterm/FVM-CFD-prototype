@@ -8,8 +8,6 @@
 #include <cstddef>
 #include <string>
 
-#include <iostream>
-
 class Mesh {
 public:
   Mesh() = default;
@@ -33,7 +31,6 @@ public:
   std::size_t &nBElements() { return nBElements_; }
   std::size_t &nBFaces() { return nBFaces_; }
   ~Mesh() {
-    // Deallocate memory for nodes, faces, boundaries, and elements
     delete[] nodes_;
     delete[] faces_;
     delete[] boundaries_;
