@@ -8,6 +8,8 @@
 #include <cstddef>
 #include <string>
 
+#include <iostream>
+
 class Mesh {
 public:
   Mesh() = default;
@@ -30,6 +32,13 @@ public:
   void allocateElements() { elements_ = new Element[nElements_]; }
   std::size_t &nBElements() { return nBElements_; }
   std::size_t &nBFaces() { return nBFaces_; }
+  ~Mesh() {
+    // Deallocate memory for nodes, faces, boundaries, and elements
+    delete[] nodes_;
+    delete[] faces_;
+    delete[] boundaries_;
+    delete[] elements_;
+  }
 
 private:
   std::string caseDir_ = "";
