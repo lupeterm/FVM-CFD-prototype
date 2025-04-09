@@ -6,7 +6,7 @@
 class AssembleDiffusionTerm {
 public:
   // Assemble the diffusion term on a structured mesh
-  void cellBaesdAssemble(Field &scalarField);
+  // void cellBaesdAssemble(Field &scalarField);
 
 private:
 };

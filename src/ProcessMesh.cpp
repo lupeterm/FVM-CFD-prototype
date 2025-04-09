@@ -206,51 +206,35 @@ void ProcessMesh::processSecondaryFaceGeometry(Mesh &fvMesh) {
 
     // Compute unit surface normal vector
     std::array<double, 3> nf = {0.0, 0.0, 0.0};
-    for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
-      nf[iCoordinate] = theFace.Sf()[iCoordinate] / theFace.area();
-    }
+    nf = (1 / theFace.area()) * theFace.Sf();
 
     Element &ownerElement = fvMesh.elements()[theFace.iOwner()];
     Element &neighborElement = fvMesh.elements()[theFace.iNeighbor()];
 
     std::array<double, 3> CN = {0.0, 0.0, 0.0};
-    for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
-      CN[iCoordinate] = neighborElement.centroid()[iCoordinate] -
-                        ownerElement.centroid()[iCoordinate];
-    }
+    CN = neighborElement.centroid() - ownerElement.centroid();
     fvMesh.faces()[iFace].CN() = CN;
 
     std::array<double, 3> eCN = {0.0, 0.0, 0.0};
     const double magCN = mag(CN);
-    for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
-      eCN[iCoordinate] = CN[iCoordinate] / magCN;
-    }
+    eCN = (1 / magCN) * CN;
+
     fvMesh.faces()[iFace].eCN() = eCN;
 
     std::array<double, 3> E = {0.0, 0.0, 0.0};
-    for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
-      E[iCoordinate] = theFace.area() * eCN[iCoordinate];
-    }
+    E = theFace.area() * eCN;
 
     fvMesh.faces()[iFace].gDiff() = mag(E) / magCN;
 
-    for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
-      fvMesh.faces()[iFace].T()[iCoordinate] =
-          theFace.Sf()[iCoordinate] - E[iCoordinate];
-    }
+    fvMesh.faces()[iFace].T() = theFace.Sf() - E;
 
     // Compute face weighting factor
     std::array<double, 3> Cf = {0.0, 0.0, 0.0};
-    for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
-      Cf[iCoordinate] = theFace.centroid()[iCoordinate] -
-                        ownerElement.centroid()[iCoordinate];
-    }
+    Cf = theFace.centroid() - ownerElement.centroid();
 
     std::array<double, 3> fF = {0.0, 0.0, 0.0};
-    for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
-      fF[iCoordinate] = neighborElement.centroid()[iCoordinate] -
-                        theFace.centroid()[iCoordinate];
-    }
+    fF = neighborElement.centroid() - theFace.centroid();
+
     fvMesh.faces()[iFace].gf() =
         dot_product(Cf, nf) / (dot_product(Cf, nf) + dot_product(fF, nf));
 
@@ -264,17 +248,15 @@ void ProcessMesh::processSecondaryFaceGeometry(Mesh &fvMesh) {
 
     // Compute unit surface normal vector
     std::array<double, 3> nf = {0.0, 0.0, 0.0};
-    for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
-      nf[iCoordinate] = theBFace.Sf()[iCoordinate] / theBFace.area();
-    }
+    // for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
+    //   nf[iCoordinate] = theBFace.Sf()[iCoordinate] / theBFace.area();
+    // }
 
     Element &ownerElement = fvMesh.elements()[theBFace.iOwner()];
 
     std::array<double, 3> CN = {0.0, 0.0, 0.0};
-    for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
-      CN[iCoordinate] = theBFace.centroid()[iCoordinate] -
-                        ownerElement.centroid()[iCoordinate];
-    }
+    CN = theBFace.centroid() - ownerElement.centroid();
+
     fvMesh.faces()[iBFace].CN() = CN;
 
     fvMesh.faces()[iBFace].gDiff() =
@@ -282,20 +264,15 @@ void ProcessMesh::processSecondaryFaceGeometry(Mesh &fvMesh) {
 
     std::array<double, 3> eCN = {0.0, 0.0, 0.0};
     const double magCN = mag(CN);
-    for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
-      eCN[iCoordinate] = CN[iCoordinate] / magCN;
-    }
+
+    eCN = (1 / magCN) * CN;
+
     fvMesh.faces()[iBFace].eCN() = eCN;
 
     std::array<double, 3> E = {0.0, 0.0, 0.0};
-    for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
-      E[iCoordinate] = theBFace.area() * eCN[iCoordinate];
-    }
+    E = theBFace.area() * eCN;
 
-    for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
-      fvMesh.faces()[iBFace].T()[iCoordinate] =
-          theBFace.Sf()[iCoordinate] - E[iCoordinate];
-    }
+    fvMesh.faces()[iBFace].T() = theBFace.Sf() - E;
 
     fvMesh.faces()[iBFace].gf() = 1.0;
     fvMesh.faces()[iBFace].walldist() =

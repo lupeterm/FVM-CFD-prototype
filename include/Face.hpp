@@ -38,10 +38,13 @@ private:
   std::array<double, 3> Sf_ = {0.0, 0.0, 0.0};
   double area_ = 0.0;
 
-  // The distance vector from the owner element centroid to the surface centroid
+  // The distance vector from the owner element centroid to the neighbor element
+  // centroid
   std::array<double, 3> CN_ = {0.0, 0.0, 0.0};
 
+  // The unit vector from the owner element centroid to the neighbor element
   std::array<double, 3> eCN_ = {0.0, 0.0, 0.0};
+
   double gDiff_ = 0.0;
 
   // The distance vector joining the centroids of the owner and neighbor
