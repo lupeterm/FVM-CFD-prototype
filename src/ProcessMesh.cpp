@@ -160,17 +160,12 @@ void ProcessMesh::computeElementVolumeAndCentroid(Mesh &fvMesh) {
       const int localFaceSign = fvMesh.elements()[iElement].faceSigns()[iFace];
       std::array<double, 3> Sf = {0.0, 0.0, 0.0};
 
-      for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
-        Sf[iCoordinate] = localFace.Sf()[iCoordinate] * localFaceSign;
-      }
+      Sf = localFaceSign * localFace.Sf();
 
       // Calculate the distance vector from geometric center to the face
       // centroid
       std::array<double, 3> d_Gf = {0.0, 0.0, 0.0};
-      for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
-        d_Gf[iCoordinate] =
-            localFace.centroid()[iCoordinate] - elementCenter[iCoordinate];
-      }
+      d_Gf = localFace.centroid() - elementCenter;
 
       // Calculate the volume of each sub-element pyramid
       double localVolume =
@@ -190,10 +185,11 @@ void ProcessMesh::computeElementVolumeAndCentroid(Mesh &fvMesh) {
             localCentroid[iCoordinate] * localVolume;
       }
     }
-    for (std::size_t iCoordinate = 0; iCoordinate < 3; ++iCoordinate) {
-      fvMesh.elements()[iElement].centroid()[iCoordinate] =
-          localVolumeCentroidSum[iCoordinate] / localVolumeSum;
-    }
+
+    // Compute the centroid of the element
+    fvMesh.elements()[iElement].centroid() =
+        (1 / localVolumeSum) * localVolumeCentroidSum;
+
     fvMesh.elements()[iElement].volume() = localVolumeSum;
     fvMesh.elements()[iElement].oldVolume() = localVolumeSum;
   }
