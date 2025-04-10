@@ -67,32 +67,28 @@ TEST(ReadingOpenFoamMeshTest, ReadingFacesWorksForStructuredMesh) {
   // Verify the number of faces
   EXPECT_EQ(fvMesh.nFaces(), 1640);
 
-  // Verify the 1st face
+  // Verify the 1st 3 faces
   EXPECT_EQ(fvMesh.faces()[0].nNodes(), 4);
   EXPECT_TRUE(
       VectorMatch(fvMesh.faces()[0].iNodes(), expected_face0_iNodes, 4));
 
-  // Verify the 2nd face
   EXPECT_EQ(fvMesh.faces()[1].nNodes(), 4);
   EXPECT_TRUE(
       VectorMatch(fvMesh.faces()[1].iNodes(), expected_face1_iNodes, 4));
 
-  // Verify the 3rd face
   EXPECT_EQ(fvMesh.faces()[2].nNodes(), 4);
   EXPECT_TRUE(
       VectorMatch(fvMesh.faces()[2].iNodes(), expected_face2_iNodes, 4));
 
-  // Verify the third from the last face
+  // Verify the last 3 faces
   EXPECT_EQ(fvMesh.faces()[1637].nNodes(), 4);
   EXPECT_TRUE(
       VectorMatch(fvMesh.faces()[1637].iNodes(), expected_face1637_iNodes, 4));
 
-  // Verify the third from the last face
   EXPECT_EQ(fvMesh.faces()[1638].nNodes(), 4);
   EXPECT_TRUE(
       VectorMatch(fvMesh.faces()[1638].iNodes(), expected_face1638_iNodes, 4));
 
-  // Verify the third from the last face
   EXPECT_EQ(fvMesh.faces()[1639].nNodes(), 4);
   EXPECT_TRUE(
       VectorMatch(fvMesh.faces()[1639].iNodes(), expected_face1639_iNodes, 4));
@@ -168,7 +164,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingNeighborsWorksForStructuredMesh) {
   EXPECT_EQ(fvMesh.faces()[761].iNeighbor(), -1);
   EXPECT_EQ(fvMesh.faces()[762].iNeighbor(), -1);
 
-  // The last 3 boundary faces
+  // Verify the last 3 boundary faces
   EXPECT_EQ(fvMesh.faces()[1637].iNeighbor(), -1);
   EXPECT_EQ(fvMesh.faces()[1638].iNeighbor(), -1);
   EXPECT_EQ(fvMesh.faces()[1639].iNeighbor(), -1);
@@ -229,6 +225,7 @@ TEST(ConstructingElementsTest,
 
   // --- Assert ---
   // *** Verify neighbors for the given finite volume elements ***
+  // Verify the 1st 2 elements
   EXPECT_EQ(fvMesh.elements()[0].nNeighbors(), 2);
   EXPECT_TRUE(VectorMatch(fvMesh.elements()[0].iNeighbors(),
                           expected_element0_iNeighbors, 2));
@@ -237,6 +234,7 @@ TEST(ConstructingElementsTest,
   EXPECT_TRUE(VectorMatch(fvMesh.elements()[1].iNeighbors(),
                           expected_element1_iNeighbors, 3));
 
+  // Verify two middle elements
   EXPECT_EQ(fvMesh.elements()[199].nNeighbors(), 3);
   EXPECT_TRUE(VectorMatch(fvMesh.elements()[199].iNeighbors(),
                           expected_element199_iNeighbors, 3));
@@ -244,7 +242,8 @@ TEST(ConstructingElementsTest,
   EXPECT_EQ(fvMesh.elements()[200].nNeighbors(), 3);
   EXPECT_TRUE(VectorMatch(fvMesh.elements()[200].iNeighbors(),
                           expected_element200_iNeighbors, 2));
-  // Last two elements
+
+  // Verify the two elements
   EXPECT_EQ(fvMesh.elements()[398].nNeighbors(), 3);
   EXPECT_TRUE(VectorMatch(fvMesh.elements()[398].iNeighbors(),
                           expected_element398_iNeighbors, 3));
@@ -278,6 +277,7 @@ TEST(ConstructingElementsTest, ConstructingElementFacesWorksForStructuredMesh) {
 
   // --- Assert ---
   // *** Verify face indices for the given finite volume elements ***
+  // Verify the 1st 2 elements
   EXPECT_EQ(fvMesh.elements()[0].iFaces().size(), expected_element_nFaces);
   EXPECT_TRUE(VectorMatch(fvMesh.elements()[0].iFaces(),
                           expected_element0_iFaces, expected_element_nFaces));
@@ -286,6 +286,7 @@ TEST(ConstructingElementsTest, ConstructingElementFacesWorksForStructuredMesh) {
   EXPECT_TRUE(VectorMatch(fvMesh.elements()[1].iFaces(),
                           expected_element1_iFaces, expected_element_nFaces));
 
+  // Verify two middle elements
   EXPECT_EQ(fvMesh.elements()[99].iFaces().size(), expected_element_nFaces);
   EXPECT_TRUE(VectorMatch(fvMesh.elements()[99].iFaces(),
                           expected_element99_iFaces, expected_element_nFaces));
@@ -294,7 +295,7 @@ TEST(ConstructingElementsTest, ConstructingElementFacesWorksForStructuredMesh) {
   EXPECT_TRUE(VectorMatch(fvMesh.elements()[100].iFaces(),
                           expected_element100_iFaces, expected_element_nFaces));
 
-  // Last two elements
+  // Verify the last two elements
   EXPECT_EQ(fvMesh.elements()[398].iFaces().size(), expected_element_nFaces);
   EXPECT_TRUE(VectorMatch(fvMesh.elements()[398].iFaces(),
                           expected_element398_iFaces, expected_element_nFaces));
@@ -323,12 +324,15 @@ TEST(ConstructingElementsTest,
 
   // --- Assert ---
   // *** Verify face signs for the given finite volume elements ***
+  // Verify the 1st 2 elements
   EXPECT_TRUE(VectorMatch(fvMesh.elements()[0].faceSigns(),
                           expected_element0_faceSigns,
                           expected_element_nFaces));
   EXPECT_TRUE(VectorMatch(fvMesh.elements()[1].faceSigns(),
                           expected_element1_faceSigns,
                           expected_element_nFaces));
+
+  // Verify two middle elements
   EXPECT_TRUE(VectorMatch(fvMesh.elements()[99].faceSigns(),
                           expected_element99_faceSigns,
                           expected_element_nFaces));
@@ -336,7 +340,7 @@ TEST(ConstructingElementsTest,
                           expected_element100_faceSigns,
                           expected_element_nFaces));
 
-  // Last two elements
+  // Verify last two elements
   EXPECT_TRUE(VectorMatch(fvMesh.elements()[398].faceSigns(),
                           expected_element398_faceSigns,
                           expected_element_nFaces));
@@ -389,6 +393,7 @@ TEST(SettingUpNodeConnectivitiesTest,
   meshReader.readOpenFoamMesh(fvMesh);
 
   // --- Assert ---
+  // Verify the 1st two nodes
   EXPECT_EQ(fvMesh.nodes()[0].iFaces().size(), expected_node0_nFaces);
   EXPECT_TRUE(VectorMatch(fvMesh.nodes()[0].iFaces(), expected_node0_iFaces,
                           expected_node0_nFaces));
@@ -397,6 +402,7 @@ TEST(SettingUpNodeConnectivitiesTest,
   EXPECT_TRUE(VectorMatch(fvMesh.nodes()[1].iFaces(), expected_node1_iFaces,
                           expected_node1_nFaces));
 
+  // Verify two middle nodes
   EXPECT_EQ(fvMesh.nodes()[438].iFaces().size(), expected_nodes438_nFaces);
   EXPECT_TRUE(VectorMatch(fvMesh.nodes()[438].iFaces(),
                           expected_nodes438_iFaces, expected_nodes438_nFaces));
@@ -405,7 +411,7 @@ TEST(SettingUpNodeConnectivitiesTest,
   EXPECT_TRUE(VectorMatch(fvMesh.nodes()[439].iFaces(),
                           expected_nodes439_iFaces, expected_nodes439_nFaces));
 
-  // Last two nodes
+  // Verify the last two nodes
   EXPECT_EQ(fvMesh.nodes()[880].iFaces().size(), expected_node880_nFaces);
   EXPECT_TRUE(VectorMatch(fvMesh.nodes()[880].iFaces(), expected_node880_iFaces,
                           expected_node880_nFaces));
@@ -440,6 +446,7 @@ TEST(SettingUpNodeConnectivitiesTest,
 
   // --- Assert ---
   // *** Verify the node indices of some finite volume elements ***
+  // Verify the 1st two elements
   EXPECT_EQ(fvMesh.elements()[0].iNodes().size(), expected_element_nNodes);
   EXPECT_TRUE(VectorMatch(fvMesh.elements()[0].iNodes(),
                           expected_element0_iNodes, expected_element_nNodes));
@@ -448,6 +455,7 @@ TEST(SettingUpNodeConnectivitiesTest,
   EXPECT_TRUE(VectorMatch(fvMesh.elements()[1].iNodes(),
                           expected_element1_iNodes, expected_element_nNodes));
 
+  // Verify two middle elements
   EXPECT_EQ(fvMesh.elements()[198].iNodes().size(), expected_element_nNodes);
   EXPECT_TRUE(VectorMatch(fvMesh.elements()[198].iNodes(),
                           expected_element198_iNodes, expected_element_nNodes));
@@ -456,7 +464,7 @@ TEST(SettingUpNodeConnectivitiesTest,
   EXPECT_TRUE(VectorMatch(fvMesh.elements()[199].iNodes(),
                           expected_element199_iNodes, expected_element_nNodes));
 
-  // Last two elements
+  // Verify the last two elements
   EXPECT_EQ(fvMesh.elements()[398].iNodes().size(), expected_element_nNodes);
   EXPECT_TRUE(VectorMatch(fvMesh.elements()[398].iNodes(),
                           expected_element398_iNodes, expected_element_nNodes));
@@ -491,6 +499,7 @@ TEST(SettingUpNodeConnectivitiesTest,
 
   // --- Assert ---
   // *** Verify the element indices of some nodes ***
+  // Verify the 1st two nodes
   EXPECT_EQ(fvMesh.nodes()[0].iElements().size(), expected_node0_nElements);
   EXPECT_TRUE(VectorMatch(fvMesh.nodes()[0].iElements(),
                           expected_node0_iElements, expected_node0_nElements));
@@ -499,6 +508,7 @@ TEST(SettingUpNodeConnectivitiesTest,
   EXPECT_TRUE(VectorMatch(fvMesh.nodes()[1].iElements(),
                           expected_node1_iElements, expected_node1_nElements));
 
+  // Verify two middle nodes
   EXPECT_EQ(fvMesh.nodes()[499].iElements().size(), expected_node499_nElements);
   EXPECT_TRUE(VectorMatch(fvMesh.nodes()[499].iElements(),
                           expected_node499_iElements,
@@ -509,7 +519,7 @@ TEST(SettingUpNodeConnectivitiesTest,
                           expected_node500_iElements,
                           expected_node500_nElements));
 
-  // Last two elements
+  // Verify the last two nodes
   EXPECT_EQ(fvMesh.nodes()[880].iElements().size(), expected_node880_nElements);
   EXPECT_TRUE(VectorMatch(fvMesh.nodes()[880].iElements(),
                           expected_node880_iElements,
