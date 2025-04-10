@@ -2,6 +2,7 @@
 
 #include "Mesh.hpp"
 #include "ReadMesh.hpp"
+#include "arrayOperations.hpp"
 #include "utilitiesForTesting.hpp"
 #include <array>
 #include <string>
@@ -260,6 +261,7 @@ TEST(ProcessingSecondaryFaceGeometryTest,
   // Expected data of face 0
   const std::array<double, 3> expected_face0_CN = {0.00500000000000000, 0,
                                                    8.67361737988404e-19};
+  const double expected_face0_magCN = mag(expected_face0_CN);
   const std::array<double, 3> expected_face0_eCN = {1, 0, 1.73472347597681e-16};
   const double expected_face0_gDiff = 0.0100000000000000;
   const std::array<double, 3> expected_face0_T = {0, 0, -8.67361737988403e-21};
@@ -267,6 +269,7 @@ TEST(ProcessingSecondaryFaceGeometryTest,
 
   // Expected data of face 1
   const std::array<double, 3> expected_face1_CN = {0, 0.00500000000000000, 0};
+  const double expected_face1_magCN = mag(expected_face1_CN);
   const std::array<double, 3> expected_face1_eCN = {0, 1, 0};
   const double expected_face1_gDiff = 0.0100000000000000;
   const std::array<double, 3> expected_face1_T = {0, 0, -8.67361737988403e-21};
@@ -275,6 +278,7 @@ TEST(ProcessingSecondaryFaceGeometryTest,
   // Expected data of face 758
   const std::array<double, 3> expected_face758_CN = {0.00499999999999999,
                                                      1.38777878078145e-17, 0};
+  const double expected_face758_magCN = mag(expected_face758_CN);
   const std::array<double, 3> expected_face758_eCN = {1, 2.77555756156290e-15,
                                                       0};
   const double expected_face758_gDiff = 0.0100000000000000;
@@ -284,6 +288,7 @@ TEST(ProcessingSecondaryFaceGeometryTest,
 
   // Expected data of face 759
   const std::array<double, 3> expected_face759_CN = {0.00499999999999999, 0, 0};
+  const double expected_face759_magCN = mag(expected_face759_CN);
   const std::array<double, 3> expected_face759_eCN = {1, 0, 0};
   const double expected_face759_gDiff = 0.0100000000000000;
   const std::array<double, 3> expected_face759_T = {0, 0, 0};
@@ -300,8 +305,11 @@ TEST(ProcessingSecondaryFaceGeometryTest,
   // Verify the geometric quantities of the first interior two faces
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[0].CN(), expected_face0_CN, 3,
                                 maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[0].magCN(), expected_face0_magCN,
+                                maxDiff, maxRelativeDiff));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[0].eCN(), expected_face0_eCN, 3,
                                 maxDiff, maxRelativeDiff));
+
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[0].gDiff(), expected_face0_gDiff,
                                 maxDiff, maxRelativeDiff));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[0].T(), expected_face0_T, 3,
@@ -310,6 +318,8 @@ TEST(ProcessingSecondaryFaceGeometryTest,
                                 maxDiff, maxRelativeDiff));
 
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1].CN(), expected_face1_CN, 3,
+                                maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1].magCN(), expected_face1_magCN,
                                 maxDiff, maxRelativeDiff));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1].eCN(), expected_face1_eCN, 3,
                                 maxDiff, maxRelativeDiff));
@@ -323,6 +333,9 @@ TEST(ProcessingSecondaryFaceGeometryTest,
   // Verify the geometric quantities of the last two interior faces
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[758].CN(), expected_face758_CN,
                                 3, maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[758].magCN(),
+                                expected_face758_magCN, maxDiff,
+                                maxRelativeDiff));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[758].eCN(), expected_face758_eCN,
                                 3, maxDiff, maxRelativeDiff));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[758].gDiff(),
@@ -335,6 +348,9 @@ TEST(ProcessingSecondaryFaceGeometryTest,
 
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[759].CN(), expected_face759_CN,
                                 3, maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[759].magCN(),
+                                expected_face759_magCN, maxDiff,
+                                maxRelativeDiff));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[759].eCN(), expected_face759_eCN,
                                 3, maxDiff, maxRelativeDiff));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[759].gDiff(),
@@ -355,6 +371,7 @@ TEST(ProcessingSecondaryFaceGeometryTest,
 
   // Expected data of face 760
   const std::array<double, 3> expected_face760_CN = {0, 0.00250000000000000, 0};
+  const double expected_face760_magCN = mag(expected_face760_CN);
   const std::array<double, 3> expected_face760_eCN = {0, 1, 0};
   const double expected_face760_gDiff = 0.0200000000000000;
   const std::array<double, 3> expected_face760_T = {0, 0, 0};
@@ -364,6 +381,7 @@ TEST(ProcessingSecondaryFaceGeometryTest,
   // Expected data of face 761
   const std::array<double, 3> expected_face761_CN = {
       8.67361737988404e-19, 0.00250000000000002, 8.67361737988404e-19};
+  const double expected_face761_magCN = mag(expected_face761_CN);
   const std::array<double, 3> expected_face761_eCN = {3.46944695195359e-16, 1,
                                                       3.46944695195359e-16};
   const double expected_face761_gDiff = 0.0200000000000000;
@@ -375,6 +393,7 @@ TEST(ProcessingSecondaryFaceGeometryTest,
   // Expected data of face 1638
   const std::array<double, 3> expected_face1638_CN = {0, -1.38777878078145e-17,
                                                       0.00500000000000000};
+  const double expected_face1638_magCN = mag(expected_face1638_CN);
   const std::array<double, 3> expected_face1638_eCN = {0, -2.77555756156289e-15,
                                                        1};
   const double expected_face1638_gDiff = 0.00500000000000001;
@@ -386,6 +405,7 @@ TEST(ProcessingSecondaryFaceGeometryTest,
   // Expected data of face 1639
   const std::array<double, 3> expected_face1639_CN = {0, 0,
                                                       0.00500000000000000};
+  const double expected_face1639_magCN = mag(expected_face1639_CN);
   const std::array<double, 3> expected_face1639_eCN = {0, 0, 1};
   const double expected_face1639_gDiff = 0.00500000000000001;
   const std::array<double, 3> expected_face1639_T = {0, 0, 0};
@@ -403,6 +423,9 @@ TEST(ProcessingSecondaryFaceGeometryTest,
   // Verify the geometric quantities of the first boundary two faces
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[760].CN(), expected_face760_CN,
                                 3, maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[760].magCN(),
+                                expected_face760_magCN, maxDiff,
+                                maxRelativeDiff));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[760].eCN(), expected_face760_eCN,
                                 3, maxDiff, maxRelativeDiff));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[760].gDiff(),
@@ -418,6 +441,9 @@ TEST(ProcessingSecondaryFaceGeometryTest,
 
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[761].CN(), expected_face761_CN,
                                 3, maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[761].magCN(),
+                                expected_face761_magCN, maxDiff,
+                                maxRelativeDiff));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[761].eCN(), expected_face761_eCN,
                                 3, maxDiff, maxRelativeDiff));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[761].gDiff(),
@@ -434,6 +460,9 @@ TEST(ProcessingSecondaryFaceGeometryTest,
   // Verify the geometric quantities of the last boundary two faces
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1638].CN(), expected_face1638_CN,
                                 3, maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1638].magCN(),
+                                expected_face1638_magCN, maxDiff,
+                                maxRelativeDiff));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1638].eCN(),
                                 expected_face1638_eCN, 3, maxDiff,
                                 maxRelativeDiff));
@@ -450,6 +479,9 @@ TEST(ProcessingSecondaryFaceGeometryTest,
 
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1639].CN(), expected_face1639_CN,
                                 3, maxDiff, maxRelativeDiff));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1639].magCN(),
+                                expected_face1639_magCN, maxDiff,
+                                maxRelativeDiff));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1639].eCN(),
                                 expected_face1639_eCN, 3, maxDiff,
                                 maxRelativeDiff));
