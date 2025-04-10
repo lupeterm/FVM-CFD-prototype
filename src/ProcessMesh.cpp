@@ -213,6 +213,7 @@ void ProcessMesh::processSecondaryFaceGeometry(Mesh &fvMesh) {
 
     std::array<double, 3> eCN = {0.0, 0.0, 0.0};
     const double magCN = mag(CN);
+    fvMesh.faces()[iFace].magCN() = magCN;
     eCN = (1 / magCN) * CN;
 
     fvMesh.faces()[iFace].eCN() = eCN;
@@ -260,6 +261,7 @@ void ProcessMesh::processSecondaryFaceGeometry(Mesh &fvMesh) {
 
     std::array<double, 3> eCN = {0.0, 0.0, 0.0};
     const double magCN = mag(CN);
+    fvMesh.faces()[iBFace].magCN() = magCN;
 
     eCN = (1 / magCN) * CN;
 

@@ -16,6 +16,7 @@ public:
   std::array<double, 3> &centroid() { return centroid_; }
   std::array<double, 3> &Sf() { return Sf_; }
   double &area() { return area_; }
+  double &magCN() { return magCN_; }
   std::array<double, 3> &CN() { return CN_; }
   std::array<double, 3> &eCN() { return eCN_; }
   double &gDiff() { return gDiff_; }
@@ -38,6 +39,12 @@ private:
   std::array<double, 3> Sf_ = {0.0, 0.0, 0.0};
   double area_ = 0.0;
 
+  // The distance between the owner element centroid and the neighbor element
+  // centroid for interior faces
+  // The distance between the owner element centroid and the wall for boundary
+  // faces
+  double magCN_ = 0.0;
+
   // The distance vector from the owner element centroid to the neighbor element
   // centroid
   std::array<double, 3> CN_ = {0.0, 0.0, 0.0};
@@ -47,8 +54,6 @@ private:
 
   double gDiff_ = 0.0;
 
-  // The distance vector joining the centroids of the owner and neighbor
-  // elements
   std::array<double, 3> T_ = {0.0, 0.0, 0.0};
 
   // The geometric factor
