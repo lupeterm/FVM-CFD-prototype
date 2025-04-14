@@ -8,7 +8,8 @@ class AssembleDiffusionTerm {
 public:
   // Assemble the diffusion term on a Cartesian orthogonal mesh by looping over
   // the elements (cells)
-  void elementBasedAssemble(Mesh &fvMesh);
+  void AssembleDiffusionTerm::elementBasedAssemble(Mesh &fvMesh,
+                                                   const double *diffusionCoef);
 
   // Assemble the diffusion term on a Cartesian orthogonal mesh by looping over
   // the faces

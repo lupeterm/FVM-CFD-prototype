@@ -1,40 +1,55 @@
 #include "AssembleDiffusionTerm.hpp"
 #include <cstddef>
+#include <vector>
 
-void AssembleDiffusionTerm::elementBasedAssemble(Mesh &fvMesh) {
-  for (std::size_t iElement = 0; iElement < fvMesh.nElements(); ++iElement) {
+void AssembleDiffusionTerm::elementBasedAssemble(Mesh &fvMesh,
+                                                 const double *diffusionCoef) {
+
+  const std::size_t nElements = fvMesh.nElements();
+
+  // Declare a 2D array for coefficient matrix corresponding to the discrete
+  // form of diffusion equation
+  std::vector<std::vector<double>> coeffMatrix(
+      nElements, std::vector<double>(nElements, 0.0));
+
+  for (std::size_t iElement = 0; iElement < nElements; ++iElement) {
     // Get the element
-    Element &element = fvMesh.elements()[iElement];
-    const std::size_t nFaces = element.iFaces().size();
+    Element &theElement = fvMesh.elements()[iElement];
+    const std::size_t nFaces = theElement.iFaces().size();
 
-    // Go through the faces of the element
     for (std::size_t iFace = 0; iFace < nFaces; ++iFace) {
       // Get the face
-      Face &face = fvMesh.faces()[element.iFaces()[iFace]];
+      const std::size_t iFaceIndex = theElement.iFaces()[iFace];
+      Face &theFace = fvMesh.faces()[iFaceIndex];
 
-      // Judege if the face is an interior face or a boundary face
-      if (face.iNeighbor() != -1) {
-        // The face is an interior face
-        // Get the neighbor element
-        // Element &neighborElement = fvMesh.elements()[face.iNeighbor()];
+      double FluxCn = 0.0;
+      double FluxFn = 0.0;
+      double FluxVn = 0.0;
 
-        // Get the geometric factors gDiff
+      // Check if the face is an interior face or a boundary face
+      if (theFace.iNeighbor() != -1) { // If it is an interior face
+        // Compute FluxCn, FluxFn and FluxVn
+        FluxCn = diffusionCoef[iFaceIndex] * theFace.gDiff();
+        FluxFn = -FluxCn;
 
-        // Calculate the coefficients due to different faces of a given element
-        // Store the coefficients in a full matrix
-      } else {
-        // The face is a boundary face
-        // Get the patch index of the face
-        // std::size_t patchIndex = face.patchIndex();
+        // Compute the coefficient matrix
+        coeffMatrix[iElement][theElement.iNeighbors()[iFace]] = FluxFn;
+        coeffMatrix[iElement][iElement] += FluxCn;
 
-        // Calculate the geometric factors
-        // Calculate the coefficients due to different faces of a given element
-        // Store the coefficients in a full matrix
+      } else { // If it is a boundary face
+        // Get the boundary condition
+        if () { // Dirichlet BC
+
+        }
+
+        else if () { // Neumann BC
+
+        }
+
+        else if () { // mixed BC
+        }
       }
     }
-    // Calculate geometric factors
-    // Calculate the coefficients due to different faces of a given element
-    // Store the coefficients in a full matrix
   }
 }
 //   void AssembleDiffusionTerm::faceBasedAssemble() {}
