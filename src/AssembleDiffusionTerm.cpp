@@ -65,6 +65,10 @@ void AssembleDiffusionTerm::elementBasedAssemble(
           // Do nothing because FluxCb and FluxVb are already 0.0
         }
 
+        else if (boundaryType == "empty") { // empty BC for 1D or 2D problems
+          // Do nothing because the face does not contribute
+        }
+
         coeffMatrix[iElement][iElement] += FluxCb;
         RHS[iElement] -= FluxVb;
 
