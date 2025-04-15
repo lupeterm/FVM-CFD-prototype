@@ -38,16 +38,16 @@ void AssembleDiffusionTerm::elementBasedAssemble(Mesh &fvMesh,
 
       } else { // If it is a boundary face
         // Get the boundary condition
-        if () { // Dirichlet BC
+        // if () { // Dirichlet BC
 
-        }
+        // }
 
-        else if () { // Neumann BC
+        // else if () { // Neumann BC
 
-        }
+        // }
 
-        else if () { // mixed BC
-        }
+        // else if () { // mixed BC
+        // }
       }
     }
   }

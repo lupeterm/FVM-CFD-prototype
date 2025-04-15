@@ -167,15 +167,14 @@ TEST(ReadInitialBoundaryConditionsTest, ReadingBoundaryTemperatureFieldWorks) {
 
   const std::size_t expected_nBoundaries = 3;
   const std::array<std::string, expected_nBoundaries> expected_boundary_types =
-      {"fixedValue", "fixedValue", "empty"};
+      {"fixedValue", "zeroGradient", "empty"};
 
   const std::array<std::size_t, expected_nBoundaries> expected_boundary_nFaces =
       {20, 60, 800};
 
   // Only the first 2 boundaries need values since the 3rd boundary type is
   // empty
-  const std::array<double, expected_nBoundaries - 1>
-      expected_boundary_temperature_Fields = {493, 293};
+  const double expected_boundary_temperature_Field = 493.0;
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
@@ -195,32 +194,20 @@ TEST(ReadInitialBoundaryConditionsTest, ReadingBoundaryTemperatureFieldWorks) {
 
   // The first two faces
   EXPECT_EQ(boundaryTemperatureFields[0].values()[0],
-            expected_boundary_temperature_Fields[0]);
+            expected_boundary_temperature_Field);
   EXPECT_EQ(boundaryTemperatureFields[0].values()[1],
-            expected_boundary_temperature_Fields[0]);
+            expected_boundary_temperature_Field);
 
   // The last two faces
   EXPECT_EQ(boundaryTemperatureFields[0].values()[18],
-            expected_boundary_temperature_Fields[0]);
+            expected_boundary_temperature_Field);
   EXPECT_EQ(boundaryTemperatureFields[0].values()[19],
-            expected_boundary_temperature_Fields[0]);
+            expected_boundary_temperature_Field);
 
   // --- The second boundary ---
   EXPECT_EQ(boundaryTemperatureFields[1].boundaryType(),
             expected_boundary_types[1]);
   EXPECT_EQ(boundaryTemperatureFields[1].size(), expected_boundary_nFaces[1]);
-
-  // The first two faces
-  EXPECT_EQ(boundaryTemperatureFields[1].values()[0],
-            expected_boundary_temperature_Fields[1]);
-  EXPECT_EQ(boundaryTemperatureFields[1].values()[1],
-            expected_boundary_temperature_Fields[1]);
-
-  // The last two faces
-  EXPECT_EQ(boundaryTemperatureFields[1].values()[58],
-            expected_boundary_temperature_Fields[1]);
-  EXPECT_EQ(boundaryTemperatureFields[1].values()[59],
-            expected_boundary_temperature_Fields[1]);
 
   // --- The third boundary ---
   EXPECT_EQ(boundaryTemperatureFields[2].boundaryType(),
