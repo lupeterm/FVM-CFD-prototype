@@ -9,6 +9,7 @@ add_executable(
   testProcessOpenFoamStructuredMesh.cpp
   testField.cpp
   testReadInitialBoundaryConditions.cpp
+  test-2D-heat-conduction.cpp
   # testIO.cpp  // Don't include this file for automatic testing
 )
 
