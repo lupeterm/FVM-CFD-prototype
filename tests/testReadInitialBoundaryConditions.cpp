@@ -219,7 +219,7 @@ TEST(ReadBoundaryConditionsTest, ReadingBoundaryTemperatureFieldWorks) {
 TEST(ReadCustomInitialConditionTest, ReadingInternalTemperatureFieldWorks) {
 
   // --- Arrange ---
-  std::string caseDirectory("../../cases/test-2D-heat-conduction");
+  std::string caseDirectory("../../cases/test-setup-of-2D-heat-conduction");
   ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
 
@@ -259,7 +259,7 @@ TEST(ReadCustomInitialBoundaryConditionsTest,
      ReadingBoundaryTemperatureFieldWorks) {
 
   // --- Arrange ---
-  std::string caseDirectory("../../cases/test-2D-heat-conduction");
+  std::string caseDirectory("../../cases/test-setup-of-2D-heat-conduction");
   ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
 
