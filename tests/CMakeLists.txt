@@ -10,6 +10,7 @@ add_executable(
   testField.cpp
   testReadInitialBoundaryConditions.cpp
   test-2D-heat-conduction.cpp
+  testMatrix.cpp
 )
 
 target_link_libraries(
