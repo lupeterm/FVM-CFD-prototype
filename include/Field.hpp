@@ -24,7 +24,7 @@ protected:
 template <typename T> class boundaryField : public Field<T> {
 public:
   boundaryField() = default;
-  boundaryField(std::size_t nElements) : Field<T>(nElements) {}
+  boundaryField(std::size_t nFaces) : Field<T>(nFaces) {}
 
   std::string &boundaryType() { return boundaryType_; }
 

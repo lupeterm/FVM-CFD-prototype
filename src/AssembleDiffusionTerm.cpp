@@ -4,7 +4,7 @@
 
 void AssembleDiffusionTerm::elementBasedAssemble(
     Mesh &fvMesh, const std::vector<double> diffusionCoef,
-    const std::vector<double> &Q,
+    const std::vector<double> &source,
     std::vector<boundaryField<double>> &boundaryFields,
     std::vector<std::vector<double>> &coeffMatrix, std::vector<double> &RHS) {
 
@@ -20,7 +20,7 @@ void AssembleDiffusionTerm::elementBasedAssemble(
     Element &theElement = fvMesh.elements()[iElement];
 
     // Calculate the source term and it to the RHS
-    RHS[iElement] = Q[iElement] * theElement.volume();
+    RHS[iElement] = source[iElement] * theElement.volume();
 
     const std::size_t nFaces = theElement.iFaces().size();
 

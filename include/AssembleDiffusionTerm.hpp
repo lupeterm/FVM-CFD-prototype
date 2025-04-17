@@ -10,7 +10,7 @@ public:
   // the elements (cells)
   void elementBasedAssemble(Mesh &fvMesh,
                             const std::vector<double> diffusionCoef,
-                            const std::vector<double> &Q,
+                            const std::vector<double> &source,
                             std::vector<boundaryField<double>> &boundaryFields,
                             std::vector<std::vector<double>> &coeffMatrix,
                             std::vector<double> &RHS);
