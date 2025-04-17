@@ -127,7 +127,11 @@ void ReadMesh::readNeighborsFile(Mesh &fvMesh) {
   neighborsFile >> nNeighbors;
 
   // Discard the rest of the line and the next line
-  IO::discardLines(neighborsFile, 2);
+  if (nNeighbors <= 4) {
+    neighborsFile.ignore(1); // Discard the left parenthesis
+  } else {
+    IO::discardLines(neighborsFile, 2);
+  }
 
   for (std::size_t iNeighbor = 0; iNeighbor < nNeighbors; ++iNeighbor) {
     neighborsFile >> fvMesh.faces()[iNeighbor].iNeighbor();
