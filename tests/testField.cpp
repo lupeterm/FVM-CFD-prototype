@@ -11,8 +11,8 @@ TEST(FieldTest, SettingScalarVolFieldWorks) {
 
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
 
   const double expected_element_scalar_field = 1.0;
 
@@ -40,8 +40,8 @@ TEST(FieldTest, SettingVectorVolFieldWorks) {
 
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
 
   const std::array<double, 3> expected_element_vector_field = {1.0, 2.0, 3.0};
 
@@ -75,8 +75,8 @@ TEST(FieldTest, UsingDefaultVectorVolFieldWorks) {
 
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
 
   const std::array<double, 3> expected_element_vector_field = {0.0, 0.0, 0.0};
 

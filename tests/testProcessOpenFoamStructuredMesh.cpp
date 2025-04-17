@@ -12,8 +12,9 @@ TEST(ProcessingBasicFaceGeometryTest,
      ComputingFaceCentroidWorksForStructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
+
   const std::array<double, 3> expected_face0_centroid = {
       0.00500000000000000, 0.00250000000000000, 0.00500000000000000};
   const std::array<double, 3> expected_face1_centroid = {
@@ -66,8 +67,9 @@ TEST(ProcessingBasicFaceGeometryTest,
      ComputingFaceSurfaceVectorWorksForStructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
+
   const std::array<double, 3> expected_face0_Sf = {5.00000000000000e-05, 0, 0};
   const std::array<double, 3> expected_face1_Sf = {0, 5.00000000000000e-05, 0};
 
@@ -111,8 +113,9 @@ TEST(ProcessingBasicFaceGeometryTest,
 TEST(ProcessingBasicFaceGeometryTest, ComputingFaceAreaWorksForStructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
+
   const double expected_face0_area = 5.00000000000000e-05;
   const double expected_face1_area = 5.00000000000000e-05;
   const double expected_face818_area = 5.00000000000000e-05;
@@ -155,8 +158,9 @@ TEST(ComputingElementVolumeAndCentroidTest,
      ComputingElementVolumeWorksForStructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
+
   const double expected_element0_volume = 2.50000000000000e-07;
   const double expected_element1_volume = 2.50000000000000e-07;
 
@@ -202,8 +206,9 @@ TEST(ComputingElementVolumeAndCentroidTest,
      ComputingElementCentroidWorksForStructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
+
   const std::array<double, 3> expected_element0_centroid = {
       0.00250000000000000, 0.00250000000000000, 0.00500000000000000};
   const std::array<double, 3> expected_element1_centroid = {
@@ -255,8 +260,8 @@ TEST(ProcessingSecondaryFaceGeometryTest,
      ComputingInteriorFaceGeometryWorksForStructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
 
   // Expected data of face 0
   const std::array<double, 3> expected_face0_CN = {0.00500000000000000, 0,
@@ -366,8 +371,8 @@ TEST(ProcessingSecondaryFaceGeometryTest,
      ComputingBoundaryFaceGeometryWorksForStructuredMesh) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
 
   // Expected data of face 760
   const std::array<double, 3> expected_face760_CN = {0, 0.00250000000000000, 0};

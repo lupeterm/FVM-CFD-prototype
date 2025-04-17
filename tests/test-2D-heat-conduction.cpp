@@ -10,6 +10,6 @@
 TEST(ReadingMeshFor2DHeatConduction, CellOrderingIsCorrect) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/2D-heat-conduction");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
 }

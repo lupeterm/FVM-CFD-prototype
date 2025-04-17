@@ -12,8 +12,8 @@ TEST(ReadInitialConditionTest, ReadingInternalVelocityFieldWorks) {
 
   // --- Arrange ---
   std::string caseDirectory("../../cases/testReadInitialBoundaryConditions");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
 
   const std::array<double, 3> expected_internal_velocity_field = {2.0, 0.0,
                                                                   3.0};
@@ -53,8 +53,8 @@ TEST(ReadBoundaryConditionsTest, ReadingBoundaryVelocityFieldWorks) {
 
   // --- Arrange ---
   std::string caseDirectory("../../cases/testReadInitialBoundaryConditions");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
 
   const std::size_t expected_nBoundaries = 3;
   const std::array<std::string, expected_nBoundaries> expected_boundary_types =
@@ -123,8 +123,8 @@ TEST(ReadInitialConditionTest, ReadingInternalTemperatureFieldWorks) {
 
   // --- Arrange ---
   std::string caseDirectory("../../cases/testReadInitialBoundaryConditions");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
 
   const double expected_internal_temperature_field = 239.0;
 
@@ -162,8 +162,8 @@ TEST(ReadBoundaryConditionsTest, ReadingBoundaryTemperatureFieldWorks) {
 
   // --- Arrange ---
   std::string caseDirectory("../../cases/testReadInitialBoundaryConditions");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
 
   const std::size_t expected_nBoundaries = 3;
   const std::array<std::string, expected_nBoundaries> expected_boundary_types =
@@ -220,8 +220,8 @@ TEST(ReadCustomInitialConditionTest, ReadingInternalTemperatureFieldWorks) {
 
   // --- Arrange ---
   std::string caseDirectory("../../cases/test-setup-of-2D-heat-conduction");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
 
   const double expected_internal_temperature_field = 273.0;
 
@@ -260,8 +260,8 @@ TEST(ReadCustomInitialBoundaryConditionsTest,
 
   // --- Arrange ---
   std::string caseDirectory("../../cases/test-setup-of-2D-heat-conduction");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
 
   const std::size_t expected_nBoundaries = 5;
   const std::array<std::string, expected_nBoundaries> expected_boundary_types =
