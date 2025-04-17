@@ -10,7 +10,6 @@ add_executable(
   testField.cpp
   testReadInitialBoundaryConditions.cpp
   test-2D-heat-conduction.cpp
-  # testIO.cpp  // Don't include this file for automatic testing
 )
 
 target_link_libraries(
