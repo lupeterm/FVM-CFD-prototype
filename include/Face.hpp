@@ -11,8 +11,10 @@ public:
   std::size_t *iNodes() { return iNodes_; }
   void allocateNodeList() { iNodes_ = new std::size_t[nNodes_]; }
   std::size_t &index() { return index_; }
-  std::size_t &iOwner() { return iOwner_; }
-  std::size_t &iNeighbor() { return iNeighbor_; }
+  // std::size_t &iOwner() { return iOwner_; }
+  // std::size_t &iNeighbor() { return iNeighbor_; }
+  int &iOwner() { return iOwner_; }
+  int &iNeighbor() { return iNeighbor_; }
   std::array<double, 3> &centroid() { return centroid_; }
   std::array<double, 3> &Sf() { return Sf_; }
   double &area() { return area_; }
@@ -25,15 +27,18 @@ public:
   double &walldist() { return walldist_; }
   std::size_t &iOwnerNeighborCoef() { return iOwnerNeighborCoef_; }
   std::size_t &iNeighborOwnerCoef() { return iNeighborOwnerCoef_; }
-  std::size_t &patchIndex() { return patchIndex_; }
+  // std::size_t &patchIndex() { return patchIndex_; }
+  int &patchIndex() { return patchIndex_; }
   ~Face() { delete[] iNodes_; }
 
 private:
   std::size_t nNodes_ = 0;
   std::size_t *iNodes_ = nullptr;
   std::size_t index_ = 0;
-  std::size_t iOwner_ = -1;
-  std::size_t iNeighbor_ = -1;
+  // std::size_t iOwner_ = -1;
+  // std::size_t iNeighbor_ = -1;
+  int iOwner_ = -1;
+  int iNeighbor_ = -1;
   double deltaVol = 0.0;
   std::array<double, 3> centroid_ = {0.0, 0.0, 0.0};
   std::array<double, 3> Sf_ = {0.0, 0.0, 0.0};
@@ -64,6 +69,7 @@ private:
 
   std::size_t iOwnerNeighborCoef_ = 0;
   std::size_t iNeighborOwnerCoef_ = 0;
-  std::size_t patchIndex_ = 0;
+  // std::size_t patchIndex_ = 0;
+  int patchIndex_ = -1;
 };
 #endif

@@ -749,23 +749,23 @@ TEST(SortingBoundaryNodesFromInteriorNodesTest,
   meshReader.readOpenFoamMesh(fvMesh);
 
   // --- Assert ---
-  // *** Verify the first three interior faces ***
+  // *** Verify the 1st three interior faces ***
   // Node 36, 573, 589, 52 belong to face 0
-  EXPECT_EQ(fvMesh.faces()[0].patchIndex(), 0);
+  EXPECT_EQ(fvMesh.faces()[0].patchIndex(), -1);
   EXPECT_EQ(fvMesh.nodes()[36].Flag(), 0);
   EXPECT_EQ(fvMesh.nodes()[573].Flag(), 0);
   EXPECT_EQ(fvMesh.nodes()[589].Flag(), 0);
   EXPECT_EQ(fvMesh.nodes()[52].Flag(), 0);
 
   // Node 41, 578, 634, 97 belong to face 1
-  EXPECT_EQ(fvMesh.faces()[1].patchIndex(), 0);
+  EXPECT_EQ(fvMesh.faces()[1].patchIndex(), -1);
   EXPECT_EQ(fvMesh.nodes()[41].Flag(), 0);
   EXPECT_EQ(fvMesh.nodes()[578].Flag(), 0);
   EXPECT_EQ(fvMesh.nodes()[634].Flag(), 0);
   EXPECT_EQ(fvMesh.nodes()[97].Flag(), 0);
 
   // Node 44, 81, 618, 581 belong to face 2
-  EXPECT_EQ(fvMesh.faces()[2].patchIndex(), 0);
+  EXPECT_EQ(fvMesh.faces()[2].patchIndex(), -1);
   EXPECT_EQ(fvMesh.nodes()[44].Flag(), 0);
   EXPECT_EQ(fvMesh.nodes()[81].Flag(), 0);
   EXPECT_EQ(fvMesh.nodes()[618].Flag(), 0);
@@ -773,19 +773,19 @@ TEST(SortingBoundaryNodesFromInteriorNodesTest,
 
   // *** Verify the last three interior faces ***
   // Node 536, 476, 1013, 1073 belong to face 1297
-  EXPECT_EQ(fvMesh.faces()[1297].patchIndex(), 0);
+  EXPECT_EQ(fvMesh.faces()[1297].patchIndex(), -1);
   EXPECT_EQ(fvMesh.nodes()[536].Flag(), 1);
   EXPECT_EQ(fvMesh.nodes()[476].Flag(), 1);
   EXPECT_EQ(fvMesh.nodes()[1013].Flag(), 1);
   EXPECT_EQ(fvMesh.nodes()[1073].Flag(), 1);
 
   // Node 536, 1073, 1072, 535 belong to face 1298
-  EXPECT_EQ(fvMesh.faces()[1298].patchIndex(), 0);
+  EXPECT_EQ(fvMesh.faces()[1298].patchIndex(), -1);
   EXPECT_EQ(fvMesh.nodes()[1072].Flag(), 1);
   EXPECT_EQ(fvMesh.nodes()[535].Flag(), 1);
 
   // Node 408, 536, 1073, 945 belong to face 1299
-  EXPECT_EQ(fvMesh.faces()[1299].patchIndex(), 0);
+  EXPECT_EQ(fvMesh.faces()[1299].patchIndex(), -1);
   EXPECT_EQ(fvMesh.nodes()[408].Flag(), 1);
   EXPECT_EQ(fvMesh.nodes()[945].Flag(), 1);
 
@@ -803,8 +803,15 @@ TEST(SortingBoundaryNodesFromInteriorNodesTest,
   EXPECT_EQ(fvMesh.nodes()[36].Flag(), 0);
   EXPECT_EQ(fvMesh.nodes()[573].Flag(), 0);
 
+  // Face 1408 (usrname = velocity-inlet-6)
+  EXPECT_EQ(fvMesh.faces()[1408].patchIndex(), 2);
+
+  // Face 1412 (usrname =  pressure-outlet-7)
+  EXPECT_EQ(fvMesh.faces()[1412].patchIndex(), 3);
+
   // Face 1420 (username = wall-8)
   // Node 51, 121, 658, 588 belong to face 1420
+  EXPECT_EQ(fvMesh.faces()[1420].patchIndex(), 4);
   EXPECT_EQ(fvMesh.nodes()[51].Flag(), 0);
   EXPECT_EQ(fvMesh.nodes()[121].Flag(), 0);
   EXPECT_EQ(fvMesh.nodes()[658].Flag(), 0);

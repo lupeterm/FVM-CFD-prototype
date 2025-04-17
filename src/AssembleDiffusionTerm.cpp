@@ -2,6 +2,8 @@
 #include "Field.hpp"
 #include <cstddef>
 
+#include <iostream>
+
 void AssembleDiffusionTerm::elementBasedAssemble(
     Mesh &fvMesh, const std::vector<double> diffusionCoef,
     const std::vector<double> &source,
@@ -12,9 +14,6 @@ void AssembleDiffusionTerm::elementBasedAssemble(
 
   // Declare a 2D array for coefficient matrix corresponding to the discrete
   // form of diffusion equation
-  // std::vector<std::vector<double>> coeffMatrix(
-  //     nElements, std::vector<double>(nElements, 0.0));
-
   for (std::size_t iElement = 0; iElement < nElements; ++iElement) {
     // Get the element
     Element &theElement = fvMesh.elements()[iElement];

@@ -71,6 +71,100 @@ TEST(ReadingMeshFor2DHeatConductionTest, ConfirmingElementOrdering) {
                                 maxRelativeDiff));
 }
 
+TEST(ReadInitialBoundaryConditionsTest, ReadingBoundaryTemperatureFieldWorks) {
+
+  // --- Arrange ---
+  std::string caseDirectory("../../cases/2D-heat-conduction");
+  Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
+
+  const std::size_t expected_nBoundaries = 5;
+  const std::array<std::string, expected_nBoundaries> expected_boundary_types =
+      {"zeroGradient", "zeroGradient", "fixedValue", "fixedValue", "empty"};
+
+  const std::array<std::size_t, expected_nBoundaries> expected_boundary_nFaces =
+      {2, 2, 2, 2, 8};
+
+  const std::array<double, 2> expected_boundary_temperature_Field = {373.0,
+                                                                     273.0};
+
+  // --- Act ---
+  meshReader.readOpenFoamMesh(fvMesh);
+  Field<double> internalTemperatureField(fvMesh.nElements());
+  std::vector<boundaryField<double>> boundaryTemperatureFields;
+  ReadInitialBoundaryConditions initialBoundaryConditionsReader;
+  initialBoundaryConditionsReader.readTemperatureField(
+      fvMesh, internalTemperatureField, boundaryTemperatureFields);
+
+  // --- Assert ---
+  EXPECT_EQ(boundaryTemperatureFields.size(), expected_nBoundaries);
+
+  // --- The 1st boundary ---
+  EXPECT_EQ(boundaryTemperatureFields[0].boundaryType(),
+            expected_boundary_types[0]);
+  EXPECT_EQ(boundaryTemperatureFields[0].size(), expected_boundary_nFaces[0]);
+
+  // --- The 2nd boundary ---
+  EXPECT_EQ(boundaryTemperatureFields[1].boundaryType(),
+            expected_boundary_types[1]);
+  EXPECT_EQ(boundaryTemperatureFields[1].size(), expected_boundary_nFaces[1]);
+
+  // --- The 3rd boundary ---
+  EXPECT_EQ(boundaryTemperatureFields[2].boundaryType(),
+            expected_boundary_types[2]);
+  EXPECT_EQ(boundaryTemperatureFields[2].size(), expected_boundary_nFaces[2]);
+
+  // The two faces
+  EXPECT_EQ(boundaryTemperatureFields[2].values()[0],
+            expected_boundary_temperature_Field[0]);
+  EXPECT_EQ(boundaryTemperatureFields[2].values()[1],
+            expected_boundary_temperature_Field[0]);
+
+  // --- The 4th boundary ---
+  EXPECT_EQ(boundaryTemperatureFields[3].boundaryType(),
+            expected_boundary_types[3]);
+  EXPECT_EQ(boundaryTemperatureFields[3].size(), expected_boundary_nFaces[3]);
+
+  // The two faces
+  EXPECT_EQ(boundaryTemperatureFields[3].values()[0],
+            expected_boundary_temperature_Field[1]);
+  EXPECT_EQ(boundaryTemperatureFields[3].values()[1],
+            expected_boundary_temperature_Field[1]);
+
+  // --- The 5th boundary ---
+  EXPECT_EQ(boundaryTemperatureFields[4].boundaryType(),
+            expected_boundary_types[4]);
+  EXPECT_EQ(boundaryTemperatureFields[4].size(), expected_boundary_nFaces[4]);
+}
+
+TEST(SortBoundaryFacesFromInteriorFacesTest, LabelingBoundaryFacesWorks) {
+  // --- Arrange ---
+  std::string caseDirectory("../../cases/2D-heat-conduction");
+  Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
+
+  // --- Act ---
+  meshReader.readOpenFoamMesh(fvMesh);
+
+  // --- Assert ---
+  EXPECT_EQ(fvMesh.faces()[0].patchIndex(), -1);
+  EXPECT_EQ(fvMesh.faces()[1].patchIndex(), -1);
+  EXPECT_EQ(fvMesh.faces()[2].patchIndex(), -1);
+  EXPECT_EQ(fvMesh.faces()[3].patchIndex(), -1);
+  EXPECT_EQ(fvMesh.faces()[4].patchIndex(), 0);
+  EXPECT_EQ(fvMesh.faces()[5].patchIndex(), 0);
+  EXPECT_EQ(fvMesh.faces()[6].patchIndex(), 1);
+  EXPECT_EQ(fvMesh.faces()[7].patchIndex(), 1);
+  EXPECT_EQ(fvMesh.faces()[8].patchIndex(), 2);
+  EXPECT_EQ(fvMesh.faces()[9].patchIndex(), 2);
+  EXPECT_EQ(fvMesh.faces()[10].patchIndex(), 3);
+  EXPECT_EQ(fvMesh.faces()[11].patchIndex(), 3);
+  EXPECT_EQ(fvMesh.faces()[12].patchIndex(), 4);
+  EXPECT_EQ(fvMesh.faces()[13].patchIndex(), 4);
+  EXPECT_EQ(fvMesh.faces()[18].patchIndex(), 4);
+  EXPECT_EQ(fvMesh.faces()[19].patchIndex(), 4);
+}
+
 TEST(ReadingMeshFor2DHeatConductionTest, DiscretizingDiffusionTermWorks) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/2D-heat-conduction");
@@ -117,18 +211,7 @@ TEST(ReadingMeshFor2DHeatConductionTest, DiscretizingDiffusionTermWorks) {
 
   // --- Assert ---
   // Verify the coefficient matrix
-  // Print out coefficient matrix for debugging
-  for (size_t i = 0; i < coeffMatrix.size(); ++i) {
-    for (size_t j = 0; j < coeffMatrix[i].size(); ++j) {
-      std::cout << coeffMatrix[i][j] << " ";
-    }
-    std::cout << std::endl;
-  }
 
-  // Print out the RHS vector for debugging
-  for (size_t i = 0; i < RHS.size(); ++i) {
-    std::cout << RHS[i] << std::endl;
-  }
   //   EXPECT_EQ(coeffMatrix[0][0], 4);
   // EXPECT_TRUE(ScalarAlmostEqual
   //   std::cout << "coeffMatrix[0][0]: " << coeffMatrix[0][0] << std::endl;
