@@ -18,7 +18,7 @@ public:
   std::size_t &nOwners() { return nOwners_; }
   std::size_t &nElements() { return nElements_; }
   std::size_t &nInteriorFaces() { return nInteriorFaces_; }
-  std::size_t &nBoundaries() { return nBoundaries_; }
+  int &nBoundaries() { return nBoundaries_; }
   std::size_t &nPatches() { return nPatches_; }
   Node *nodes() { return nodes_; }
   void allocateNodes() { nodes_ = new Node[nNodes_]; }
@@ -44,7 +44,7 @@ private:
   std::size_t nOwners_ = 0;
   std::size_t nElements_ = 0;
   std::size_t nInteriorFaces_ = 0;
-  std::size_t nBoundaries_ = 0;
+  int nBoundaries_ = 0;
   std::size_t nPatches_ = 0;
   Node *nodes_ = nullptr;
   Face *faces_ = nullptr;
