@@ -7,22 +7,25 @@
 
 template <typename T> class Matrix {
 private:
-  std::vector<std::vector<T>> data_;
+  std::vector<T> data_;
   std::size_t rows_;
   std::size_t cols_;
 
 public:
   // Constructor
   Matrix(std::size_t rows, std::size_t cols, const T &initialValue = T())
-      : rows_(rows), cols_(cols),
-        data_(rows, std::vector<T>(cols, initialValue)) {}
+      : rows_(rows), cols_(cols), data_(rows * cols, initialValue) {
+    if (rows_ == 0 || cols_ == 0) {
+      throw std::invalid_argument("Matrix dimensions must be non-zero");
+    }
+  }
 
   // Access element (read/write)
   T &operator()(std::size_t row, std::size_t col) {
     if (row >= rows_ || col >= cols_) {
       throw std::out_of_range("Matrix indices out of range");
     }
-    return data_[row][col];
+    return data_[row * cols_ + col];
   }
 
   // Access element (read-only)
@@ -30,7 +33,7 @@ public:
     if (row >= rows_ || col >= cols_) {
       throw std::out_of_range("Matrix indices out of range");
     }
-    return data_[row][col];
+    return data_[row * cols_ + col];
   }
 
   // Get number of rows
@@ -40,11 +43,7 @@ public:
   std::size_t nCols() const { return cols_; }
 
   // Set all elements to a value
-  void fill(const T &value) {
-    for (std::size_t i = 0; i < rows_; ++i) {
-      std::fill(data_[i].begin(), data_[i].end(), value);
-    }
-  }
+  void fill(const T &value) { std::fill(data_.begin(), data_.end(), value); }
 };
 
 #endif // MATRIX_HPP
