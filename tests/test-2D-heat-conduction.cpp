@@ -189,7 +189,17 @@ TEST(DiscretizingDiffusionTermTest,
   std::vector<double> RHS(fvMesh.nElements(), 0.0);
 
   // Set up expected values for the coefficient matrix and RHS vector
-
+  // The expected coefficient matrix is:
+  // | 4.0 -1.0 -1.0 0.0 |
+  // | -1.0 4.0 0.0 -1.0 |
+  // | -1.0 0.0 4.0 -1.0 |
+  // | 0.0 -1.0 -1.0 4.0 |
+  const std::array<std::array<double, 4>, 4> expected_coeffMatrix = {
+      {{4.0, -1.0, -1.0, 0.0},
+       {-1.0, 4.0, 0.0, -1.0},
+       {-1.0, 0.0, 4.0, -1.0},
+       {0.0, -1.0, -1.0, 4.0}}};
+  const std::array<double, 4> expected_RHS = {746.0, 546.0, 746.0, 546.0};
   const double maxDiff = 1.0e-9;
   const double maxRelativeDiff = 1.0e-4;
 
@@ -201,6 +211,19 @@ TEST(DiscretizingDiffusionTermTest,
 
   // --- Assert ---
   // Verify the coefficient matrix
+  for (std::size_t i = 0; i < 4; ++i) {
+    for (std::size_t j = 0; j < 4; ++j) {
+      EXPECT_TRUE(ScalarAlmostEqual(coeffMatrix.getValue(i, j),
+                                    expected_coeffMatrix[i][j], maxDiff,
+                                    maxRelativeDiff));
+    }
+  }
+
+  // Verify the RHS vector
+  for (std::size_t i = 0; i < 4; ++i) {
+    EXPECT_TRUE(
+        ScalarAlmostEqual(RHS[i], expected_RHS[i], maxDiff, maxRelativeDiff));
+  }
 }
 
 TEST(DiscretizingDiffusionTermTest,
@@ -227,7 +250,19 @@ TEST(DiscretizingDiffusionTermTest,
   std::vector<double> RHS(fvMesh.nElements(), 0.0);
 
   // Set up expected values for the coefficient matrix and RHS vector
+  const std::array<std::array<double, 9>, 9> expected_coeffMatrix = {
+      {{4.0, -1.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+       {-1.0, 3.0, -1.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0},
+       {0.0, -1.0, 4.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0},
+       {-1.0, 0.0, 0.0, 5.0, -1.0, 0.0, -1.0, 0.0, 0.0},
+       {0.0, -1.0, 0.0, -1.0, 4.0, -1.0, 0.0, -1.0, 0.0},
+       {0.0, 0.0, -1.0, 0.0, -1.0, 5.0, 0.0, 0.0, -1.0},
+       {0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 4.0, -1.0, 0.0},
+       {0.0, 0.0, 0.0, 0.0, -1.0, 0.0, -1.0, 3.0, -1.0},
+       {0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, -1.0, 4.0}}};
 
+  const std::array<double, 9> expected_RHS = {746.0, 0.0,   546.0, 746.0, 0.0,
+                                              546.0, 746.0, 0.0,   546.0};
   const double maxDiff = 1.0e-9;
   const double maxRelativeDiff = 1.0e-4;
 
@@ -239,4 +274,16 @@ TEST(DiscretizingDiffusionTermTest,
 
   // --- Assert ---
   // Verify the coefficient matrix
+  for (std::size_t i = 0; i < 9; ++i) {
+    for (std::size_t j = 0; j < 9; ++j) {
+      EXPECT_TRUE(ScalarAlmostEqual(coeffMatrix.getValue(i, j),
+                                    expected_coeffMatrix[i][j], maxDiff,
+                                    maxRelativeDiff));
+    }
+  }
+  // Verify the RHS vector
+  for (std::size_t i = 0; i < 9; ++i) {
+    EXPECT_TRUE(
+        ScalarAlmostEqual(RHS[i], expected_RHS[i], maxDiff, maxRelativeDiff));
+  }
 }
