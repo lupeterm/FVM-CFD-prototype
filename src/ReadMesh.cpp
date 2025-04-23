@@ -232,7 +232,6 @@ void ReadMesh::constructElements(Mesh &fvMesh) {
 void ReadMesh::setupNodeConnectivities(Mesh &fvMesh) {
   for (std::size_t iFace = 0; iFace < fvMesh.nFaces(); ++iFace) {
 
-    // std::size_t *iNodes = fvMesh.faces()[iFace].iNodes();
     std::vector<std::size_t> &iNodes = fvMesh.faces()[iFace].iNodes();
     const std::size_t nNodes = fvMesh.faces()[iFace].nNodes();
     for (std::size_t iNode = 0; iNode < nNodes; ++iNode) {
@@ -245,7 +244,6 @@ void ReadMesh::setupNodeConnectivities(Mesh &fvMesh) {
 
     for (auto iFace : fvMesh.elements()[iElement].iFaces()) {
 
-      // std::size_t *iNodes = fvMesh.faces()[iFace].iNodes();
       std::vector<std::size_t> &iNodes = fvMesh.faces()[iFace].iNodes();
       const std::size_t nNodes = fvMesh.faces()[iFace].nNodes();
       for (std::size_t iNode = 0; iNode < nNodes; ++iNode) {

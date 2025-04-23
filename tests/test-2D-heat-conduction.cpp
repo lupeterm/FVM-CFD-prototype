@@ -165,7 +165,7 @@ TEST(SortBoundaryFacesFromInteriorFacesTest, LabelingBoundaryFacesWorks) {
   EXPECT_EQ(fvMesh.faces()[19].patchIndex(), 4);
 }
 
-TEST(ReadingMeshFor2DHeatConductionTest, DiscretizingDiffusionTermWorks) {
+TEST(DiscretizingDiffusionTermTest, Discretizing2DHeatConductionWorks) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/2D-heat-conduction");
   Mesh fvMesh(caseDirectory);
@@ -185,8 +185,9 @@ TEST(ReadingMeshFor2DHeatConductionTest, DiscretizingDiffusionTermWorks) {
 
   // Define the coefficient matrix and RHS vector
   //   Matrix<double> coeffMatrix(fvMesh.nElements(), fvMesh.nElements(), 0.0);
-  std::vector<std::vector<double>> coeffMatrix(
-      fvMesh.nElements(), std::vector<double>(fvMesh.nElements(), 0.0));
+  //   std::vector<std::vector<double>> coeffMatrix(
+  //       fvMesh.nElements(), std::vector<double>(fvMesh.nElements(), 0.0));
+  Matrix<double> coeffMatrix(fvMesh.nElements(), fvMesh.nElements(), 0.0);
   std::vector<double> RHS(fvMesh.nElements(), 0.0);
 
   // Set up expected values for the coefficient matrix and RHS vector
@@ -208,6 +209,21 @@ TEST(ReadingMeshFor2DHeatConductionTest, DiscretizingDiffusionTermWorks) {
   diffusionTermAssembler.elementBasedAssemble(
       fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
       coeffMatrix, RHS);
+
+  // Print out coeffMatrix for debugging
+  std::cout << "Coefficient Matrix:" << std::endl;
+  for (std::size_t i = 0; i < coeffMatrix.nRows(); ++i) {
+    for (std::size_t j = 0; j < coeffMatrix.nCols(); ++j) {
+      std::cout << coeffMatrix(i, j) << " ";
+    }
+    std::cout << std::endl;
+  }
+
+  // Print out RHS for debugging
+  std::cout << "RHS Vector:" << std::endl;
+  for (std::size_t i = 0; i < RHS.size(); ++i) {
+    std::cout << RHS[i] << std::endl;
+  }
 
   // --- Assert ---
   // Verify the coefficient matrix

@@ -2,6 +2,7 @@
 #define ASSERMBLE_DIFF_HPP
 
 #include "Field.hpp"
+#include "Matrix.hpp"
 #include "Mesh.hpp"
 
 class AssembleDiffusionTerm {
@@ -12,7 +13,7 @@ public:
                             const std::vector<double> diffusionCoef,
                             const std::vector<double> &source,
                             std::vector<boundaryField<double>> &boundaryFields,
-                            std::vector<std::vector<double>> &coeffMatrix,
+                            Matrix<double> &coeffMatrix,
                             std::vector<double> &RHS);
 
   // Assemble the diffusion term on a Cartesian orthogonal mesh by looping over

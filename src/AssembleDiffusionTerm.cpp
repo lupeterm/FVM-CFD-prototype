@@ -8,12 +8,10 @@ void AssembleDiffusionTerm::elementBasedAssemble(
     Mesh &fvMesh, const std::vector<double> diffusionCoef,
     const std::vector<double> &source,
     std::vector<boundaryField<double>> &boundaryFields,
-    std::vector<std::vector<double>> &coeffMatrix, std::vector<double> &RHS) {
+    Matrix<double> &coeffMatrix, std::vector<double> &RHS) {
 
   const std::size_t nElements = fvMesh.nElements();
 
-  // Declare a 2D array for coefficient matrix corresponding to the discrete
-  // form of diffusion equation
   for (std::size_t iElement = 0; iElement < nElements; ++iElement) {
     // Get the element
     Element &theElement = fvMesh.elements()[iElement];
@@ -39,8 +37,10 @@ void AssembleDiffusionTerm::elementBasedAssemble(
         FluxFn = -FluxCn;
 
         // Compute the coefficient matrix
-        coeffMatrix[iElement][theElement.iNeighbors()[iFace]] = FluxFn;
-        coeffMatrix[iElement][iElement] += FluxCn;
+        // coeffMatrix[iElement][theElement.iNeighbors()[iFace]] = FluxFn;
+        coeffMatrix(iElement, theElement.iNeighbors()[iFace]) = FluxFn;
+        // coeffMatrix[iElement][iElement] += FluxCn;
+        coeffMatrix(iElement, iElement) += FluxCn;
 
       } else { // If it is a boundary face
         // Get the boundary type
@@ -68,7 +68,8 @@ void AssembleDiffusionTerm::elementBasedAssemble(
           // Do nothing because the face does not contribute
         }
 
-        coeffMatrix[iElement][iElement] += FluxCb;
+        // coeffMatrix[iElement][iElement] += FluxCb;
+        coeffMatrix(iElement, iElement) += FluxCb;
         RHS[iElement] -= FluxVb;
 
         // else if () { // mixed BC
