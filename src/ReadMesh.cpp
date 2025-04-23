@@ -34,7 +34,7 @@ void ReadMesh::readPointsFile(Mesh &fvMesh) {
   // Discard the rest of the line and the next line
   IO::discardLines(pointsFile, 2);
 
-  fvMesh.allocateNodes();
+  fvMesh.nodes().resize(fvMesh.nNodes());
 
   // Read x, y, z coordinates to mesh nodes
   for (std::size_t iNode = 0; iNode < fvMesh.nNodes(); ++iNode) {
@@ -67,7 +67,7 @@ void ReadMesh::readFacesFile(Mesh &fvMesh) {
   // Discard the rest of the line and the next line
   IO::discardLines(facesFile, 2);
 
-  fvMesh.allocateFaces();
+  fvMesh.faces().resize(fvMesh.nFaces());
 
   for (std::size_t iFace = 0; iFace < fvMesh.nFaces(); ++iFace) {
     facesFile >> fvMesh.faces()[iFace].nNodes();
@@ -157,7 +157,7 @@ void ReadMesh::readBoundaryFile(Mesh &fvMesh) {
   // Discard the rest of the line and the next line
   IO::discardLines(boundaryFile, 2);
 
-  fvMesh.allocateBoundaries();
+  fvMesh.boundaries().resize(fvMesh.nBoundaries());
 
   for (std::size_t iBoundary = 0; iBoundary < fvMesh.nBoundaries();
        ++iBoundary) {
@@ -189,7 +189,7 @@ void ReadMesh::readBoundaryFile(Mesh &fvMesh) {
 }
 
 void ReadMesh::constructElements(Mesh &fvMesh) {
-  fvMesh.allocateElements();
+  fvMesh.elements().resize(fvMesh.nElements());
 
   for (std::size_t iElement = 0; iElement < fvMesh.nElements(); ++iElement) {
     fvMesh.elements()[iElement].index() = iElement;
@@ -232,7 +232,8 @@ void ReadMesh::constructElements(Mesh &fvMesh) {
 void ReadMesh::setupNodeConnectivities(Mesh &fvMesh) {
   for (std::size_t iFace = 0; iFace < fvMesh.nFaces(); ++iFace) {
 
-    std::size_t *iNodes = fvMesh.faces()[iFace].iNodes();
+    // std::size_t *iNodes = fvMesh.faces()[iFace].iNodes();
+    std::vector<std::size_t> &iNodes = fvMesh.faces()[iFace].iNodes();
     const std::size_t nNodes = fvMesh.faces()[iFace].nNodes();
     for (std::size_t iNode = 0; iNode < nNodes; ++iNode) {
       fvMesh.nodes()[iNodes[iNode]].iFaces().push_back(
@@ -244,7 +245,8 @@ void ReadMesh::setupNodeConnectivities(Mesh &fvMesh) {
 
     for (auto iFace : fvMesh.elements()[iElement].iFaces()) {
 
-      std::size_t *iNodes = fvMesh.faces()[iFace].iNodes();
+      // std::size_t *iNodes = fvMesh.faces()[iFace].iNodes();
+      std::vector<std::size_t> &iNodes = fvMesh.faces()[iFace].iNodes();
       const std::size_t nNodes = fvMesh.faces()[iFace].nNodes();
       for (std::size_t iNode = 0; iNode < nNodes; ++iNode) {
         if (std::count(fvMesh.elements()[iElement].iNodes().begin(),

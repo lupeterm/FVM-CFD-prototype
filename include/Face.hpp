@@ -8,8 +8,8 @@
 class Face {
 public:
   std::size_t &nNodes() { return nNodes_; }
-  std::size_t *iNodes() { return iNodes_; }
-  void allocateNodeList() { iNodes_ = new std::size_t[nNodes_]; }
+  std::vector<std::size_t> &iNodes() { return iNodes_; }
+  void allocateNodeList() { iNodes_.resize(nNodes_); }
   std::size_t &index() { return index_; }
   int &iOwner() { return iOwner_; }
   int &iNeighbor() { return iNeighbor_; }
@@ -26,11 +26,10 @@ public:
   std::size_t &iOwnerNeighborCoef() { return iOwnerNeighborCoef_; }
   std::size_t &iNeighborOwnerCoef() { return iNeighborOwnerCoef_; }
   int &patchIndex() { return patchIndex_; }
-  ~Face() { delete[] iNodes_; }
 
 private:
   std::size_t nNodes_ = 0;
-  std::size_t *iNodes_ = nullptr;
+  std::vector<std::size_t> iNodes_;
   std::size_t index_ = 0;
   int iOwner_ = -1;
   int iNeighbor_ = -1;

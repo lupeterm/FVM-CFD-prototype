@@ -20,22 +20,12 @@ public:
   std::size_t &nInteriorFaces() { return nInteriorFaces_; }
   int &nBoundaries() { return nBoundaries_; }
   std::size_t &nPatches() { return nPatches_; }
-  Node *nodes() { return nodes_; }
-  void allocateNodes() { nodes_ = new Node[nNodes_]; }
-  Face *faces() { return faces_; }
-  void allocateFaces() { faces_ = new Face[nFaces_]; }
-  Boundary *boundaries() { return boundaries_; }
-  void allocateBoundaries() { boundaries_ = new Boundary[nBoundaries_]; }
-  Element *elements() { return elements_; }
-  void allocateElements() { elements_ = new Element[nElements_]; }
+  std::vector<Node> &nodes() { return nodes_; }
+  std::vector<Face> &faces() { return faces_; }
+  std::vector<Boundary> &boundaries() { return boundaries_; }
+  std::vector<Element> &elements() { return elements_; }
   std::size_t &nBElements() { return nBElements_; }
   std::size_t &nBFaces() { return nBFaces_; }
-  ~Mesh() {
-    delete[] nodes_;
-    delete[] faces_;
-    delete[] boundaries_;
-    delete[] elements_;
-  }
 
 private:
   std::string caseDir_ = "";
@@ -46,10 +36,10 @@ private:
   std::size_t nInteriorFaces_ = 0;
   int nBoundaries_ = 0;
   std::size_t nPatches_ = 0;
-  Node *nodes_ = nullptr;
-  Face *faces_ = nullptr;
-  Boundary *boundaries_ = nullptr;
-  Element *elements_ = nullptr;
+  std::vector<Node> nodes_;
+  std::vector<Face> faces_;
+  std::vector<Boundary> boundaries_;
+  std::vector<Element> elements_;
   std::size_t nBElements_ = 0;
   std::size_t nBFaces_ = 0;
 };
