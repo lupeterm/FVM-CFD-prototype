@@ -185,25 +185,13 @@ TEST(DiscretizingDiffusionTermTest,
       fvMesh, internalTemperatureField, boundaryTemperatureFields);
 
   // Define the coefficient matrix and RHS vector
-  //   Matrix<double> coeffMatrix(fvMesh.nElements(), fvMesh.nElements(), 0.0);
-  //   std::vector<std::vector<double>> coeffMatrix(
-  //       fvMesh.nElements(), std::vector<double>(fvMesh.nElements(), 0.0));
-  Matrix<double> coeffMatrix(fvMesh.nElements(), fvMesh.nElements(), 0.0);
+  Matrix<double> coeffMatrix(fvMesh.nElements(), fvMesh.nElements());
   std::vector<double> RHS(fvMesh.nElements(), 0.0);
 
   // Set up expected values for the coefficient matrix and RHS vector
 
-  //   const std::array<double, 3> expected_element0_centroid = {
-  //       0.250000000000000, 0.250000000000000, 0.500000000000000};
-  //   const std::array<double, 3> expected_element1_centroid = {
-  //       0.750000000000000, 0.250000000000000, 0.500000000000000};
-  //   const std::array<double, 3> expected_element2_centroid = {
-  //       0.250000000000000, 0.750000000000000, 0.500000000000000};
-  //   const std::array<double, 3> expected_element3_centroid = {
-  //       0.750000000000000, 0.750000000000000, 0.500000000000000};
-
-  //   const double maxDiff = 1.0e-9;
-  //   const double maxRelativeDiff = 1.0e-4;
+  const double maxDiff = 1.0e-9;
+  const double maxRelativeDiff = 1.0e-4;
 
   // --- Act ---
   AssembleDiffusionTerm diffusionTermAssembler;
@@ -211,39 +199,8 @@ TEST(DiscretizingDiffusionTermTest,
       fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
       coeffMatrix, RHS);
 
-  // Print out coeffMatrix for debugging
-  std::cout << "Coefficient Matrix:" << std::endl;
-  for (std::size_t i = 0; i < coeffMatrix.nRows(); ++i) {
-    for (std::size_t j = 0; j < coeffMatrix.nCols(); ++j) {
-      std::cout << coeffMatrix(i, j) << " ";
-    }
-    std::cout << std::endl;
-  }
-
-  // Print out RHS for debugging
-  std::cout << "RHS Vector:" << std::endl;
-  for (std::size_t i = 0; i < RHS.size(); ++i) {
-    std::cout << RHS[i] << std::endl;
-  }
-
   // --- Assert ---
   // Verify the coefficient matrix
-
-  //   EXPECT_EQ(coeffMatrix[0][0], 4);
-  // EXPECT_TRUE(ScalarAlmostEqual
-  //   std::cout << "coeffMatrix[0][0]: " << coeffMatrix[0][0] << std::endl;
-  //   EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[0].centroid(),
-  //                                 expected_element0_centroid, 3, maxDiff,
-  //                                 maxRelativeDiff));
-  //   EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[1].centroid(),
-  //                                 expected_element1_centroid, 3, maxDiff,
-  //                                 maxRelativeDiff));
-  //   EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[2].centroid(),
-  //                                 expected_element2_centroid, 3, maxDiff,
-  //                                 maxRelativeDiff));
-  //   EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[3].centroid(),
-  //                                 expected_element3_centroid, 3, maxDiff,
-  //                                 maxRelativeDiff));
 }
 
 TEST(DiscretizingDiffusionTermTest,
@@ -266,25 +223,13 @@ TEST(DiscretizingDiffusionTermTest,
       fvMesh, internalTemperatureField, boundaryTemperatureFields);
 
   // Define the coefficient matrix and RHS vector
-  //   Matrix<double> coeffMatrix(fvMesh.nElements(), fvMesh.nElements(), 0.0);
-  //   std::vector<std::vector<double>> coeffMatrix(
-  //       fvMesh.nElements(), std::vector<double>(fvMesh.nElements(), 0.0));
-  Matrix<double> coeffMatrix(fvMesh.nElements(), fvMesh.nElements(), 0.0);
+  Matrix<double> coeffMatrix(fvMesh.nElements(), fvMesh.nElements());
   std::vector<double> RHS(fvMesh.nElements(), 0.0);
 
   // Set up expected values for the coefficient matrix and RHS vector
 
-  //   const std::array<double, 3> expected_element0_centroid = {
-  //       0.250000000000000, 0.250000000000000, 0.500000000000000};
-  //   const std::array<double, 3> expected_element1_centroid = {
-  //       0.750000000000000, 0.250000000000000, 0.500000000000000};
-  //   const std::array<double, 3> expected_element2_centroid = {
-  //       0.250000000000000, 0.750000000000000, 0.500000000000000};
-  //   const std::array<double, 3> expected_element3_centroid = {
-  //       0.750000000000000, 0.750000000000000, 0.500000000000000};
-
-  //   const double maxDiff = 1.0e-9;
-  //   const double maxRelativeDiff = 1.0e-4;
+  const double maxDiff = 1.0e-9;
+  const double maxRelativeDiff = 1.0e-4;
 
   // --- Act ---
   AssembleDiffusionTerm diffusionTermAssembler;
@@ -292,37 +237,6 @@ TEST(DiscretizingDiffusionTermTest,
       fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
       coeffMatrix, RHS);
 
-  // Print out coeffMatrix for debugging
-  std::cout << "Coefficient Matrix:" << std::endl;
-  for (std::size_t i = 0; i < coeffMatrix.nRows(); ++i) {
-    for (std::size_t j = 0; j < coeffMatrix.nCols(); ++j) {
-      std::cout << coeffMatrix(i, j) << " ";
-    }
-    std::cout << std::endl;
-  }
-
-  // Print out RHS for debugging
-  std::cout << "RHS Vector:" << std::endl;
-  for (std::size_t i = 0; i < RHS.size(); ++i) {
-    std::cout << RHS[i] << std::endl;
-  }
-
   // --- Assert ---
   // Verify the coefficient matrix
-
-  //   EXPECT_EQ(coeffMatrix[0][0], 4);
-  // EXPECT_TRUE(ScalarAlmostEqual
-  //   std::cout << "coeffMatrix[0][0]: " << coeffMatrix[0][0] << std::endl;
-  //   EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[0].centroid(),
-  //                                 expected_element0_centroid, 3, maxDiff,
-  //                                 maxRelativeDiff));
-  //   EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[1].centroid(),
-  //                                 expected_element1_centroid, 3, maxDiff,
-  //                                 maxRelativeDiff));
-  //   EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[2].centroid(),
-  //                                 expected_element2_centroid, 3, maxDiff,
-  //                                 maxRelativeDiff));
-  //   EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[3].centroid(),
-  //                                 expected_element3_centroid, 3, maxDiff,
-  //                                 maxRelativeDiff));
 }

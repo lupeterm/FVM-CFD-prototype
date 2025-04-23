@@ -1,49 +1,54 @@
 #include "Matrix.hpp"
 #include <gtest/gtest.h>
 
-// Test Matrix constructor
-TEST(MatrixTest, ConstructorInitializesCorrectly) {
-  Matrix<int> mat(3, 4, 5);
+// Test constructor and dimension getters
+TEST(MatrixTest, ConstructorAndDimensions) {
+  Matrix<double> mat(3, 4);
+
   EXPECT_EQ(mat.nRows(), 3);
   EXPECT_EQ(mat.nCols(), 4);
-  for (std::size_t i = 0; i < 3; ++i) {
-    for (std::size_t j = 0; j < 4; ++j) {
-      EXPECT_EQ(mat(i, j), 5);
-    }
-  }
 }
 
-// Test element access (read/write)
-TEST(MatrixTest, ElementAccess) {
-  Matrix<int> mat(2, 2, 0);
-  mat(0, 0) = 10;
-  mat(1, 1) = 20;
-  EXPECT_EQ(mat(0, 0), 10);
-  EXPECT_EQ(mat(1, 1), 20);
+// Test invalid constructor arguments
+TEST(MatrixTest, InvalidConstructor) {
+  EXPECT_THROW(Matrix<double> mat(0, 4), std::invalid_argument);
+  EXPECT_THROW(Matrix<double> mat(3, 0), std::invalid_argument);
+}
+
+// Test writing and reading values in COO format
+TEST(MatrixTest, WriteAndReadCOO) {
+  Matrix<double> mat(3, 3);
+
+  mat.build(0, 0, 1.0);
+  mat.build(1, 2, 2.5);
+  mat.build(2, 1, -3.0);
+
+  EXPECT_EQ(mat.getValue(0, 0), 1.0);
+  EXPECT_EQ(mat.getValue(1, 2), 2.5);
+  EXPECT_EQ(mat.getValue(2, 1), -3.0);
+
+  // Test default value for non-existent entries
+  EXPECT_EQ(mat.getValue(0, 1), 0.0);
+  EXPECT_EQ(mat.getValue(2, 2), 0.0);
 }
 
 // Test out-of-range access
 TEST(MatrixTest, OutOfRangeAccess) {
-  Matrix<int> mat(2, 2, 0);
-  EXPECT_THROW(mat(2, 0), std::out_of_range);
-  EXPECT_THROW(mat(0, 2), std::out_of_range);
-  EXPECT_THROW(mat(3, 3), std::out_of_range);
+  Matrix<double> mat(3, 3);
+
+  EXPECT_THROW(mat.build(3, 0, 1.0), std::out_of_range);
+  EXPECT_THROW(mat.build(0, 3, 1.0), std::out_of_range);
+  EXPECT_THROW(mat.getValue(3, 0), std::out_of_range);
+  EXPECT_THROW(mat.getValue(0, 3), std::out_of_range);
 }
 
-// Test fill method
-TEST(MatrixTest, FillMethod) {
-  Matrix<int> mat(3, 3, 0);
-  mat.fill(7);
-  for (std::size_t i = 0; i < 3; ++i) {
-    for (std::size_t j = 0; j < 3; ++j) {
-      EXPECT_EQ(mat(i, j), 7);
-    }
-  }
-}
+// Test overwriting values in COO format
+TEST(MatrixTest, OverbuildValue) {
+  Matrix<double> mat(3, 3);
 
-// Test const element access
-TEST(MatrixTest, ConstElementAccess) {
-  const Matrix<int> mat(2, 2, 42);
-  EXPECT_EQ(mat(0, 0), 42);
-  EXPECT_EQ(mat(1, 1), 42);
+  mat.build(1, 1, 5.0);
+  EXPECT_EQ(mat.getValue(1, 1), 5.0);
+
+  mat.setValue(1, 1, 10.0); // Overwrite the value
+  EXPECT_EQ(mat.getValue(1, 1), 10.0);
 }
