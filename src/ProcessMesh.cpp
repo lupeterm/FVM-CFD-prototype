@@ -304,7 +304,7 @@ void ProcessMesh::sortBoundaryNodesFromInteriorNodes(Mesh &fvMesh) {
   for (std::size_t iFace = 0; iFace < fvMesh.nInteriorFaces(); ++iFace) {
     // fvMesh.faces()[iFace].patchIndex() = 0;
 
-    std::size_t *iNodes = fvMesh.faces()[iFace].iNodes();
+    std::vector<std::size_t> &iNodes = fvMesh.faces()[iFace].iNodes();
     std::size_t nNodes = fvMesh.faces()[iFace].nNodes();
     for (std::size_t iNode = 0; iNode < nNodes; ++iNode) {
       fvMesh.nodes()[iNodes[iNode]].Flag() = 1;
@@ -322,7 +322,8 @@ void ProcessMesh::sortBoundaryNodesFromInteriorNodes(Mesh &fvMesh) {
     if (s1 || s2) {
       for (std::size_t iFace = startFace; iFace < startFace + nBFaces;
            ++iFace) {
-        std::size_t *iNodes = fvMesh.faces()[iFace].iNodes();
+
+        std::vector<std::size_t> &iNodes = fvMesh.faces()[iFace].iNodes();
         const std::size_t &nNodes = fvMesh.faces()[iFace].nNodes();
 
         for (std::size_t iNode = 0; iNode < nNodes; ++iNode) {
@@ -345,7 +346,7 @@ void ProcessMesh::sortBoundaryNodesFromInteriorNodes(Mesh &fvMesh) {
            ++iFace) {
         // fvMesh.faces()[iFace].patchIndex() = iBoundary;
 
-        std::size_t *iNodes = fvMesh.faces()[iFace].iNodes();
+        std::vector<std::size_t> &iNodes = fvMesh.faces()[iFace].iNodes();
         const std::size_t &nNodes = fvMesh.faces()[iFace].nNodes();
 
         for (std::size_t iNode = 0; iNode < nNodes; ++iNode) {
