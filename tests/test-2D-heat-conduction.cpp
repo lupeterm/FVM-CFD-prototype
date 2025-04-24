@@ -190,10 +190,10 @@ TEST(DiscretizingDiffusionTermTest,
 
   // Set up expected values for the coefficient matrix and RHS vector
   // The expected coefficient matrix is:
-  // | 4.0 -1.0 -1.0 0.0 |
-  // | -1.0 4.0 0.0 -1.0 |
-  // | -1.0 0.0 4.0 -1.0 |
-  // | 0.0 -1.0 -1.0 4.0 |
+  // |  4.0 -1.0 -1.0  0.0 |
+  // | -1.0  4.0  0.0 -1.0 |
+  // | -1.0  0.0  4.0 -1.0 |
+  // |  0.0 -1.0 -1.0  4.0 |
   const std::array<std::array<double, 4>, 4> expected_coeffMatrix = {
       {{4.0, -1.0, -1.0, 0.0},
        {-1.0, 4.0, 0.0, -1.0},
