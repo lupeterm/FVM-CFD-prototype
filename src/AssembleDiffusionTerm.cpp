@@ -2,6 +2,7 @@
 #include "Field.hpp"
 #include <cstddef>
 
+#include "ginkgo/ginkgo.hpp"
 #include <iostream>
 
 void AssembleDiffusionTerm::elementBasedAssemble(
