@@ -6,6 +6,7 @@ add_library(
     ProcessMesh.cpp
     arrayOperations.cpp
     ReadInitialBoundaryConditions.cpp
+    Matrix.cpp
     AssembleDiffusionTerm.cpp
 )
 
