@@ -13,7 +13,8 @@
 // ****** Tests ******
 TEST(ReadingMeshFor2DHeatConductionTest, ReadingPointsWorks) {
   // --- Arrange ---
-  std::string caseDirectory("../../cases/2D-heat-conduction-on-a-2-by-2-mesh");
+  std::string caseDirectory(
+      "../../cases/heat-conduction/2D-heat-conduction-on-a-2-by-2-mesh");
   Mesh fvMesh(caseDirectory);
   ReadMesh meshReader;
 
@@ -36,7 +37,8 @@ TEST(ReadingMeshFor2DHeatConductionTest, ReadingPointsWorks) {
 
 TEST(ReadingMeshFor2DHeatConductionTest, ConfirmingElementOrdering) {
   // --- Arrange ---
-  std::string caseDirectory("../../cases/2D-heat-conduction-on-a-2-by-2-mesh");
+  std::string caseDirectory(
+      "../../cases/heat-conduction/2D-heat-conduction-on-a-2-by-2-mesh");
   Mesh fvMesh(caseDirectory);
   ReadMesh meshReader;
 
@@ -74,7 +76,8 @@ TEST(ReadingMeshFor2DHeatConductionTest, ConfirmingElementOrdering) {
 TEST(ReadInitialBoundaryConditionsTest, ReadingBoundaryTemperatureFieldWorks) {
 
   // --- Arrange ---
-  std::string caseDirectory("../../cases/2D-heat-conduction-on-a-2-by-2-mesh");
+  std::string caseDirectory(
+      "../../cases/heat-conduction/2D-heat-conduction-on-a-2-by-2-mesh");
   Mesh fvMesh(caseDirectory);
   ReadMesh meshReader;
 
@@ -139,7 +142,8 @@ TEST(ReadInitialBoundaryConditionsTest, ReadingBoundaryTemperatureFieldWorks) {
 
 TEST(SortBoundaryFacesFromInteriorFacesTest, LabelingBoundaryFacesWorks) {
   // --- Arrange ---
-  std::string caseDirectory("../../cases/2D-heat-conduction-on-a-2-by-2-mesh");
+  std::string caseDirectory(
+      "../../cases/heat-conduction/2D-heat-conduction-on-a-2-by-2-mesh");
   Mesh fvMesh(caseDirectory);
   ReadMesh meshReader;
 
@@ -168,7 +172,8 @@ TEST(SortBoundaryFacesFromInteriorFacesTest, LabelingBoundaryFacesWorks) {
 TEST(DiscretizingDiffusionTermTest,
      Discretizing2DHeatConductionOn2By2MeshWorks) {
   // --- Arrange ---
-  std::string caseDirectory("../../cases/2D-heat-conduction-on-a-2-by-2-mesh");
+  std::string caseDirectory(
+      "../../cases/heat-conduction/2D-heat-conduction-on-a-2-by-2-mesh");
   Mesh fvMesh(caseDirectory);
   ReadMesh meshReader;
   meshReader.readOpenFoamMesh(fvMesh);
@@ -229,7 +234,8 @@ TEST(DiscretizingDiffusionTermTest,
 TEST(DiscretizingDiffusionTermTest,
      Discretizing2DHeatConductionOn3By3MeshWorks) {
   // --- Arrange ---
-  std::string caseDirectory("../../cases/2D-heat-conduction-on-a-3-by-3-mesh");
+  std::string caseDirectory(
+      "../../cases/heat-conduction/2D-heat-conduction-on-a-3-by-3-mesh");
   Mesh fvMesh(caseDirectory);
   ReadMesh meshReader;
   meshReader.readOpenFoamMesh(fvMesh);
