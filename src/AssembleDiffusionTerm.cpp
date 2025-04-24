@@ -30,12 +30,12 @@ void AssembleDiffusionTerm::elementBasedAssemble(
       const std::size_t iFaceIndex = theElement.iFaces()[iFace];
       Face &theFace = fvMesh.faces()[iFaceIndex];
 
-      double FluxCn = 0.0;
-      double FluxFn = 0.0;
-      double FluxVn = 0.0;
-
       // Check if the face is an interior face or a boundary face
       if (theFace.iNeighbor() != -1) { // If it is an interior face
+        double FluxCn = 0.0;
+        double FluxFn = 0.0;
+        // double FluxVn = 0.0; unused
+
         // Compute FluxCn, FluxFn and FluxVn
         FluxCn = diffusionCoef[iFaceIndex] * theFace.gDiff();
         FluxFn = -FluxCn;
