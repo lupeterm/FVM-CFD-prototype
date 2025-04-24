@@ -13,10 +13,12 @@ add_executable(
   testMatrix.cpp
 )
 
+# Link Ginkgo and Google Test to the target
 target_link_libraries(
   unitTests
   MyLibrary
   GTest::gtest_main
+  ginkgo
 )
 
 include(GoogleTest)
