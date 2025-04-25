@@ -7,7 +7,7 @@
 #include <string>
 
 // ****** Tests ******
-TEST(ReadingOpenFoamMeshTest, ReadingPointsWorksForStructuredMesh) {
+TEST(ReadStructuredMeshTest, ReadPoints) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
   Mesh fvMesh(caseDirectory);
@@ -46,7 +46,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingPointsWorksForStructuredMesh) {
                           expected_node881_centroid, 3));
 }
 
-TEST(ReadingOpenFoamMeshTest, ReadingFacesWorksForStructuredMesh) {
+TEST(ReadStructuredMeshTest, ReadFaces) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
   Mesh fvMesh(caseDirectory);
@@ -96,7 +96,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingFacesWorksForStructuredMesh) {
       VectorMatch(fvMesh.faces()[1639].iNodes(), expected_face1639_iNodes, 4));
 }
 
-TEST(ReadingOpenFoamMeshTest, ReadingOwnersWorksForStructuredMesh) {
+TEST(ReadStructuredMeshTest, ReadOwners) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
   Mesh fvMesh(caseDirectory);
@@ -129,7 +129,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingOwnersWorksForStructuredMesh) {
   EXPECT_EQ(fvMesh.faces()[1639].iOwner(), 399);
 }
 
-TEST(ReadingOpenFoamMeshTest, ReadingNeighborsWorksForStructuredMesh) {
+TEST(ReadStructuredMeshTest, ReadNeighbors) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
   Mesh fvMesh(caseDirectory);
@@ -172,7 +172,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingNeighborsWorksForStructuredMesh) {
   EXPECT_EQ(fvMesh.faces()[1639].iNeighbor(), -1);
 }
 
-TEST(ReadingOpenFoamMeshTest, ReadingBoundariesWorksForStructuredMesh) {
+TEST(ReadStructuredMeshTest, ReadBoundaries) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
   Mesh fvMesh(caseDirectory);
@@ -206,8 +206,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingBoundariesWorksForStructuredMesh) {
   EXPECT_EQ(fvMesh.boundaries()[2].startFace(), 840);
 }
 
-TEST(ConstructingElementsTest,
-     ConstructingElementNeighborsWorksForStructuredMesh) {
+TEST(StructuredElementTest, ConstructNeighbors) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
   Mesh fvMesh(caseDirectory);
@@ -256,7 +255,7 @@ TEST(ConstructingElementsTest,
                           expected_element399_iNeighbors, 2));
 }
 
-TEST(ConstructingElementsTest, ConstructingElementFacesWorksForStructuredMesh) {
+TEST(StructuredElementTest, ConstructFaces) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
   Mesh fvMesh(caseDirectory);
@@ -309,8 +308,7 @@ TEST(ConstructingElementsTest, ConstructingElementFacesWorksForStructuredMesh) {
                           expected_element399_iFaces, expected_element_nFaces));
 }
 
-TEST(ConstructingElementsTest,
-     ConstructingElementFaceSignsWorksForStructuredMesh) {
+TEST(StructuredElementTest, ConstructFaceSigns) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
   Mesh fvMesh(caseDirectory);
@@ -355,8 +353,7 @@ TEST(ConstructingElementsTest,
                           expected_element_nFaces));
 }
 
-TEST(ConstructingElementsTest,
-     ConstructingElementBoundaryWorksForStructuredMesh) {
+TEST(StructuredElementTest, ConstructBoundary) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
   Mesh fvMesh(caseDirectory);
@@ -370,8 +367,7 @@ TEST(ConstructingElementsTest,
   EXPECT_EQ(fvMesh.nBFaces(), 880);
 }
 
-TEST(SettingUpNodeConnectivitiesTest,
-     ConnectingFacesToNodeWorksForStructuredMesh) {
+TEST(StructuredNodeConnectivityTest, ConnectFacesToNode) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
   Mesh fvMesh(caseDirectory);
@@ -427,8 +423,7 @@ TEST(SettingUpNodeConnectivitiesTest,
                           expected_node881_nFaces));
 }
 
-TEST(SettingUpNodeConnectivitiesTest,
-     ConnectingNodesToElementWorksForStructuredMesh) {
+TEST(StructuredNodeConnectivityTest, ConnectNodesToElement) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
   Mesh fvMesh(caseDirectory);
@@ -481,8 +476,7 @@ TEST(SettingUpNodeConnectivitiesTest,
                           expected_element399_iNodes, expected_element_nNodes));
 }
 
-TEST(SettingUpNodeConnectivitiesTest,
-     ConnectingElementsToNodetWorksForStructuredMesh) {
+TEST(StructuredNodeConnectivityTest, ConnectElementsToNode) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
   Mesh fvMesh(caseDirectory);

@@ -8,8 +8,7 @@
 #include <string>
 
 // ****** Tests ******
-TEST(ProcessingBasicFaceGeometryTest,
-     ComputingFaceCentroidWorksForUnstructuredMesh) {
+TEST(UnstructuredFaceGeometryTest, ComputeFaceCentroid) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   Mesh fvMesh(caseDirectory);
@@ -76,8 +75,7 @@ TEST(ProcessingBasicFaceGeometryTest,
                                 maxRelativeDiff));
 }
 
-TEST(ProcessingBasicFaceGeometryTest,
-     ComputingFaceSurfaceVectorWorksForUnstructuredMesh) {
+TEST(UnstructuredFaceGeometryTest, ComputeSurfaceVector) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   Mesh fvMesh(caseDirectory);
@@ -129,8 +127,7 @@ TEST(ProcessingBasicFaceGeometryTest,
                                 3, maxDiff, maxRelativeDiff));
 }
 
-TEST(ProcessingBasicFaceGeometryTest,
-     ComputingFaceAreaWorksForUnstructuredMesh) {
+TEST(UnstructuredFaceGeometryTest, ComputeFaceArea) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   Mesh fvMesh(caseDirectory);
@@ -185,8 +182,7 @@ TEST(ProcessingBasicFaceGeometryTest,
                                 maxRelativeDiff));
 }
 
-TEST(ComputingElementVolumeAndCentroidTest,
-     ComputingElementVolumeWorksForUnstructuredMesh) {
+TEST(UnstructuredElementGeometryTest, ComputeElementVolume) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   Mesh fvMesh(caseDirectory);
@@ -243,8 +239,7 @@ TEST(ComputingElementVolumeAndCentroidTest,
                                 maxRelativeDiff));
 }
 
-TEST(ComputingElementVolumeAndCentroidTest,
-     ComputingElementCentroidWorksForUnstructuredMesh) {
+TEST(UnstructuredElementGeometryTest, ComputeElementCentroid) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   Mesh fvMesh(caseDirectory);
@@ -310,8 +305,7 @@ TEST(ComputingElementVolumeAndCentroidTest,
                                 maxRelativeDiff));
 }
 
-TEST(ProcessingSecondaryFaceGeometryTest,
-     ComputingInteriorFaceGeometryWorksForUnstructuredMesh) {
+TEST(UnstructuredSecondaryFaceGeometryTest, ComputeInteriorFaceGeometry) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   Mesh fvMesh(caseDirectory);
@@ -480,8 +474,7 @@ TEST(ProcessingSecondaryFaceGeometryTest,
                                 maxDiff, maxRelativeDiff));
 }
 
-TEST(ProcessingSecondaryFaceGeometryTest,
-     ComputingBoundaryFaceGeometryWorksForUnstructuredMesh) {
+TEST(UnstructuredSecondaryFaceGeometryTest, ComputeBoundaryFaceGeometry) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   Mesh fvMesh(caseDirectory);
@@ -684,8 +677,8 @@ TEST(ProcessingSecondaryFaceGeometryTest,
                                 maxRelativeDiff));
 }
 
-TEST(ProcessingSecondaryFaceGeometryTest,
-     ComputingElementInteriorFaceGeometryWorksForUnstructuredMesh) {
+TEST(UnstructuredSecondaryFaceGeometryTest,
+     ComputeElementInteriorFaceGeometry) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   Mesh fvMesh(caseDirectory);
@@ -738,8 +731,7 @@ TEST(ProcessingSecondaryFaceGeometryTest,
   EXPECT_EQ(fvMesh.faces()[1299].iNeighborOwnerCoef(), 3);
 }
 
-TEST(SortingBoundaryNodesFromInteriorNodesTest,
-     LabelingInteriorNodesWorksForUnstructuredMesh) {
+TEST(UnstructuredNodeClassificationTest, LabelInteriorNodes) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   Mesh fvMesh(caseDirectory);

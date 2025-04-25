@@ -6,7 +6,7 @@
 #include <string>
 
 // ****** Tests ******
-TEST(ReadingOpenFoamMeshTest, ReadingPointsWorksForUnstructuredMesh) {
+TEST(ReadUnstructuredMeshTest, ReadPoints) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   Mesh fvMesh(caseDirectory);
@@ -49,7 +49,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingPointsWorksForUnstructuredMesh) {
                           expected_node1073_centroid, 3));
 }
 
-TEST(ReadingOpenFoamMeshTest, ReadingFacesWorksForUnstructuredMesh) {
+TEST(ReadUnstructuredMeshTest, ReadFaces) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   Mesh fvMesh(caseDirectory);
@@ -100,7 +100,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingFacesWorksForUnstructuredMesh) {
       VectorMatch(fvMesh.faces()[3289].iNodes(), expected_face3289_iNodes, 3));
 }
 
-TEST(ReadingOpenFoamMeshTest, ReadingOwnersWorksForUnstructuredMesh) {
+TEST(ReadUnstructuredMeshTest, ReadOwners) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   Mesh fvMesh(caseDirectory);
@@ -138,7 +138,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingOwnersWorksForUnstructuredMesh) {
   EXPECT_EQ(fvMesh.faces()[3289].iOwner(), 917);
 }
 
-TEST(ReadingOpenFoamMeshTest, ReadingNeighborsWorksForUnstructuredMesh) {
+TEST(ReadUnstructuredMeshTest, ReadNeighbors) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   Mesh fvMesh(caseDirectory);
@@ -186,7 +186,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingNeighborsWorksForUnstructuredMesh) {
   EXPECT_EQ(fvMesh.faces()[3289].iNeighbor(), -1);
 }
 
-TEST(ReadingOpenFoamMeshTest, ReadingBoundariesWorksForUnstructuredMesh) {
+TEST(ReadUnstructuredMeshTest, ReadBoundaries) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   Mesh fvMesh(caseDirectory);
@@ -241,8 +241,7 @@ TEST(ReadingOpenFoamMeshTest, ReadingBoundariesWorksForUnstructuredMesh) {
   EXPECT_EQ(fvMesh.boundaries()[5].startFace(), 1454);
 }
 
-TEST(ConstructingElementsTest,
-     ConstructingElementNeighborsWorksForUnstructuredMesh) {
+TEST(UnstructuredElementTest, ConstructNeighbors) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   Mesh fvMesh(caseDirectory);
@@ -284,8 +283,7 @@ TEST(ConstructingElementsTest,
                           expected_element917_iNeighbors, 3));
 }
 
-TEST(ConstructingElementsTest,
-     ConstructingElementFacesWorksForUnstructuredMesh) {
+TEST(UnstructuredElementTest, ConstructFaces) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   Mesh fvMesh(caseDirectory);
@@ -335,8 +333,7 @@ TEST(ConstructingElementsTest,
                           expected_element917_iFaces, 5));
 }
 
-TEST(ConstructingElementsTest,
-     ConstructingElementFaceSignsWorksForUnstructuredMesh) {
+TEST(UnstructuredElementTest, ConstructFaceSigns) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   Mesh fvMesh(caseDirectory);
@@ -371,8 +368,7 @@ TEST(ConstructingElementsTest,
                           expected_element917_faceSigns, 5));
 }
 
-TEST(ConstructingElementsTest,
-     ConstructingElementBoundaryWorksForUnstructuredMesh) {
+TEST(UnstructuredElementTest, ConstructBoundary) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   Mesh fvMesh(caseDirectory);
@@ -386,8 +382,7 @@ TEST(ConstructingElementsTest,
   EXPECT_EQ(fvMesh.nBFaces(), 1990);
 }
 
-TEST(SettingUpNodeConnectivitiesTest,
-     ConnectingFacesToNodeWorksForUnstructuredMesh) {
+TEST(UnstructuredNodeConnectivityTest, ConnectFacesToNode) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   Mesh fvMesh(caseDirectory);
@@ -436,8 +431,7 @@ TEST(SettingUpNodeConnectivitiesTest,
       VectorMatch(fvMesh.nodes()[1073].iFaces(), expected_node1073_iFaces, 10));
 }
 
-TEST(SettingUpNodeConnectivitiesTest,
-     ConnectingNodesToElementWorksForUnstructuredMesh) {
+TEST(UnstructuredNodeConnectivityTest, ConnectNodesToElement) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   Mesh fvMesh(caseDirectory);
@@ -487,8 +481,7 @@ TEST(SettingUpNodeConnectivitiesTest,
                           expected_element917_iNodes, 6));
 }
 
-TEST(SettingUpNodeConnectivitiesTest,
-     ConnectingElementsToNodetWorksForUnstructuredMesh) {
+TEST(UnstructuredNodeConnectivityTest, ConnectElementsToNode) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/elbow");
   Mesh fvMesh(caseDirectory);
