@@ -6,6 +6,7 @@
 #include "Mesh.hpp"
 #include "ReadInitialBoundaryConditions.hpp"
 #include "ReadMesh.hpp"
+#include "ginkgo/ginkgo.hpp"
 #include "utilitiesForTesting.hpp"
 #include <array>
 #include <string>
@@ -189,10 +190,6 @@ TEST(DiscretizingDiffusionTermTest,
   initialBoundaryConditionsReader.readTemperatureField(
       fvMesh, internalTemperatureField, boundaryTemperatureFields);
 
-  // Define the coefficient matrix and RHS vector
-  Matrix<double> coeffMatrix(fvMesh.nElements(), fvMesh.nElements());
-  std::vector<double> RHS(fvMesh.nElements(), 0.0);
-
   // Set up expected values for the coefficient matrix and RHS vector
   // The expected coefficient matrix is:
   // |  4.0 -1.0 -1.0  0.0 |
@@ -208,26 +205,68 @@ TEST(DiscretizingDiffusionTermTest,
   const double maxDiff = 1.0e-9;
   const double maxRelativeDiff = 1.0e-4;
 
-  // --- Act ---
-  AssembleDiffusionTerm diffusionTermAssembler;
-  diffusionTermAssembler.elementBasedAssemble(
-      fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
-      coeffMatrix, RHS);
+  // --- Act & Assert for Matrix<double> ---
+  {
+    Matrix<double> coeffMatrix(fvMesh.nElements(), fvMesh.nElements());
+    std::vector<double> RHS(fvMesh.nElements(), 0.0);
 
-  // --- Assert ---
-  // Verify the coefficient matrix
-  for (std::size_t i = 0; i < 4; ++i) {
-    for (std::size_t j = 0; j < 4; ++j) {
-      EXPECT_TRUE(ScalarAlmostEqual(coeffMatrix(i, j),
-                                    expected_coeffMatrix[i][j], maxDiff,
-                                    maxRelativeDiff));
+    AssembleDiffusionTerm diffusionTermAssembler;
+    diffusionTermAssembler.elementBasedAssemble(
+        fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
+        coeffMatrix, RHS);
+
+    // Verify the coefficient matrix
+    for (std::size_t i = 0; i < 4; ++i) {
+      for (std::size_t j = 0; j < 4; ++j) {
+        EXPECT_TRUE(ScalarAlmostEqual(coeffMatrix(i, j),
+                                      expected_coeffMatrix[i][j], maxDiff,
+                                      maxRelativeDiff));
+      }
+    }
+
+    // Verify the RHS vector
+    for (std::size_t i = 0; i < 4; ++i) {
+      EXPECT_TRUE(
+          ScalarAlmostEqual(RHS[i], expected_RHS[i], maxDiff, maxRelativeDiff));
     }
   }
 
-  // Verify the RHS vector
-  for (std::size_t i = 0; i < 4; ++i) {
-    EXPECT_TRUE(
-        ScalarAlmostEqual(RHS[i], expected_RHS[i], maxDiff, maxRelativeDiff));
+  // --- Act & Assert for gko::matrix_data ---
+  {
+    gko::matrix_data<double, std::size_t> coeffMatrix;
+    std::vector<double> RHS(fvMesh.nElements(), 0.0);
+
+    AssembleDiffusionTerm diffusionTermAssembler;
+    diffusionTermAssembler.elementBasedAssemble(
+        fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
+        coeffMatrix, RHS);
+
+    // Print the non-zero entries of the coefficient matrix
+    for (const auto &entry : coeffMatrix.nonzeros) {
+      std::cout << "Row: " << entry.row << ", Column: " << entry.column
+                << ", Value: " << entry.value << std::endl;
+    }
+
+    // Verify the coefficient matrix
+    for (std::size_t i = 0; i < 4; ++i) {
+      for (std::size_t j = 0; j < 4; ++j) {
+        double value = 0.0;
+        for (const auto &entry : coeffMatrix.nonzeros) {
+          if (entry.row == i && entry.column == j) {
+            value = entry.value;
+            break;
+          }
+        }
+        EXPECT_TRUE(ScalarAlmostEqual(value, expected_coeffMatrix[i][j],
+                                      maxDiff, maxRelativeDiff));
+      }
+    }
+
+    // Verify the RHS vector
+    for (std::size_t i = 0; i < 4; ++i) {
+      EXPECT_TRUE(
+          ScalarAlmostEqual(RHS[i], expected_RHS[i], maxDiff, maxRelativeDiff));
+    }
   }
 }
 
@@ -251,11 +290,7 @@ TEST(DiscretizingDiffusionTermTest,
   initialBoundaryConditionsReader.readTemperatureField(
       fvMesh, internalTemperatureField, boundaryTemperatureFields);
 
-  // Define the coefficient matrix and RHS vector
-  Matrix<double> coeffMatrix(fvMesh.nElements(), fvMesh.nElements());
-  std::vector<double> RHS(fvMesh.nElements(), 0.0);
-
-  // Set up expected values for the coefficient matrix and RHS vector
+  // Define the expected coefficient matrix and RHS vector
   const std::array<std::array<double, 9>, 9> expected_coeffMatrix = {
       {{4.0, -1.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0},
        {-1.0, 3.0, -1.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0},
@@ -272,24 +307,61 @@ TEST(DiscretizingDiffusionTermTest,
   const double maxDiff = 1.0e-9;
   const double maxRelativeDiff = 1.0e-4;
 
-  // --- Act ---
-  AssembleDiffusionTerm diffusionTermAssembler;
-  diffusionTermAssembler.elementBasedAssemble(
-      fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
-      coeffMatrix, RHS);
+  // --- Act & Assert for Matrix<double> ---
+  {
+    Matrix<double> coeffMatrix(fvMesh.nElements(), fvMesh.nElements());
+    std::vector<double> RHS(fvMesh.nElements(), 0.0);
 
-  // --- Assert ---
-  // Verify the coefficient matrix
-  for (std::size_t i = 0; i < 9; ++i) {
-    for (std::size_t j = 0; j < 9; ++j) {
-      EXPECT_TRUE(ScalarAlmostEqual(coeffMatrix(i, j),
-                                    expected_coeffMatrix[i][j], maxDiff,
-                                    maxRelativeDiff));
+    AssembleDiffusionTerm diffusionTermAssembler;
+    diffusionTermAssembler.elementBasedAssemble(
+        fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
+        coeffMatrix, RHS);
+
+    // Verify the coefficient matrix
+    for (std::size_t i = 0; i < 9; ++i) {
+      for (std::size_t j = 0; j < 9; ++j) {
+        EXPECT_TRUE(ScalarAlmostEqual(coeffMatrix(i, j),
+                                      expected_coeffMatrix[i][j], maxDiff,
+                                      maxRelativeDiff));
+      }
+    }
+
+    // Verify the RHS vector
+    for (std::size_t i = 0; i < 9; ++i) {
+      EXPECT_TRUE(
+          ScalarAlmostEqual(RHS[i], expected_RHS[i], maxDiff, maxRelativeDiff));
     }
   }
-  // Verify the RHS vector
-  for (std::size_t i = 0; i < 9; ++i) {
-    EXPECT_TRUE(
-        ScalarAlmostEqual(RHS[i], expected_RHS[i], maxDiff, maxRelativeDiff));
+
+  // --- Act & Assert for gko::matrix_data ---
+  {
+    gko::matrix_data<double, std::size_t> coeffMatrix;
+    std::vector<double> RHS(fvMesh.nElements(), 0.0);
+
+    AssembleDiffusionTerm diffusionTermAssembler;
+    diffusionTermAssembler.elementBasedAssemble(
+        fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
+        coeffMatrix, RHS);
+
+    // Verify the coefficient matrix
+    for (std::size_t i = 0; i < 9; ++i) {
+      for (std::size_t j = 0; j < 9; ++j) {
+        double value = 0.0;
+        for (const auto &entry : coeffMatrix.nonzeros) {
+          if (entry.row == i && entry.column == j) {
+            value = entry.value;
+            break;
+          }
+        }
+        EXPECT_TRUE(ScalarAlmostEqual(value, expected_coeffMatrix[i][j],
+                                      maxDiff, maxRelativeDiff));
+      }
+    }
+
+    // Verify the RHS vector
+    for (std::size_t i = 0; i < 9; ++i) {
+      EXPECT_TRUE(
+          ScalarAlmostEqual(RHS[i], expected_RHS[i], maxDiff, maxRelativeDiff));
+    }
   }
 }
