@@ -15,40 +15,53 @@ TEST(MatrixTest, InvalidConstructor) {
   EXPECT_THROW(Matrix<double> mat(3, 0), std::invalid_argument);
 }
 
-// Test writing and reading values in COO format
-TEST(MatrixTest, WriteAndReadCOO) {
+// Test writing and reading values
+TEST(MatrixTest, WriteAndReadValues) {
   Matrix<double> mat(3, 3);
 
-  mat.build(0, 0, 1.0);
-  mat.build(1, 2, 2.5);
-  mat.build(2, 1, -3.0);
+  mat(0, 0) = 1.0;
+  mat(1, 2) = 2.5;
+  mat(2, 1) = -3.0;
 
-  EXPECT_EQ(mat.getValue(0, 0), 1.0);
-  EXPECT_EQ(mat.getValue(1, 2), 2.5);
-  EXPECT_EQ(mat.getValue(2, 1), -3.0);
+  EXPECT_EQ(mat(0, 0), 1.0);
+  EXPECT_EQ(mat(1, 2), 2.5);
+  EXPECT_EQ(mat(2, 1), -3.0);
 
-  // Test default value for non-existent entries
-  EXPECT_EQ(mat.getValue(0, 1), 0.0);
-  EXPECT_EQ(mat.getValue(2, 2), 0.0);
+  // Test default value for uninitialized entries
+  EXPECT_EQ(mat(0, 1), 0.0);
+  EXPECT_EQ(mat(2, 2), 0.0);
 }
 
 // Test out-of-range access
 TEST(MatrixTest, OutOfRangeAccess) {
   Matrix<double> mat(3, 3);
 
-  EXPECT_THROW(mat.build(3, 0, 1.0), std::out_of_range);
-  EXPECT_THROW(mat.build(0, 3, 1.0), std::out_of_range);
-  EXPECT_THROW(mat.getValue(3, 0), std::out_of_range);
-  EXPECT_THROW(mat.getValue(0, 3), std::out_of_range);
+  EXPECT_THROW(mat(3, 0) = 1.0, std::out_of_range);
+  EXPECT_THROW(mat(0, 3) = 1.0, std::out_of_range);
+  EXPECT_THROW(mat(3, 0), std::out_of_range);
+  EXPECT_THROW(mat(0, 3), std::out_of_range);
 }
 
-// Test overwriting values in COO format
-TEST(MatrixTest, OverbuildValue) {
+// Test overwriting values
+TEST(MatrixTest, OverwriteValue) {
   Matrix<double> mat(3, 3);
 
-  mat.build(1, 1, 5.0);
-  EXPECT_EQ(mat.getValue(1, 1), 5.0);
+  mat(1, 1) = 5.0;
+  EXPECT_EQ(mat(1, 1), 5.0);
 
-  mat.setValue(1, 1, 10.0); // Overwrite the value
-  EXPECT_EQ(mat.getValue(1, 1), 10.0);
+  mat(1, 1) = 10.0; // Overwrite the value
+  EXPECT_EQ(mat(1, 1), 10.0);
+}
+
+// Test filling the matrix with a single value
+TEST(MatrixTest, FillMatrix) {
+  Matrix<double> mat(3, 3);
+
+  mat.fill(7.0);
+
+  for (std::size_t i = 0; i < mat.nRows(); ++i) {
+    for (std::size_t j = 0; j < mat.nCols(); ++j) {
+      EXPECT_EQ(mat(i, j), 7.0);
+    }
+  }
 }

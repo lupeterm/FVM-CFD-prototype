@@ -218,7 +218,7 @@ TEST(DiscretizingDiffusionTermTest,
   // Verify the coefficient matrix
   for (std::size_t i = 0; i < 4; ++i) {
     for (std::size_t j = 0; j < 4; ++j) {
-      EXPECT_TRUE(ScalarAlmostEqual(coeffMatrix.getValue(i, j),
+      EXPECT_TRUE(ScalarAlmostEqual(coeffMatrix(i, j),
                                     expected_coeffMatrix[i][j], maxDiff,
                                     maxRelativeDiff));
     }
@@ -282,7 +282,7 @@ TEST(DiscretizingDiffusionTermTest,
   // Verify the coefficient matrix
   for (std::size_t i = 0; i < 9; ++i) {
     for (std::size_t j = 0; j < 9; ++j) {
-      EXPECT_TRUE(ScalarAlmostEqual(coeffMatrix.getValue(i, j),
+      EXPECT_TRUE(ScalarAlmostEqual(coeffMatrix(i, j),
                                     expected_coeffMatrix[i][j], maxDiff,
                                     maxRelativeDiff));
     }

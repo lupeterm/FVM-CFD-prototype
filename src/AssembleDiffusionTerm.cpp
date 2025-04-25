@@ -41,7 +41,8 @@ void AssembleDiffusionTerm::elementBasedAssemble(
         FluxFn = -FluxCn;
 
         // Compute the coefficient matrix
-        coeffMatrix.build(iElement, theElement.iNeighbors()[iFace], FluxFn);
+        // coeffMatrix.build(iElement, theElement.iNeighbors()[iFace], FluxFn);
+        coeffMatrix(iElement, theElement.iNeighbors()[iFace]) = FluxFn;
         diag += FluxCn;
 
       } else { // If it is a boundary face
@@ -78,7 +79,8 @@ void AssembleDiffusionTerm::elementBasedAssemble(
       }
     }
     // Update the diagonal entry of the coefficient matrix in COO format
-    coeffMatrix.build(iElement, iElement, diag);
+    // coeffMatrix.build(iElement, iElement, diag);
+    coeffMatrix(iElement, iElement) = diag;
   }
 }
 //   void AssembleDiffusionTerm::faceBasedAssemble() {}
