@@ -15,5 +15,5 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/ginkgo-project/ginkgo.git
   GIT_TAG        main # You can replace 'main' with a specific version or tag
 )
-set(GINKGO_BUILD_MPI OFF CACHE INTERNAL "Disable Ginkgo MPI support")
+set(GINKGO_BUILD_MPI ON CACHE INTERNAL "Enable Ginkgo MPI support")
 FetchContent_MakeAvailable(ginkgo)
