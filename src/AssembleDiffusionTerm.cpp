@@ -2,9 +2,6 @@
 #include "Field.hpp"
 #include <cstddef>
 
-#include "ginkgo/ginkgo.hpp"
-#include <iostream>
-
 void AssembleDiffusionTerm::elementBasedAssemble(
     Mesh &fvMesh, const std::vector<double> diffusionCoef,
     const std::vector<double> &source,
@@ -41,7 +38,6 @@ void AssembleDiffusionTerm::elementBasedAssemble(
         FluxFn = -FluxCn;
 
         // Compute the coefficient matrix
-        // coeffMatrix.build(iElement, theElement.iNeighbors()[iFace], FluxFn);
         coeffMatrix(iElement, theElement.iNeighbors()[iFace]) = FluxFn;
         diag += FluxCn;
 
@@ -79,8 +75,8 @@ void AssembleDiffusionTerm::elementBasedAssemble(
       }
     }
     // Update the diagonal entry of the coefficient matrix in COO format
-    // coeffMatrix.build(iElement, iElement, diag);
     coeffMatrix(iElement, iElement) = diag;
   }
 }
+
 //   void AssembleDiffusionTerm::faceBasedAssemble() {}
