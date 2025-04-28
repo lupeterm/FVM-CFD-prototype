@@ -12,7 +12,7 @@
 #include <string>
 
 // ****** Tests ******
-TEST(ReadingMeshFor2DHeatConductionTest, ReadingPointsWorks) {
+TEST(MeshFor2DHeatConductionTest, ReadPoints) {
   // --- Arrange ---
   std::string caseDirectory(
       "../../cases/heat-conduction/2D-heat-conduction-on-a-2-by-2-mesh");
@@ -36,7 +36,7 @@ TEST(ReadingMeshFor2DHeatConductionTest, ReadingPointsWorks) {
       VectorMatch(fvMesh.nodes()[1].centroid(), expected_node1_centroid, 3));
 }
 
-TEST(ReadingMeshFor2DHeatConductionTest, ConfirmingElementOrdering) {
+TEST(MeshFor2DHeatConductionTest, ConfirmElementOrdering) {
   // --- Arrange ---
   std::string caseDirectory(
       "../../cases/heat-conduction/2D-heat-conduction-on-a-2-by-2-mesh");
@@ -74,7 +74,7 @@ TEST(ReadingMeshFor2DHeatConductionTest, ConfirmingElementOrdering) {
                                 maxRelativeDiff));
 }
 
-TEST(ReadInitialBoundaryConditionsTest, ReadingBoundaryTemperatureFieldWorks) {
+TEST(InitialBoundaryConditionsTest, ReadBoundaryTemperatureField) {
 
   // --- Arrange ---
   std::string caseDirectory(
@@ -141,7 +141,7 @@ TEST(ReadInitialBoundaryConditionsTest, ReadingBoundaryTemperatureFieldWorks) {
   EXPECT_EQ(boundaryTemperatureFields[4].size(), expected_boundary_nFaces[4]);
 }
 
-TEST(SortBoundaryFacesFromInteriorFacesTest, LabelingBoundaryFacesWorks) {
+TEST(MeshFor2DHeatConductionTest, LabelBoundaryFaces) {
   // --- Arrange ---
   std::string caseDirectory(
       "../../cases/heat-conduction/2D-heat-conduction-on-a-2-by-2-mesh");
@@ -170,8 +170,7 @@ TEST(SortBoundaryFacesFromInteriorFacesTest, LabelingBoundaryFacesWorks) {
   EXPECT_EQ(fvMesh.faces()[19].patchIndex(), 4);
 }
 
-TEST(DiscretizingDiffusionTermTest,
-     Discretizing2DHeatConductionOn2By2MeshWorks) {
+TEST(DiscretizingDiffusionTermTest, Discretize2DHeatConductionOn2By2Mesh) {
   // --- Arrange ---
   std::string caseDirectory(
       "../../cases/heat-conduction/2D-heat-conduction-on-a-2-by-2-mesh");
@@ -265,8 +264,7 @@ TEST(DiscretizingDiffusionTermTest,
   }
 }
 
-TEST(DiscretizingDiffusionTermTest,
-     Discretizing2DHeatConductionOn3By3MeshWorks) {
+TEST(DiscretizingDiffusionTermTest, Discretize2DHeatConductionOn3By3Mesh) {
   // --- Arrange ---
   std::string caseDirectory(
       "../../cases/heat-conduction/2D-heat-conduction-on-a-3-by-3-mesh");

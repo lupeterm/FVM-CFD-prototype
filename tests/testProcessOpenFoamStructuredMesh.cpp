@@ -8,8 +8,7 @@
 #include <string>
 
 // ****** Tests ******
-TEST(ProcessingBasicFaceGeometryTest,
-     ComputingFaceCentroidWorksForStructuredMesh) {
+TEST(StructuredFaceGeometryTest, ComputeFaceCentroid) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
   Mesh fvMesh(caseDirectory);
@@ -63,8 +62,7 @@ TEST(ProcessingBasicFaceGeometryTest,
                                 maxRelativeDiff));
 }
 
-TEST(ProcessingBasicFaceGeometryTest,
-     ComputingFaceSurfaceVectorWorksForStructuredMesh) {
+TEST(StructuredFaceGeometryTest, ComputeSurfaceVector) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
   Mesh fvMesh(caseDirectory);
@@ -110,7 +108,7 @@ TEST(ProcessingBasicFaceGeometryTest,
                                 3, maxDiff, maxRelativeDiff));
 }
 
-TEST(ProcessingBasicFaceGeometryTest, ComputingFaceAreaWorksForStructuredMesh) {
+TEST(StructuredFaceGeometryTest, ComputeFaceArea) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
   Mesh fvMesh(caseDirectory);
@@ -154,8 +152,7 @@ TEST(ProcessingBasicFaceGeometryTest, ComputingFaceAreaWorksForStructuredMesh) {
                                 maxRelativeDiff));
 }
 
-TEST(ComputingElementVolumeAndCentroidTest,
-     ComputingElementVolumeWorksForStructuredMesh) {
+TEST(StructuredElementGeometryTest, ComputeElementVolume) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
   Mesh fvMesh(caseDirectory);
@@ -202,8 +199,7 @@ TEST(ComputingElementVolumeAndCentroidTest,
                                 maxRelativeDiff));
 }
 
-TEST(ComputingElementVolumeAndCentroidTest,
-     ComputingElementCentroidWorksForStructuredMesh) {
+TEST(StructuredElementGeometryTest, ComputeElementCentroid) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
   Mesh fvMesh(caseDirectory);
@@ -256,8 +252,7 @@ TEST(ComputingElementVolumeAndCentroidTest,
                                 maxRelativeDiff));
 }
 
-TEST(ProcessingSecondaryFaceGeometryTest,
-     ComputingInteriorFaceGeometryWorksForStructuredMesh) {
+TEST(StructuredFaceGeometryTest, ComputeInteriorFaceGeometry) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
   Mesh fvMesh(caseDirectory);
@@ -367,8 +362,7 @@ TEST(ProcessingSecondaryFaceGeometryTest,
                                 maxDiff, maxRelativeDiff));
 }
 
-TEST(ProcessingSecondaryFaceGeometryTest,
-     ComputingBoundaryFaceGeometryWorksForStructuredMesh) {
+TEST(StructuredFaceGeometryTest, ComputeBoundaryFaceGeometry) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
   Mesh fvMesh(caseDirectory);
