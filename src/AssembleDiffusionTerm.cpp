@@ -42,18 +42,16 @@ void AssembleDiffusionTerm::elementBasedAssemble(
         // Compute the coefficient matrix
         if constexpr (std::is_same_v<MatrixType, Matrix<double>>) {
           coeffMatrix(iElement, theElement.iNeighbors()[iFace]) = FluxFn;
-        } else if constexpr (std::is_same_v<
-                                 MatrixType,
-                                 gko::matrix_data<double, std::size_t>>) {
+        } else if constexpr (std::is_same_v<MatrixType,
+                                            gko::matrix_data<double, int>>) {
           coeffMatrix.nonzeros.emplace_back(
               iElement, theElement.iNeighbors()[iFace], FluxFn);
         } else {
           static_assert(
               std::is_same_v<MatrixType, Matrix<double>> ||
-                  std::is_same_v<MatrixType,
-                                 gko::matrix_data<double, std::size_t>>,
+                  std::is_same_v<MatrixType, gko::matrix_data<double, int>>,
               "Unsupported MatrixType. Must be either Matrix<double> or "
-              "gko::matrix_data<double, std::size_t>.");
+              " gko::matrix_data<double, int>.");
         }
         // coeffMatrix(iElement, theElement.iNeighbors()[iFace]) = FluxFn;
         diag += FluxCn;
@@ -95,8 +93,8 @@ void AssembleDiffusionTerm::elementBasedAssemble(
     // Set the diagonal entry of the coefficient matrix
     if constexpr (std::is_same_v<MatrixType, Matrix<double>>) {
       coeffMatrix(iElement, iElement) = diag;
-    } else if constexpr (std::is_same_v<MatrixType, gko::matrix_data<
-                                                        double, std::size_t>>) {
+    } else if constexpr (std::is_same_v<MatrixType,
+                                        gko::matrix_data<double, int>>) {
       coeffMatrix.nonzeros.emplace_back(iElement, iElement, diag);
     }
   }
@@ -112,7 +110,6 @@ template void AssembleDiffusionTerm::elementBasedAssemble(
     Mesh &fvMesh, const std::vector<double> diffusionCoef,
     const std::vector<double> &source,
     std::vector<boundaryField<double>> &boundaryFields,
-    gko::matrix_data<double, std::size_t> &coeffMatrix,
-    std::vector<double> &RHS);
+    gko::matrix_data<double, int> &coeffMatrix, std::vector<double> &RHS);
 
 //   void AssembleDiffusionTerm::faceBasedAssemble() {}

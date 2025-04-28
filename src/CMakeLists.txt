@@ -8,6 +8,7 @@ add_library(
     ReadInitialBoundaryConditions.cpp
     Matrix.cpp
     AssembleDiffusionTerm.cpp
+    LinearSolver.cpp
 )
 
 target_include_directories(

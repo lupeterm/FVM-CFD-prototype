@@ -227,7 +227,7 @@ TEST(DiscretizingDiffusionTermTest, Discretize2DHeatConductionOn2By2Mesh) {
 
   // --- Act & Assert for gko::matrix_data ---
   {
-    gko::matrix_data<double, std::size_t> coeffMatrix;
+    gko::matrix_data<double, int> coeffMatrix;
     std::vector<double> RHS(fvMesh.nElements(), 0.0);
 
     AssembleDiffusionTerm diffusionTermAssembler;
@@ -328,7 +328,7 @@ TEST(DiscretizingDiffusionTermTest, Discretize2DHeatConductionOn3By3Mesh) {
 
   // --- Act & Assert for gko::matrix_data ---
   {
-    gko::matrix_data<double, std::size_t> coeffMatrix;
+    gko::matrix_data<double, int> coeffMatrix;
     std::vector<double> RHS(fvMesh.nElements(), 0.0);
 
     AssembleDiffusionTerm diffusionTermAssembler;
