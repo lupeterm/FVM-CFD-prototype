@@ -44,13 +44,13 @@ TEST(MeshFor2DHeatConductionTest, ConfirmElementOrdering) {
   ReadMesh meshReader;
 
   const std::array<double, 3> expected_element0_centroid = {
-      0.250000000000000, 0.250000000000000, 0.500000000000000};
+      0.250000000000000, 0.250000000000000, 0.05};
   const std::array<double, 3> expected_element1_centroid = {
-      0.750000000000000, 0.250000000000000, 0.500000000000000};
+      0.750000000000000, 0.250000000000000, 0.05};
   const std::array<double, 3> expected_element2_centroid = {
-      0.250000000000000, 0.750000000000000, 0.500000000000000};
+      0.250000000000000, 0.750000000000000, 0.05};
   const std::array<double, 3> expected_element3_centroid = {
-      0.750000000000000, 0.750000000000000, 0.500000000000000};
+      0.750000000000000, 0.750000000000000, 0.05};
 
   const double maxDiff = 1.0e-9;
   const double maxRelativeDiff = 1.0e-4;
@@ -191,11 +191,11 @@ TEST(DiscretizingDiffusionTermTest, Discretize2DHeatConductionOn2By2Mesh) {
 
   // Set up expected values for the coefficient matrix and RHS vector
   const std::array<std::array<double, 4>, 4> expected_coeffMatrix = {
-      {{4.0, -1.0, -1.0, 0.0},
-       {-1.0, 4.0, 0.0, -1.0},
-       {-1.0, 0.0, 4.0, -1.0},
-       {0.0, -1.0, -1.0, 4.0}}};
-  const std::array<double, 4> expected_RHS = {746.0, 546.0, 746.0, 546.0};
+      {{0.4, -0.1, -0.1, 0.0},
+       {-0.1, 0.4, 0.0, -0.1},
+       {-0.1, 0.0, 0.4, -0.1},
+       {0.0, -0.1, -0.1, 0.4}}};
+  const std::array<double, 4> expected_RHS = {74.6, 54.6, 74.6, 54.6};
   const double maxDiff = 1.0e-9;
   const double maxRelativeDiff = 1.0e-4;
 
@@ -285,18 +285,18 @@ TEST(DiscretizingDiffusionTermTest, Discretize2DHeatConductionOn3By3Mesh) {
 
   // Define the expected coefficient matrix and RHS vector
   const std::array<std::array<double, 9>, 9> expected_coeffMatrix = {
-      {{4.0, -1.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0},
-       {-1.0, 3.0, -1.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0},
-       {0.0, -1.0, 4.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0},
-       {-1.0, 0.0, 0.0, 5.0, -1.0, 0.0, -1.0, 0.0, 0.0},
-       {0.0, -1.0, 0.0, -1.0, 4.0, -1.0, 0.0, -1.0, 0.0},
-       {0.0, 0.0, -1.0, 0.0, -1.0, 5.0, 0.0, 0.0, -1.0},
-       {0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 4.0, -1.0, 0.0},
-       {0.0, 0.0, 0.0, 0.0, -1.0, 0.0, -1.0, 3.0, -1.0},
-       {0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, -1.0, 4.0}}};
+      {{0.4, -0.1, 0.0, -0.1, 0.0, 0.0, 0.0, 0.0, 0.0},
+       {-0.1, 0.3, -0.1, 0.0, -0.1, 0.0, 0.0, 0.0, 0.0},
+       {0.0, -0.1, 0.4, 0.0, 0.0, -0.1, 0.0, 0.0, 0.0},
+       {-0.1, 0.0, 0.0, 0.5, -0.1, 0.0, -0.1, 0.0, 0.0},
+       {0.0, -0.1, 0.0, -0.1, 0.4, -0.1, 0.0, -0.1, 0.0},
+       {0.0, 0.0, -0.1, 0.0, -0.1, 0.5, 0.0, 0.0, -0.1},
+       {0.0, 0.0, 0.0, -0.1, 0.0, 0.0, 0.4, -0.1, 0.0},
+       {0.0, 0.0, 0.0, 0.0, -0.1, 0.0, -0.1, 0.3, -0.1},
+       {0.0, 0.0, 0.0, 0.0, 0.0, -0.1, 0.0, -0.1, 0.4}}};
 
-  const std::array<double, 9> expected_RHS = {746.0, 0.0,   546.0, 746.0, 0.0,
-                                              546.0, 746.0, 0.0,   546.0};
+  const std::array<double, 9> expected_RHS = {74.6, 0.0,  54.6, 74.6, 0.0,
+                                              54.6, 74.6, 0.0,  54.6};
   const double maxDiff = 1.0e-9;
   const double maxRelativeDiff = 1.0e-4;
 
