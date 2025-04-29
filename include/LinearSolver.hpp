@@ -13,9 +13,6 @@ public:
              gko::remove_complex<ValueType> reduction_factor,
              IndexType maxNumIterations);
 
-  // template <typename ValueType>
-  // void print_solution(const std::vector<ValueType> &solVector) const;
-
 private:
   // Add any private member variables or helper functions if needed
 };

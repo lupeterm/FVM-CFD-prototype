@@ -12,8 +12,6 @@ void LinearSolver::solve(gko::matrix_data<ValueType, IndexType> &coeffMatrix,
 
   // === Prepare the Ginkgo matrix and vectors to be used by a Ginkgo solver ===
   // --- Convert the input matrix coeffMatrix to a Ginkgo matrix ---
-  //   using IndexType = int; // int or int64
-  //   using ValueType = double;
   using mtx = gko::matrix::Coo<ValueType, IndexType>;
   using vec = gko::matrix::Dense<ValueType>;
   using val_array = gko::array<ValueType>;
@@ -33,7 +31,6 @@ void LinearSolver::solve(gko::matrix_data<ValueType, IndexType> &coeffMatrix,
 
   // --- Create a Ginkgo matrix to store the solution vector ---
   // Create an initial guess vector
-  //   std::vector<ValueType> x0(nMeshPoints, 0.0);
   auto gko_x =
       vec::create(app_exec, gko::dim<2>(nMeshPoints, 1),
                   val_array::view(app_exec, nMeshPoints, solVector.data()), 1);
@@ -58,12 +55,3 @@ void LinearSolver::solve(gko::matrix_data<ValueType, IndexType> &coeffMatrix,
   // --- Solve system ---
   solver->apply(gko_RHS, gko_x);
 }
-
-// template <typename ValueType>
-// void LinearSolver::print_solution(
-//     const std::vector<ValueType> &solVector) const {
-//   std::cout << "Solution vector:" << std::endl;
-//   for (std::size_t i = 0; i < solVector.size(); ++i) {
-//     std::cout << "x[" << i << "] = " << solVector[i] << std::endl;
-//   }
-// }
