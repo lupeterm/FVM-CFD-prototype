@@ -81,7 +81,7 @@ TEST(LinearSolverTest, Solve3x3Matrix) {
   }
 }
 
-TEST(LinearSolverTest, Solve4x4MatrixWithDecimals) {
+TEST(LinearSolverTest, Solve4x4Matrix) {
   // --- Arrange ---
   // Define a 4x4 linear system:
   // [ 4 -1  0  0] [x1] = [8.0]
