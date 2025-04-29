@@ -18,19 +18,21 @@ void LinearSolver::solve(gko::matrix_data<ValueType, IndexType> &coeffMatrix,
 
   coeffMatrix.sort_row_major();
 
-  auto gko_coeffMatrix = gko::share(mtx::create(exec));
+  auto gko_coeffMatrix = gko::share(
+      mtx::create(exec, coeffMatrix.size, coeffMatrix.nonzeros.size()));
+
   gko_coeffMatrix->read(coeffMatrix);
 
   // --- Convert the input RHS vector to a Ginkgo vector ---
   // executor where the application initialized the data
   const auto app_exec = exec->get_master();
-  const auto &nMeshPoints = RHS.size();
+  const auto nMeshPoints = RHS.size();
   auto gko_RHS =
       vec::create(exec, gko::dim<2>(nMeshPoints, 1),
                   val_array::view(app_exec, nMeshPoints, RHS.data()), 1);
 
-  // --- Create a Ginkgo matrix to store the solution vector ---
-  // Create an initial guess vector
+  //   -- -Create a Ginkgo matrix to store the solution vector-- -
+  //   Create an initial guess vector
   auto gko_x =
       vec::create(app_exec, gko::dim<2>(nMeshPoints, 1),
                   val_array::view(app_exec, nMeshPoints, solVector.data()), 1);
@@ -55,3 +57,9 @@ void LinearSolver::solve(gko::matrix_data<ValueType, IndexType> &coeffMatrix,
   // --- Solve system ---
   solver->apply(gko_RHS, gko_x);
 }
+
+template void LinearSolver::solve(gko::matrix_data<double, int> &coeffMatrix,
+                                  std::vector<double> &RHS,
+                                  std::vector<double> &solVector,
+                                  gko::remove_complex<double> reduction_factor,
+                                  int maxNumIterations);

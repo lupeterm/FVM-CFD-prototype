@@ -23,3 +23,19 @@ target_link_libraries(
 
 include(GoogleTest)
 gtest_discover_tests(unitTests)
+
+add_executable(
+  testLinearSolver
+  testLinearSolver.cpp
+)
+
+gtest_add_tests(
+  TARGET testLinearSolver
+)
+
+target_link_libraries(
+  testLinearSolver
+  MyLibrary
+  GTest::gtest_main
+  ginkgo
+)

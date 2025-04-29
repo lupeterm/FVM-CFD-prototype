@@ -2,6 +2,7 @@
 
 #include "AssembleDiffusionTerm.hpp"
 #include "Field.hpp"
+#include "LinearSolver.hpp"
 #include "Matrix.hpp"
 #include "Mesh.hpp"
 #include "ReadInitialBoundaryConditions.hpp"
