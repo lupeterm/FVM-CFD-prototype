@@ -44,6 +44,7 @@ void AssembleDiffusionTerm::elementBasedAssemble(
           coeffMatrix(iElement, theElement.iNeighbors()[iFace]) = FluxFn;
         } else if constexpr (std::is_same_v<MatrixType,
                                             gko::matrix_data<double, int>>) {
+          coeffMatrix.size = {fvMesh.nElements(), fvMesh.nElements()};
           coeffMatrix.nonzeros.emplace_back(
               iElement, theElement.iNeighbors()[iFace], FluxFn);
         } else {
