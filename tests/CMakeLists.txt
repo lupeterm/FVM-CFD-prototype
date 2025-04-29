@@ -29,13 +29,11 @@ add_executable(
   testLinearSolver.cpp
 )
 
-gtest_add_tests(
-  TARGET testLinearSolver
-)
-
 target_link_libraries(
   testLinearSolver
   MyLibrary
   GTest::gtest_main
   ginkgo
 )
+
+gtest_discover_tests(testLinearSolver)
