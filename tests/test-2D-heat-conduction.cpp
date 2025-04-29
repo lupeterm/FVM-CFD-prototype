@@ -359,3 +359,57 @@ TEST(DiscretizingDiffusionTermTest, Discretize2DHeatConductionOn3By3Mesh) {
     }
   }
 }
+
+// TEST(LinearSolverTest, Solve2DHeatConductionOn2By2Mesh) {
+//   // --- Arrange ---
+//   std::string caseDirectory(
+//       "../../cases/heat-conduction/2D-heat-conduction-on-a-2-by-2-mesh");
+//   Mesh fvMesh(caseDirectory);
+//   ReadMesh meshReader;
+//   meshReader.readOpenFoamMesh(fvMesh);
+
+//   using ValueType = double;
+//   using IndexType = int;
+//   using RealValueType = gko::remove_complex<ValueType>;
+
+//   // Define the thermal conductivity and source term
+//   std::vector<ValueType> thermalConductivity(fvMesh.nFaces(), 1.0);
+//   std::vector<ValueType> heatSource(fvMesh.nElements(), 0.0);
+
+//   // Read initial condition and boundary conditions
+//   Field<ValueType> internalTemperatureField(fvMesh.nElements());
+//   std::vector<boundaryField<ValueType>> boundaryTemperatureFields;
+//   ReadInitialBoundaryConditions initialBoundaryConditionsReader;
+//   initialBoundaryConditionsReader.readTemperatureField(
+//       fvMesh, internalTemperatureField, boundaryTemperatureFields);
+
+//   // Assemble the coefficient matrix and RHS vector
+//   gko::matrix_data<ValueType, IndexType> coeffMatrix;
+//   std::vector<ValueType> RHS(fvMesh.nElements(), 0.0);
+
+//   AssembleDiffusionTerm diffusionTermAssembler;
+//   diffusionTermAssembler.elementBasedAssemble(
+//       fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
+//       coeffMatrix, RHS);
+
+//   // Expected solution vector
+//   const std::vector<ValueType> expectedSolution = {348.0, 298.0, 348.0,
+//   298.0}; std::vector<ValueType> solution(fvMesh.nElements(), 0.0);
+
+//   // Set up parameters
+//   const ValueType maxDiff = 1.0e-9;
+//   const ValueType maxRelativeDiff = 1.0e-4;
+//   const RealValueType reduction_factor{1e-7};
+//   const IndexType maxNumIterations = 1000;
+
+//   // --- Act ---
+//   LinearSolver solver;
+//   solver.solve(coeffMatrix, RHS, solution, reduction_factor,
+//   maxNumIterations);
+
+//   // --- Assert ---
+//   for (std::size_t i = 0; i < solution.size(); ++i) {
+//     EXPECT_TRUE(ScalarAlmostEqual(solution[i], expectedSolution[i], maxDiff,
+//                                   maxRelativeDiff));
+//   }
+// }

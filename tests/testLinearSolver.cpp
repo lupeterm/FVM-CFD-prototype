@@ -33,7 +33,7 @@ TEST(LinearSolverTest, Solve2x2Matrix) {
 
   // --- Act ---
   LinearSolver solver;
-  solver.solve(coeffMatrix, RHS, solution, reduction_factor, 1000);
+  solver.solve(coeffMatrix, RHS, solution, reduction_factor, maxNumIterations);
 
   // --- Assert ---
   for (std::size_t i = 0; i < solution.size(); ++i) {
