@@ -29,8 +29,8 @@ TEST(StructuredFaceGeometryTest, ComputeFaceCentroid) {
   const std::array<double, 3> expected_face1639_centroid = {
       0.0975000000000000, 0.0975000000000000, 0.0100000000000000};
 
-  const double maxDiff = 1.0e-9;
-  const double maxRelativeDiff = 1.0e-4;
+  const double maxDiff = 1.0e-12;
+  const double maxRelativeDiff = 1.0e-8;
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
@@ -81,8 +81,8 @@ TEST(StructuredFaceGeometryTest, ComputeSurfaceVector) {
   const std::array<double, 3> expected_face1639_Sf = {0, 0,
                                                       2.50000000000000e-05};
 
-  const double maxDiff = 1.0e-9;
-  const double maxRelativeDiff = 1.0e-4;
+  const double maxDiff = 1.0e-12;
+  const double maxRelativeDiff = 1.0e-8;
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
@@ -121,8 +121,8 @@ TEST(StructuredFaceGeometryTest, ComputeFaceArea) {
   const double expected_face1638_area = 2.50000000000000e-05;
   const double expected_face1639_area = 2.50000000000000e-05;
 
-  const double maxDiff = 1.0e-9;
-  const double maxRelativeDiff = 1.0e-4;
+  const double maxDiff = 1.0e-12;
+  const double maxRelativeDiff = 1.0e-8;
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
@@ -167,8 +167,8 @@ TEST(StructuredElementGeometryTest, ComputeElementVolume) {
   const double expected_element398_volume = 2.50000000000000e-07;
   const double expected_element399_volume = 2.50000000000000e-07;
 
-  const double maxDiff = 1.0e-9;
-  const double maxRelativeDiff = 1.0e-4;
+  const double maxDiff = 1.0e-12;
+  const double maxRelativeDiff = 1.0e-8;
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
@@ -220,8 +220,8 @@ TEST(StructuredElementGeometryTest, ComputeElementCentroid) {
   const std::array<double, 3> expected_element399_centroid = {
       0.0975000000000000, 0.0975000000000000, 0.00500000000000000};
 
-  const double maxDiff = 1.0e-9;
-  const double maxRelativeDiff = 1.0e-4;
+  const double maxDiff = 1.0e-12;
+  const double maxRelativeDiff = 1.0e-8;
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
@@ -295,8 +295,8 @@ TEST(StructuredFaceGeometryTest, ComputeInteriorFaceGeometry) {
   const double expected_face759_gf = 0.500000000000000;
 
   // Set tolerance
-  const double maxDiff = 1.0e-9;
-  const double maxRelativeDiff = 1.0e-4;
+  const double maxDiff = 1.0e-12;
+  const double maxRelativeDiff = 1.0e-8;
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
@@ -412,8 +412,8 @@ TEST(StructuredFaceGeometryTest, ComputeBoundaryFaceGeometry) {
   const double expected_face1639_walldist = 0.00500000000000000;
 
   // Set tolerance
-  const double maxDiff = 1.0e-9;
-  const double maxRelativeDiff = 1.0e-4;
+  const double maxDiff = 1.0e-12;
+  const double maxRelativeDiff = 1.0e-8;
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);

@@ -53,8 +53,8 @@ TEST(MeshFor2DHeatConductionTest, ConfirmElementOrdering) {
   const std::array<double, 3> expected_element3_centroid = {
       0.750000000000000, 0.750000000000000, 0.05};
 
-  const double maxDiff = 1.0e-9;
-  const double maxRelativeDiff = 1.0e-4;
+  const double maxDiff = 1.0e-12;
+  const double maxRelativeDiff = 1.0e-8;
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
@@ -197,8 +197,8 @@ TEST(DiffusionTermDiscretizationTest, Discretize2DHeatConductionOn2By2Mesh) {
        {-0.1, 0.0, 0.4, -0.1},
        {0.0, -0.1, -0.1, 0.4}}};
   const std::array<double, 4> expected_RHS = {74.6, 54.6, 74.6, 54.6};
-  const double maxDiff = 1.0e-9;
-  const double maxRelativeDiff = 1.0e-4;
+  const double maxDiff = 1.0e-12;
+  const double maxRelativeDiff = 1.0e-8;
 
   // --- Act & Assert for Matrix<double> ---
   {
@@ -292,8 +292,8 @@ TEST(DiffusionTermDiscretizationTest, Discretize2DHeatConductionOn3By3Mesh) {
 
   const std::array<double, 9> expected_RHS = {74.6, 0.0,  54.6, 74.6, 0.0,
                                               54.6, 74.6, 0.0,  54.6};
-  const double maxDiff = 1.0e-9;
-  const double maxRelativeDiff = 1.0e-4;
+  const double maxDiff = 1.0e-12;
+  const double maxRelativeDiff = 1.0e-8;
 
   // --- Act & Assert for Matrix<double> ---
   {
@@ -391,8 +391,8 @@ TEST(LinearSolverTest, Solve2DHeatConductionOn2By2Mesh) {
   std::vector<ValueType> solution(fvMesh.nElements(), 0.0);
 
   // Set up parameters
-  const ValueType maxDiff = 1.0e-9;
-  const ValueType maxRelativeDiff = 1.0e-4;
+  const ValueType maxDiff = 1.0e-12;
+  const ValueType maxRelativeDiff = 1.0e-8;
   const RealValueType reduction_factor{1e-7};
   const IndexType maxNumIterations = 1000;
 
@@ -442,8 +442,8 @@ TEST(LinearSolverTest, Solve2DHeatConductionOn3By3Mesh) {
   std::vector<ValueType> solution(fvMesh.nElements(), 0.0);
 
   // Set up parameters
-  const ValueType maxDiff = 1.0e-9;
-  const ValueType maxRelativeDiff = 1.0e-4;
+  const ValueType maxDiff = 1.0e-12;
+  const ValueType maxRelativeDiff = 1.0e-8;
   const RealValueType reduction_factor{1e-7};
   const IndexType maxNumIterations = 1000;
 
