@@ -8,8 +8,9 @@ target_link_libraries(
   MyLibrary
   ginkgo
 )
-# target_include_directories(
-#   heatConduction
-#   PRIVATE
-#   ${CMAKE_CURRENT_SOURCE_DIR}/include
-# )
+
+target_include_directories(
+  heatConduction
+  PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
