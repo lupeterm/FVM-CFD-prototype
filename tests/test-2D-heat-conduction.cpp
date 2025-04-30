@@ -236,12 +236,6 @@ TEST(DiffusionTermDiscretizationTest, Discretize2DHeatConductionOn2By2Mesh) {
         fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
         coeffMatrix, RHS);
 
-    // Print the non-zero entries of the coefficient matrix
-    for (const auto &entry : coeffMatrix.nonzeros) {
-      std::cout << "Row: " << entry.row << ", Column: " << entry.column
-                << ", Value: " << entry.value << std::endl;
-    }
-
     // Verify the coefficient matrix
     for (std::size_t i = 0; i < 4; ++i) {
       for (std::size_t j = 0; j < 4; ++j) {
@@ -402,21 +396,7 @@ TEST(LinearSolverTest, Solve2DHeatConductionOn2By2Mesh) {
   const RealValueType reduction_factor{1e-7};
   const IndexType maxNumIterations = 1000;
 
-  // Print out coeffMatrix
-  for (const auto &entry : coeffMatrix.nonzeros) {
-    std::cout << "Row: " << entry.row << ", Column: " << entry.column
-              << ", Value: " << entry.value << std::endl;
-  }
-  // Print out RHS
-  for (std::size_t i = 0; i < RHS.size(); ++i) {
-    std::cout << "RHS[" << i << "] = " << RHS[i] << std::endl;
-  }
-  // Print the initial solution
-  for (std::size_t i = 0; i < solution.size(); ++i) {
-    std::cout << "solution[" << i << "] = " << solution[i] << std::endl;
-  }
-
-  // // --- Act ---
+  // --- Act ---
   LinearSolver solver;
   solver.solve(coeffMatrix, RHS, solution, reduction_factor, maxNumIterations);
 
@@ -424,5 +404,63 @@ TEST(LinearSolverTest, Solve2DHeatConductionOn2By2Mesh) {
   for (std::size_t i = 0; i < solution.size(); ++i) {
     EXPECT_TRUE(ScalarAlmostEqual(solution[i], expectedSolution[i], maxDiff,
                                   maxRelativeDiff));
+  }
+}
+
+TEST(LinearSolverTest, Solve2DHeatConductionOn3By3Mesh) {
+  // --- Arrange ---
+  std::string caseDirectory(
+      "../../cases/heat-conduction/2D-heat-conduction-on-a-3-by-3-mesh");
+  Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
+  meshReader.readOpenFoamMesh(fvMesh);
+
+  using ValueType = double;
+  using IndexType = int;
+  using RealValueType = gko::remove_complex<ValueType>;
+
+  // Define the thermal conductivity and source term
+  std::vector<ValueType> thermalConductivity(fvMesh.nFaces(), 1.0);
+  std::vector<ValueType> heatSource(fvMesh.nElements(), 0.0);
+
+  // Read initial condition and boundary conditions
+  Field<ValueType> internalTemperatureField(fvMesh.nElements());
+  std::vector<boundaryField<ValueType>> boundaryTemperatureFields;
+  ReadInitialBoundaryConditions initialBoundaryConditionsReader;
+  initialBoundaryConditionsReader.readTemperatureField(
+      fvMesh, internalTemperatureField, boundaryTemperatureFields);
+
+  // Assemble the coefficient matrix and RHS vector
+  gko::matrix_data<ValueType, IndexType> coeffMatrix;
+  std::vector<ValueType> RHS(fvMesh.nElements(), 0.0);
+
+  AssembleDiffusionTerm diffusionTermAssembler;
+  diffusionTermAssembler.elementBasedAssemble(
+      fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
+      coeffMatrix, RHS);
+
+  std::vector<ValueType> solution(fvMesh.nElements(), 0.0);
+
+  // Set up parameters
+  const ValueType maxDiff = 1.0e-9;
+  const ValueType maxRelativeDiff = 1.0e-4;
+  const RealValueType reduction_factor{1e-7};
+  const IndexType maxNumIterations = 1000;
+
+  // --- Act ---
+  LinearSolver solver;
+  solver.solve(coeffMatrix, RHS, solution, reduction_factor, maxNumIterations);
+
+  // --- Assert ---
+  // Substitute the solution into the coefficient matrix and compare the result
+  // to the RHS
+  for (std::size_t i = 0; i < solution.size(); ++i) {
+    ValueType result = 0.0;
+    for (const auto &entry : coeffMatrix.nonzeros) {
+      if (entry.row == i) {
+        result += entry.value * solution[entry.column];
+      }
+    }
+    EXPECT_TRUE(ScalarAlmostEqual(result, RHS[i], maxDiff, maxRelativeDiff));
   }
 }
