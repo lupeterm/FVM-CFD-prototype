@@ -53,8 +53,8 @@ TEST(MeshFor2DHeatConductionTest, ConfirmElementOrdering) {
   const std::array<double, 3> expected_element3_centroid = {
       0.750000000000000, 0.750000000000000, 0.05};
 
-  const double maxDiff = 1.0e-12;
-  const double maxRelativeDiff = 1.0e-8;
+  const double absTol = 1.0e-12;
+  const double relTol = 1.0e-8;
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
@@ -62,17 +62,13 @@ TEST(MeshFor2DHeatConductionTest, ConfirmElementOrdering) {
   // --- Assert ---
   // Verify the centroids of all the four elements
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[0].centroid(),
-                                expected_element0_centroid, 3, maxDiff,
-                                maxRelativeDiff));
+                                expected_element0_centroid, 3, absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[1].centroid(),
-                                expected_element1_centroid, 3, maxDiff,
-                                maxRelativeDiff));
+                                expected_element1_centroid, 3, absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[2].centroid(),
-                                expected_element2_centroid, 3, maxDiff,
-                                maxRelativeDiff));
+                                expected_element2_centroid, 3, absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[3].centroid(),
-                                expected_element3_centroid, 3, maxDiff,
-                                maxRelativeDiff));
+                                expected_element3_centroid, 3, absTol, relTol));
 }
 
 TEST(InitialBoundaryConditionsTest, ReadBoundaryTemperatureField) {
@@ -197,8 +193,8 @@ TEST(DiffusionTermDiscretizationTest, Discretize2DHeatConductionOn2By2Mesh) {
        {-0.1, 0.0, 0.4, -0.1},
        {0.0, -0.1, -0.1, 0.4}}};
   const std::array<double, 4> expected_RHS = {74.6, 54.6, 74.6, 54.6};
-  const double maxDiff = 1.0e-12;
-  const double maxRelativeDiff = 1.0e-8;
+  const double absTol = 1.0e-12;
+  const double relTol = 1.0e-8;
 
   // --- Act & Assert for Matrix<double> ---
   {
@@ -213,16 +209,14 @@ TEST(DiffusionTermDiscretizationTest, Discretize2DHeatConductionOn2By2Mesh) {
     // Verify the coefficient matrix
     for (std::size_t i = 0; i < 4; ++i) {
       for (std::size_t j = 0; j < 4; ++j) {
-        EXPECT_TRUE(ScalarAlmostEqual(coeffMatrix(i, j),
-                                      expected_coeffMatrix[i][j], maxDiff,
-                                      maxRelativeDiff));
+        EXPECT_TRUE(ScalarAlmostEqual(
+            coeffMatrix(i, j), expected_coeffMatrix[i][j], absTol, relTol));
       }
     }
 
     // Verify the RHS vector
     for (std::size_t i = 0; i < 4; ++i) {
-      EXPECT_TRUE(
-          ScalarAlmostEqual(RHS[i], expected_RHS[i], maxDiff, maxRelativeDiff));
+      EXPECT_TRUE(ScalarAlmostEqual(RHS[i], expected_RHS[i], absTol, relTol));
     }
   }
 
@@ -246,15 +240,14 @@ TEST(DiffusionTermDiscretizationTest, Discretize2DHeatConductionOn2By2Mesh) {
             break;
           }
         }
-        EXPECT_TRUE(ScalarAlmostEqual(value, expected_coeffMatrix[i][j],
-                                      maxDiff, maxRelativeDiff));
+        EXPECT_TRUE(ScalarAlmostEqual(value, expected_coeffMatrix[i][j], absTol,
+                                      relTol));
       }
     }
 
     // Verify the RHS vector
     for (std::size_t i = 0; i < 4; ++i) {
-      EXPECT_TRUE(
-          ScalarAlmostEqual(RHS[i], expected_RHS[i], maxDiff, maxRelativeDiff));
+      EXPECT_TRUE(ScalarAlmostEqual(RHS[i], expected_RHS[i], absTol, relTol));
     }
   }
 }
@@ -292,8 +285,8 @@ TEST(DiffusionTermDiscretizationTest, Discretize2DHeatConductionOn3By3Mesh) {
 
   const std::array<double, 9> expected_RHS = {74.6, 0.0,  54.6, 74.6, 0.0,
                                               54.6, 74.6, 0.0,  54.6};
-  const double maxDiff = 1.0e-12;
-  const double maxRelativeDiff = 1.0e-8;
+  const double absTol = 1.0e-12;
+  const double relTol = 1.0e-8;
 
   // --- Act & Assert for Matrix<double> ---
   {
@@ -308,16 +301,14 @@ TEST(DiffusionTermDiscretizationTest, Discretize2DHeatConductionOn3By3Mesh) {
     // Verify the coefficient matrix
     for (std::size_t i = 0; i < 9; ++i) {
       for (std::size_t j = 0; j < 9; ++j) {
-        EXPECT_TRUE(ScalarAlmostEqual(coeffMatrix(i, j),
-                                      expected_coeffMatrix[i][j], maxDiff,
-                                      maxRelativeDiff));
+        EXPECT_TRUE(ScalarAlmostEqual(
+            coeffMatrix(i, j), expected_coeffMatrix[i][j], absTol, relTol));
       }
     }
 
     // Verify the RHS vector
     for (std::size_t i = 0; i < 9; ++i) {
-      EXPECT_TRUE(
-          ScalarAlmostEqual(RHS[i], expected_RHS[i], maxDiff, maxRelativeDiff));
+      EXPECT_TRUE(ScalarAlmostEqual(RHS[i], expected_RHS[i], absTol, relTol));
     }
   }
 
@@ -341,15 +332,14 @@ TEST(DiffusionTermDiscretizationTest, Discretize2DHeatConductionOn3By3Mesh) {
             break;
           }
         }
-        EXPECT_TRUE(ScalarAlmostEqual(value, expected_coeffMatrix[i][j],
-                                      maxDiff, maxRelativeDiff));
+        EXPECT_TRUE(ScalarAlmostEqual(value, expected_coeffMatrix[i][j], absTol,
+                                      relTol));
       }
     }
 
     // Verify the RHS vector
     for (std::size_t i = 0; i < 9; ++i) {
-      EXPECT_TRUE(
-          ScalarAlmostEqual(RHS[i], expected_RHS[i], maxDiff, maxRelativeDiff));
+      EXPECT_TRUE(ScalarAlmostEqual(RHS[i], expected_RHS[i], absTol, relTol));
     }
   }
 }
@@ -391,8 +381,8 @@ TEST(LinearSolverTest, Solve2DHeatConductionOn2By2Mesh) {
   std::vector<ValueType> solution(fvMesh.nElements(), 0.0);
 
   // Set up parameters
-  const ValueType maxDiff = 1.0e-12;
-  const ValueType maxRelativeDiff = 1.0e-8;
+  const ValueType absTol = 1.0e-12;
+  const ValueType relTol = 1.0e-8;
   const RealValueType reduction_factor{1e-7};
   const IndexType maxNumIterations = 1000;
 
@@ -402,8 +392,8 @@ TEST(LinearSolverTest, Solve2DHeatConductionOn2By2Mesh) {
 
   // --- Assert ---
   for (std::size_t i = 0; i < solution.size(); ++i) {
-    EXPECT_TRUE(ScalarAlmostEqual(solution[i], expectedSolution[i], maxDiff,
-                                  maxRelativeDiff));
+    EXPECT_TRUE(
+        ScalarAlmostEqual(solution[i], expectedSolution[i], absTol, relTol));
   }
 }
 
@@ -442,8 +432,8 @@ TEST(LinearSolverTest, Solve2DHeatConductionOn3By3Mesh) {
   std::vector<ValueType> solution(fvMesh.nElements(), 0.0);
 
   // Set up parameters
-  const ValueType maxDiff = 1.0e-12;
-  const ValueType maxRelativeDiff = 1.0e-8;
+  const ValueType absTol = 1.0e-12;
+  const ValueType relTol = 1.0e-8;
   const RealValueType reduction_factor{1e-7};
   const IndexType maxNumIterations = 1000;
 
@@ -461,6 +451,6 @@ TEST(LinearSolverTest, Solve2DHeatConductionOn3By3Mesh) {
         result += entry.value * solution[entry.column];
       }
     }
-    EXPECT_TRUE(ScalarAlmostEqual(result, RHS[i], maxDiff, maxRelativeDiff));
+    EXPECT_TRUE(ScalarAlmostEqual(result, RHS[i], absTol, relTol));
   }
 }

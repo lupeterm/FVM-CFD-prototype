@@ -20,13 +20,13 @@ VectorMatch(const T1 &actual, const T2 &expected, const std::size_t size) {
 
 inline bool AlmostEqualAbsAndRelative(const double &actualValue,
                                       const double &expectedValue,
-                                      const double maxDiff,
-                                      const double maxRelativeDiff) {
+                                      const double absTol,
+                                      const double relTol) {
 
   // Check if the numbers are really close when comparing not very small numbers
   // or comparing against zero
   double absDiff = std::fabs(actualValue - expectedValue);
-  if (absDiff <= maxDiff) {
+  if (absDiff <= absTol) {
     return true;
   }
 
@@ -35,7 +35,7 @@ inline bool AlmostEqualAbsAndRelative(const double &actualValue,
   auto expectedAbsValue = std::fabs(expectedValue);
   auto actualAbsValue = std::fabs(actualValue);
 
-  if (absDiff <= expectedAbsValue * maxRelativeDiff) {
+  if (absDiff <= expectedAbsValue * relTol) {
     return true;
   }
   return false;
@@ -44,10 +44,9 @@ inline bool AlmostEqualAbsAndRelative(const double &actualValue,
 template <typename T1, typename T2>
 inline ::testing::AssertionResult
 VectorAlmostEqual(const T1 &actual, const T2 &expected, const std::size_t size,
-                  const double maxDiff, const double maxRelativeDiff) {
+                  const double absTol, const double relTol) {
   for (std::size_t i = 0; i < size; ++i) {
-    if (!AlmostEqualAbsAndRelative(actual[i], expected[i], maxDiff,
-                                   maxRelativeDiff)) {
+    if (!AlmostEqualAbsAndRelative(actual[i], expected[i], absTol, relTol)) {
       return ::testing::AssertionFailure()
              << "actual[" << i << "] (" << actual[i] << ") != expected[" << i
              << "] (" << expected[i] << ")";
@@ -56,11 +55,12 @@ VectorAlmostEqual(const T1 &actual, const T2 &expected, const std::size_t size,
   return ::testing::AssertionSuccess();
 }
 
-inline ::testing::AssertionResult
-ScalarAlmostEqual(const double &actual, const double &expected,
-                  const double maxDiff, const double maxRelativeDiff) {
+inline ::testing::AssertionResult ScalarAlmostEqual(const double &actual,
+                                                    const double &expected,
+                                                    const double absTol,
+                                                    const double relTol) {
 
-  if (!AlmostEqualAbsAndRelative(actual, expected, maxDiff, maxRelativeDiff)) {
+  if (!AlmostEqualAbsAndRelative(actual, expected, absTol, relTol)) {
     return ::testing::AssertionFailure()
            << "actual (" << actual << ") != expected (" << expected << ")";
   }

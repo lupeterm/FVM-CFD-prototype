@@ -26,8 +26,8 @@ TEST(LinearSolverTest, Solve2x2Matrix) {
   std::vector<ValueType> expectedSolution = {1.0, 1.0}; // Expected solution
   std::vector<ValueType> solution(2, 0.0); // Solution vector initialized to 0
 
-  const ValueType maxDiff = 1.0e-12;
-  const ValueType maxRelativeDiff = 1.0e-8;
+  const ValueType absTol = 1.0e-12;
+  const ValueType relTol = 1.0e-8;
   const RealValueType reduction_factor{1e-7};
   const IndexType maxNumIterations = 1000;
 
@@ -37,8 +37,8 @@ TEST(LinearSolverTest, Solve2x2Matrix) {
 
   // --- Assert ---
   for (std::size_t i = 0; i < solution.size(); ++i) {
-    EXPECT_TRUE(ScalarAlmostEqual(solution[i], expectedSolution[i], maxDiff,
-                                  maxRelativeDiff));
+    EXPECT_TRUE(
+        ScalarAlmostEqual(solution[i], expectedSolution[i], absTol, relTol));
   }
 }
 
@@ -65,8 +65,8 @@ TEST(LinearSolverTest, Solve3x3Matrix) {
                                              2.5}; // Expected solution
   std::vector<ValueType> solution(3, 0.0); // Solution vector initialized to 0
 
-  const ValueType maxDiff = 1.0e-12;
-  const ValueType maxRelativeDiff = 1.0e-8;
+  const ValueType absTol = 1.0e-12;
+  const ValueType relTol = 1.0e-8;
   const RealValueType reduction_factor{1e-7};
   const IndexType maxNumIterations = 1000;
 
@@ -76,8 +76,8 @@ TEST(LinearSolverTest, Solve3x3Matrix) {
 
   // --- Assert ---
   for (std::size_t i = 0; i < solution.size(); ++i) {
-    EXPECT_TRUE(ScalarAlmostEqual(solution[i], expectedSolution[i], maxDiff,
-                                  maxRelativeDiff));
+    EXPECT_TRUE(
+        ScalarAlmostEqual(solution[i], expectedSolution[i], absTol, relTol));
   }
 }
 
@@ -106,8 +106,8 @@ TEST(LinearSolverTest, Solve4x4Matrix) {
                                              2.5}; // Expected solution
   std::vector<ValueType> solution(4, 0.0); // Solution vector initialized to 0
 
-  const ValueType maxDiff = 1.0e-12;
-  const ValueType maxRelativeDiff = 1.0e-8;
+  const ValueType absTol = 1.0e-12;
+  const ValueType relTol = 1.0e-8;
   const RealValueType reduction_factor{1e-7};
   const IndexType maxNumIterations = 1000;
 
@@ -117,7 +117,7 @@ TEST(LinearSolverTest, Solve4x4Matrix) {
 
   // --- Assert ---
   for (std::size_t i = 0; i < solution.size(); ++i) {
-    EXPECT_TRUE(ScalarAlmostEqual(solution[i], expectedSolution[i], maxDiff,
-                                  maxRelativeDiff));
+    EXPECT_TRUE(
+        ScalarAlmostEqual(solution[i], expectedSolution[i], absTol, relTol));
   }
 }
