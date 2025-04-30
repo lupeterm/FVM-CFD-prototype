@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <iostream>
 #include <limits>
+#include <regex> // For extracting boundaryField content
 
 void IO::getDirectory(Mesh &fvMesh) {
   std::cout << "Enter the case directory: ";
@@ -34,54 +35,52 @@ void IO::printVector(const std::vector<ValueType> &vec) {
 template void IO::printVector(const std::vector<double> &vec);
 
 // Function to write the solution vector to a file
+
 template <typename ValueType>
 void IO::writeSolutionToFile(const std::vector<ValueType> &solution,
                              const std::string &caseDirectory,
                              const std::string &timePoint,
                              const std::string &solutionFileName) {
-  // Construct the file path
-  std::string filePath =
+  // Construct the file paths
+  std::string sourceFilePath = caseDirectory + "/0/" + solutionFileName;
+  std::string targetFilePath =
       caseDirectory + "/" + timePoint + "/" + solutionFileName;
 
-  // Ensure the directory path exists
-  std::filesystem::path path(filePath);
-  std::filesystem::path directory = path.parent_path();
+  // Ensure the target directory exists
+  std::filesystem::path targetPath(targetFilePath);
+  std::filesystem::path targetDirectory = targetPath.parent_path();
 
-  if (!std::filesystem::exists(directory)) {
-    std::cout << "Directory does not exist. Creating directories: " << directory
-              << std::endl;
-    std::filesystem::create_directories(directory);
+  if (!std::filesystem::exists(targetDirectory)) {
+    std::cout << "Target directory does not exist. Creating directories: "
+              << targetDirectory << std::endl;
+    std::filesystem::create_directories(targetDirectory);
   }
 
-  // Check if the file exists
-  bool fileExists = std::filesystem::exists(filePath);
-
-  // If the file exists, notify the user
-  if (fileExists) {
-    std::cout << "File already exists. Overwriting: " << filePath << std::endl;
+  // Check if the target file exists and notify the user about the file status
+  if (std::filesystem::exists(targetFilePath)) {
+    std::cout << "File already exists. Overwriting: " << targetFilePath
+              << std::endl;
   } else {
-    std::cout << "File does not exist. Creating new file: " << filePath
+    std::cout << "File does not exist. Creating new file: " << targetFilePath
               << std::endl;
   }
 
-  // Open the file in write mode (creates the file if it doesn't exist)
-  std::ofstream outFile(filePath, std::ios::out);
+  // Open the target file in write mode (create if it doesn't exist)
+  std::ofstream outFile(targetFilePath, std::ios::out);
   if (!outFile.is_open()) {
-    throw std::ios_base::failure("Failed to open or create file: " + filePath);
+    throw std::ios_base::failure("Failed to open or create file: " +
+                                 targetFilePath);
   }
 
-  // Show a message indicating the file is being written
-  std::cout << "Writing solution to file: " << filePath << std::endl;
-
-  // Write the header (similar to the "T" file format)
+  // Write the header (similar to the OpenFOAM "T" file format)
   outFile
       << "FoamFile\n"
       << "{\n"
       << "    version     2.0;\n"
       << "    format      ascii;\n"
       << "    class       volScalarField;\n"
-      << "    location    \"" + timePoint + "\";\n"
-      << "    object      " + solutionFileName + ";\n"
+      << "    location    \"" << timePoint << "\";\n"
+      << "    object      " << solutionFileName << ";\n"
       << "}\n"
       << "// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //\n\n";
 
@@ -96,8 +95,35 @@ void IO::writeSolutionToFile(const std::vector<ValueType> &solution,
   }
   outFile << ");\n\n";
 
-  // Close the file
+  // Read the boundaryField entry from the source file
+  std::ifstream inFile(sourceFilePath);
+  if (!inFile.is_open()) {
+    throw std::ios_base::failure("Failed to open source file: " +
+                                 sourceFilePath);
+  }
+
+  std::string line;
+  bool boundaryFieldFound = false;
+
+  while (std::getline(inFile, line)) {
+    if (line.find("boundaryField") != std::string::npos) {
+      boundaryFieldFound = true;
+    }
+    if (boundaryFieldFound) {
+      outFile << line << "\n";
+    }
+  }
+
+  if (!boundaryFieldFound) {
+    throw std::runtime_error("boundaryField entry not found in source file: " +
+                             sourceFilePath);
+  }
+
+  // Close the files
+  inFile.close();
   outFile.close();
+
+  std::cout << "Solution written to file: " << targetFilePath << std::endl;
 }
 
 // Explicit template instantiation for commonly used types

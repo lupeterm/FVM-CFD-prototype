@@ -43,8 +43,6 @@ int main() {
   std::vector<ValueType> solution(fvMesh.nElements(), 0.0);
 
   // Set up parameters
-  //   const ValueType absTol = 1.0e-12;
-  //   const ValueType relTol = 1.0e-8;
   const RealValueType reduction_factor{1e-7};
   const IndexType maxNumIterations = 1000;
 
@@ -59,10 +57,7 @@ int main() {
   // Write the solution to a file
   std::string timePoint = "1";
   std::string solutionFileName = "T";
-  //   std::string outputFilePath = caseDirectory + "/" + timePoint + "/T";
-  //   IO::writeSolutionToFile(solution, outputFilePath);
   IO::writeSolutionToFile(solution, caseDirectory, timePoint, solutionFileName);
 
-  //   std::cout << "Solution written to file: " << outputFilePath << std::endl;
   return 0;
 }
