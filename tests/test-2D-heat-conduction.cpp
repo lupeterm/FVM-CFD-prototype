@@ -2,16 +2,18 @@
 
 #include "AssembleDiffusionTerm.hpp"
 #include "Field.hpp"
+#include "LinearSolver.hpp"
 #include "Matrix.hpp"
 #include "Mesh.hpp"
 #include "ReadInitialBoundaryConditions.hpp"
 #include "ReadMesh.hpp"
+#include "ginkgo/ginkgo.hpp"
 #include "utilitiesForTesting.hpp"
 #include <array>
 #include <string>
 
 // ****** Tests ******
-TEST(ReadingMeshFor2DHeatConductionTest, ReadingPointsWorks) {
+TEST(MeshFor2DHeatConductionTest, ReadPoints) {
   // --- Arrange ---
   std::string caseDirectory(
       "../../cases/heat-conduction/2D-heat-conduction-on-a-2-by-2-mesh");
@@ -35,7 +37,7 @@ TEST(ReadingMeshFor2DHeatConductionTest, ReadingPointsWorks) {
       VectorMatch(fvMesh.nodes()[1].centroid(), expected_node1_centroid, 3));
 }
 
-TEST(ReadingMeshFor2DHeatConductionTest, ConfirmingElementOrdering) {
+TEST(MeshFor2DHeatConductionTest, ConfirmElementOrdering) {
   // --- Arrange ---
   std::string caseDirectory(
       "../../cases/heat-conduction/2D-heat-conduction-on-a-2-by-2-mesh");
@@ -43,16 +45,16 @@ TEST(ReadingMeshFor2DHeatConductionTest, ConfirmingElementOrdering) {
   ReadMesh meshReader;
 
   const std::array<double, 3> expected_element0_centroid = {
-      0.250000000000000, 0.250000000000000, 0.500000000000000};
+      0.250000000000000, 0.250000000000000, 0.05};
   const std::array<double, 3> expected_element1_centroid = {
-      0.750000000000000, 0.250000000000000, 0.500000000000000};
+      0.750000000000000, 0.250000000000000, 0.05};
   const std::array<double, 3> expected_element2_centroid = {
-      0.250000000000000, 0.750000000000000, 0.500000000000000};
+      0.250000000000000, 0.750000000000000, 0.05};
   const std::array<double, 3> expected_element3_centroid = {
-      0.750000000000000, 0.750000000000000, 0.500000000000000};
+      0.750000000000000, 0.750000000000000, 0.05};
 
-  const double maxDiff = 1.0e-9;
-  const double maxRelativeDiff = 1.0e-4;
+  const double absTol = 1.0e-12;
+  const double relTol = 1.0e-8;
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
@@ -60,20 +62,16 @@ TEST(ReadingMeshFor2DHeatConductionTest, ConfirmingElementOrdering) {
   // --- Assert ---
   // Verify the centroids of all the four elements
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[0].centroid(),
-                                expected_element0_centroid, 3, maxDiff,
-                                maxRelativeDiff));
+                                expected_element0_centroid, 3, absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[1].centroid(),
-                                expected_element1_centroid, 3, maxDiff,
-                                maxRelativeDiff));
+                                expected_element1_centroid, 3, absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[2].centroid(),
-                                expected_element2_centroid, 3, maxDiff,
-                                maxRelativeDiff));
+                                expected_element2_centroid, 3, absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[3].centroid(),
-                                expected_element3_centroid, 3, maxDiff,
-                                maxRelativeDiff));
+                                expected_element3_centroid, 3, absTol, relTol));
 }
 
-TEST(ReadInitialBoundaryConditionsTest, ReadingBoundaryTemperatureFieldWorks) {
+TEST(InitialBoundaryConditionsTest, ReadBoundaryTemperatureField) {
 
   // --- Arrange ---
   std::string caseDirectory(
@@ -140,7 +138,7 @@ TEST(ReadInitialBoundaryConditionsTest, ReadingBoundaryTemperatureFieldWorks) {
   EXPECT_EQ(boundaryTemperatureFields[4].size(), expected_boundary_nFaces[4]);
 }
 
-TEST(SortBoundaryFacesFromInteriorFacesTest, LabelingBoundaryFacesWorks) {
+TEST(MeshFor2DHeatConductionTest, LabelBoundaryFaces) {
   // --- Arrange ---
   std::string caseDirectory(
       "../../cases/heat-conduction/2D-heat-conduction-on-a-2-by-2-mesh");
@@ -169,8 +167,7 @@ TEST(SortBoundaryFacesFromInteriorFacesTest, LabelingBoundaryFacesWorks) {
   EXPECT_EQ(fvMesh.faces()[19].patchIndex(), 4);
 }
 
-TEST(DiscretizingDiffusionTermTest,
-     Discretizing2DHeatConductionOn2By2MeshWorks) {
+TEST(DiffusionTermDiscretizationTest, Discretize2DHeatConductionOn2By2Mesh) {
   // --- Arrange ---
   std::string caseDirectory(
       "../../cases/heat-conduction/2D-heat-conduction-on-a-2-by-2-mesh");
@@ -189,50 +186,73 @@ TEST(DiscretizingDiffusionTermTest,
   initialBoundaryConditionsReader.readTemperatureField(
       fvMesh, internalTemperatureField, boundaryTemperatureFields);
 
-  // Define the coefficient matrix and RHS vector
-  Matrix<double> coeffMatrix(fvMesh.nElements(), fvMesh.nElements());
-  std::vector<double> RHS(fvMesh.nElements(), 0.0);
-
   // Set up expected values for the coefficient matrix and RHS vector
-  // The expected coefficient matrix is:
-  // |  4.0 -1.0 -1.0  0.0 |
-  // | -1.0  4.0  0.0 -1.0 |
-  // | -1.0  0.0  4.0 -1.0 |
-  // |  0.0 -1.0 -1.0  4.0 |
   const std::array<std::array<double, 4>, 4> expected_coeffMatrix = {
-      {{4.0, -1.0, -1.0, 0.0},
-       {-1.0, 4.0, 0.0, -1.0},
-       {-1.0, 0.0, 4.0, -1.0},
-       {0.0, -1.0, -1.0, 4.0}}};
-  const std::array<double, 4> expected_RHS = {746.0, 546.0, 746.0, 546.0};
-  const double maxDiff = 1.0e-9;
-  const double maxRelativeDiff = 1.0e-4;
+      {{0.4, -0.1, -0.1, 0.0},
+       {-0.1, 0.4, 0.0, -0.1},
+       {-0.1, 0.0, 0.4, -0.1},
+       {0.0, -0.1, -0.1, 0.4}}};
+  const std::array<double, 4> expected_RHS = {74.6, 54.6, 74.6, 54.6};
+  const double absTol = 1.0e-12;
+  const double relTol = 1.0e-8;
 
-  // --- Act ---
-  AssembleDiffusionTerm diffusionTermAssembler;
-  diffusionTermAssembler.elementBasedAssemble(
-      fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
-      coeffMatrix, RHS);
+  // --- Act & Assert for Matrix<double> ---
+  {
+    Matrix<double> coeffMatrix(fvMesh.nElements(), fvMesh.nElements());
+    std::vector<double> RHS(fvMesh.nElements(), 0.0);
 
-  // --- Assert ---
-  // Verify the coefficient matrix
-  for (std::size_t i = 0; i < 4; ++i) {
-    for (std::size_t j = 0; j < 4; ++j) {
-      EXPECT_TRUE(ScalarAlmostEqual(coeffMatrix(i, j),
-                                    expected_coeffMatrix[i][j], maxDiff,
-                                    maxRelativeDiff));
+    AssembleDiffusionTerm diffusionTermAssembler;
+    diffusionTermAssembler.elementBasedAssemble(
+        fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
+        coeffMatrix, RHS);
+
+    // Verify the coefficient matrix
+    for (std::size_t i = 0; i < 4; ++i) {
+      for (std::size_t j = 0; j < 4; ++j) {
+        EXPECT_TRUE(ScalarAlmostEqual(
+            coeffMatrix(i, j), expected_coeffMatrix[i][j], absTol, relTol));
+      }
+    }
+
+    // Verify the RHS vector
+    for (std::size_t i = 0; i < 4; ++i) {
+      EXPECT_TRUE(ScalarAlmostEqual(RHS[i], expected_RHS[i], absTol, relTol));
     }
   }
 
-  // Verify the RHS vector
-  for (std::size_t i = 0; i < 4; ++i) {
-    EXPECT_TRUE(
-        ScalarAlmostEqual(RHS[i], expected_RHS[i], maxDiff, maxRelativeDiff));
+  // --- Act & Assert for gko::matrix_data ---
+  {
+    gko::matrix_data<double, int> coeffMatrix;
+    std::vector<double> RHS(fvMesh.nElements(), 0.0);
+
+    AssembleDiffusionTerm diffusionTermAssembler;
+    diffusionTermAssembler.elementBasedAssemble(
+        fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
+        coeffMatrix, RHS);
+
+    // Verify the coefficient matrix
+    for (std::size_t i = 0; i < 4; ++i) {
+      for (std::size_t j = 0; j < 4; ++j) {
+        double value = 0.0;
+        for (const auto &entry : coeffMatrix.nonzeros) {
+          if (entry.row == i && entry.column == j) {
+            value = entry.value;
+            break;
+          }
+        }
+        EXPECT_TRUE(ScalarAlmostEqual(value, expected_coeffMatrix[i][j], absTol,
+                                      relTol));
+      }
+    }
+
+    // Verify the RHS vector
+    for (std::size_t i = 0; i < 4; ++i) {
+      EXPECT_TRUE(ScalarAlmostEqual(RHS[i], expected_RHS[i], absTol, relTol));
+    }
   }
 }
 
-TEST(DiscretizingDiffusionTermTest,
-     Discretizing2DHeatConductionOn3By3MeshWorks) {
+TEST(DiffusionTermDiscretizationTest, Discretize2DHeatConductionOn3By3Mesh) {
   // --- Arrange ---
   std::string caseDirectory(
       "../../cases/heat-conduction/2D-heat-conduction-on-a-3-by-3-mesh");
@@ -251,45 +271,186 @@ TEST(DiscretizingDiffusionTermTest,
   initialBoundaryConditionsReader.readTemperatureField(
       fvMesh, internalTemperatureField, boundaryTemperatureFields);
 
-  // Define the coefficient matrix and RHS vector
-  Matrix<double> coeffMatrix(fvMesh.nElements(), fvMesh.nElements());
-  std::vector<double> RHS(fvMesh.nElements(), 0.0);
-
-  // Set up expected values for the coefficient matrix and RHS vector
+  // Define the expected coefficient matrix and RHS vector
   const std::array<std::array<double, 9>, 9> expected_coeffMatrix = {
-      {{4.0, -1.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0},
-       {-1.0, 3.0, -1.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0},
-       {0.0, -1.0, 4.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0},
-       {-1.0, 0.0, 0.0, 5.0, -1.0, 0.0, -1.0, 0.0, 0.0},
-       {0.0, -1.0, 0.0, -1.0, 4.0, -1.0, 0.0, -1.0, 0.0},
-       {0.0, 0.0, -1.0, 0.0, -1.0, 5.0, 0.0, 0.0, -1.0},
-       {0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 4.0, -1.0, 0.0},
-       {0.0, 0.0, 0.0, 0.0, -1.0, 0.0, -1.0, 3.0, -1.0},
-       {0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, -1.0, 4.0}}};
+      {{0.4, -0.1, 0.0, -0.1, 0.0, 0.0, 0.0, 0.0, 0.0},
+       {-0.1, 0.3, -0.1, 0.0, -0.1, 0.0, 0.0, 0.0, 0.0},
+       {0.0, -0.1, 0.4, 0.0, 0.0, -0.1, 0.0, 0.0, 0.0},
+       {-0.1, 0.0, 0.0, 0.5, -0.1, 0.0, -0.1, 0.0, 0.0},
+       {0.0, -0.1, 0.0, -0.1, 0.4, -0.1, 0.0, -0.1, 0.0},
+       {0.0, 0.0, -0.1, 0.0, -0.1, 0.5, 0.0, 0.0, -0.1},
+       {0.0, 0.0, 0.0, -0.1, 0.0, 0.0, 0.4, -0.1, 0.0},
+       {0.0, 0.0, 0.0, 0.0, -0.1, 0.0, -0.1, 0.3, -0.1},
+       {0.0, 0.0, 0.0, 0.0, 0.0, -0.1, 0.0, -0.1, 0.4}}};
 
-  const std::array<double, 9> expected_RHS = {746.0, 0.0,   546.0, 746.0, 0.0,
-                                              546.0, 746.0, 0.0,   546.0};
-  const double maxDiff = 1.0e-9;
-  const double maxRelativeDiff = 1.0e-4;
+  const std::array<double, 9> expected_RHS = {74.6, 0.0,  54.6, 74.6, 0.0,
+                                              54.6, 74.6, 0.0,  54.6};
+  const double absTol = 1.0e-12;
+  const double relTol = 1.0e-8;
 
-  // --- Act ---
+  // --- Act & Assert for Matrix<double> ---
+  {
+    Matrix<double> coeffMatrix(fvMesh.nElements(), fvMesh.nElements());
+    std::vector<double> RHS(fvMesh.nElements(), 0.0);
+
+    AssembleDiffusionTerm diffusionTermAssembler;
+    diffusionTermAssembler.elementBasedAssemble(
+        fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
+        coeffMatrix, RHS);
+
+    // Verify the coefficient matrix
+    for (std::size_t i = 0; i < 9; ++i) {
+      for (std::size_t j = 0; j < 9; ++j) {
+        EXPECT_TRUE(ScalarAlmostEqual(
+            coeffMatrix(i, j), expected_coeffMatrix[i][j], absTol, relTol));
+      }
+    }
+
+    // Verify the RHS vector
+    for (std::size_t i = 0; i < 9; ++i) {
+      EXPECT_TRUE(ScalarAlmostEqual(RHS[i], expected_RHS[i], absTol, relTol));
+    }
+  }
+
+  // --- Act & Assert for gko::matrix_data ---
+  {
+    gko::matrix_data<double, int> coeffMatrix;
+    std::vector<double> RHS(fvMesh.nElements(), 0.0);
+
+    AssembleDiffusionTerm diffusionTermAssembler;
+    diffusionTermAssembler.elementBasedAssemble(
+        fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
+        coeffMatrix, RHS);
+
+    // Verify the coefficient matrix
+    for (std::size_t i = 0; i < 9; ++i) {
+      for (std::size_t j = 0; j < 9; ++j) {
+        double value = 0.0;
+        for (const auto &entry : coeffMatrix.nonzeros) {
+          if (entry.row == i && entry.column == j) {
+            value = entry.value;
+            break;
+          }
+        }
+        EXPECT_TRUE(ScalarAlmostEqual(value, expected_coeffMatrix[i][j], absTol,
+                                      relTol));
+      }
+    }
+
+    // Verify the RHS vector
+    for (std::size_t i = 0; i < 9; ++i) {
+      EXPECT_TRUE(ScalarAlmostEqual(RHS[i], expected_RHS[i], absTol, relTol));
+    }
+  }
+}
+
+TEST(LinearSolverTest, Solve2DHeatConductionOn2By2Mesh) {
+  // --- Arrange ---
+  std::string caseDirectory(
+      "../../cases/heat-conduction/2D-heat-conduction-on-a-2-by-2-mesh");
+  Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
+  meshReader.readOpenFoamMesh(fvMesh);
+
+  using ValueType = double;
+  using IndexType = int;
+  using RealValueType = gko::remove_complex<ValueType>;
+
+  // Define the thermal conductivity and source term
+  std::vector<ValueType> thermalConductivity(fvMesh.nFaces(), 1.0);
+  std::vector<ValueType> heatSource(fvMesh.nElements(), 0.0);
+
+  // Read initial condition and boundary conditions
+  Field<ValueType> internalTemperatureField(fvMesh.nElements());
+  std::vector<boundaryField<ValueType>> boundaryTemperatureFields;
+  ReadInitialBoundaryConditions initialBoundaryConditionsReader;
+  initialBoundaryConditionsReader.readTemperatureField(
+      fvMesh, internalTemperatureField, boundaryTemperatureFields);
+
+  // Assemble the coefficient matrix and RHS vector
+  gko::matrix_data<ValueType, IndexType> coeffMatrix;
+  std::vector<ValueType> RHS(fvMesh.nElements(), 0.0);
+
   AssembleDiffusionTerm diffusionTermAssembler;
   diffusionTermAssembler.elementBasedAssemble(
       fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
       coeffMatrix, RHS);
 
+  // Expected solution vector
+  const std::vector<ValueType> expectedSolution = {348.0, 298.0, 348.0, 298.0};
+  std::vector<ValueType> solution(fvMesh.nElements(), 0.0);
+
+  // Set up parameters
+  const ValueType absTol = 1.0e-12;
+  const ValueType relTol = 1.0e-8;
+  const RealValueType reduction_factor{1e-7};
+  const IndexType maxNumIterations = 1000;
+
+  // --- Act ---
+  LinearSolver solver;
+  solver.solve(coeffMatrix, RHS, solution, reduction_factor, maxNumIterations);
+
   // --- Assert ---
-  // Verify the coefficient matrix
-  for (std::size_t i = 0; i < 9; ++i) {
-    for (std::size_t j = 0; j < 9; ++j) {
-      EXPECT_TRUE(ScalarAlmostEqual(coeffMatrix(i, j),
-                                    expected_coeffMatrix[i][j], maxDiff,
-                                    maxRelativeDiff));
-    }
-  }
-  // Verify the RHS vector
-  for (std::size_t i = 0; i < 9; ++i) {
+  for (std::size_t i = 0; i < solution.size(); ++i) {
     EXPECT_TRUE(
-        ScalarAlmostEqual(RHS[i], expected_RHS[i], maxDiff, maxRelativeDiff));
+        ScalarAlmostEqual(solution[i], expectedSolution[i], absTol, relTol));
+  }
+}
+
+TEST(LinearSolverTest, Solve2DHeatConductionOn3By3Mesh) {
+  // --- Arrange ---
+  std::string caseDirectory(
+      "../../cases/heat-conduction/2D-heat-conduction-on-a-3-by-3-mesh");
+  Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
+  meshReader.readOpenFoamMesh(fvMesh);
+
+  using ValueType = double;
+  using IndexType = int;
+  using RealValueType = gko::remove_complex<ValueType>;
+
+  // Define the thermal conductivity and source term
+  std::vector<ValueType> thermalConductivity(fvMesh.nFaces(), 1.0);
+  std::vector<ValueType> heatSource(fvMesh.nElements(), 0.0);
+
+  // Read initial condition and boundary conditions
+  Field<ValueType> internalTemperatureField(fvMesh.nElements());
+  std::vector<boundaryField<ValueType>> boundaryTemperatureFields;
+  ReadInitialBoundaryConditions initialBoundaryConditionsReader;
+  initialBoundaryConditionsReader.readTemperatureField(
+      fvMesh, internalTemperatureField, boundaryTemperatureFields);
+
+  // Assemble the coefficient matrix and RHS vector
+  gko::matrix_data<ValueType, IndexType> coeffMatrix;
+  std::vector<ValueType> RHS(fvMesh.nElements(), 0.0);
+
+  AssembleDiffusionTerm diffusionTermAssembler;
+  diffusionTermAssembler.elementBasedAssemble(
+      fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
+      coeffMatrix, RHS);
+
+  std::vector<ValueType> solution(fvMesh.nElements(), 0.0);
+
+  // Set up parameters
+  const ValueType absTol = 1.0e-12;
+  const ValueType relTol = 1.0e-8;
+  const RealValueType reduction_factor{1e-7};
+  const IndexType maxNumIterations = 1000;
+
+  // --- Act ---
+  LinearSolver solver;
+  solver.solve(coeffMatrix, RHS, solution, reduction_factor, maxNumIterations);
+
+  // --- Assert ---
+  // Substitute the solution into the coefficient matrix and compare the result
+  // to the RHS
+  for (std::size_t i = 0; i < solution.size(); ++i) {
+    ValueType result = 0.0;
+    for (const auto &entry : coeffMatrix.nonzeros) {
+      if (entry.row == i) {
+        result += entry.value * solution[entry.column];
+      }
+    }
+    EXPECT_TRUE(ScalarAlmostEqual(result, RHS[i], absTol, relTol));
   }
 }

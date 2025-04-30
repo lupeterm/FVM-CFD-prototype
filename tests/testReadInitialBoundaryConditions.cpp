@@ -8,7 +8,7 @@
 #include <string>
 
 // ****** Tests ******
-TEST(ReadInitialConditionTest, ReadingInternalVelocityFieldWorks) {
+TEST(ReadInitialConditionTest, ReadInternalVelocity) {
 
   // --- Arrange ---
   std::string caseDirectory("../../cases/testReadInitialBoundaryConditions");
@@ -49,7 +49,7 @@ TEST(ReadInitialConditionTest, ReadingInternalVelocityFieldWorks) {
                           expected_internal_velocity_field, 3));
 }
 
-TEST(ReadBoundaryConditionsTest, ReadingBoundaryVelocityFieldWorks) {
+TEST(ReadBoundaryConditionsTest, ReadBoundaryVelocity) {
 
   // --- Arrange ---
   std::string caseDirectory("../../cases/testReadInitialBoundaryConditions");
@@ -119,7 +119,7 @@ TEST(ReadBoundaryConditionsTest, ReadingBoundaryVelocityFieldWorks) {
   EXPECT_EQ(boundaryVelocityFields[2].size(), expected_boundary_nFaces[2]);
 }
 
-TEST(ReadInitialConditionTest, ReadingInternalTemperatureFieldWorks) {
+TEST(ReadInitialConditionTest, ReadInternalTemperature) {
 
   // --- Arrange ---
   std::string caseDirectory("../../cases/testReadInitialBoundaryConditions");
@@ -158,7 +158,7 @@ TEST(ReadInitialConditionTest, ReadingInternalTemperatureFieldWorks) {
             expected_internal_temperature_field);
 }
 
-TEST(ReadBoundaryConditionsTest, ReadingBoundaryTemperatureFieldWorks) {
+TEST(ReadBoundaryConditionsTest, ReadBoundaryTemperature) {
 
   // --- Arrange ---
   std::string caseDirectory("../../cases/testReadInitialBoundaryConditions");
@@ -216,7 +216,7 @@ TEST(ReadBoundaryConditionsTest, ReadingBoundaryTemperatureFieldWorks) {
 }
 
 // *** A case with custom initial and boundary conditions ***
-TEST(ReadCustomInitialConditionTest, ReadingInternalTemperatureFieldWorks) {
+TEST(ReadCustomInitialConditionTest, ReadInternalTemperature) {
 
   // --- Arrange ---
   std::string caseDirectory(
@@ -256,8 +256,7 @@ TEST(ReadCustomInitialConditionTest, ReadingInternalTemperatureFieldWorks) {
             expected_internal_temperature_field);
 }
 
-TEST(ReadCustomInitialBoundaryConditionsTest,
-     ReadingBoundaryTemperatureFieldWorks) {
+TEST(ReadCustomBoundaryConditionsTest, ReadBoundaryTemperature) {
 
   // --- Arrange ---
   std::string caseDirectory(

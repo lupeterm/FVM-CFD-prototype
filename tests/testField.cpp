@@ -7,7 +7,7 @@
 #include <string>
 
 // ****** Tests ******
-TEST(FieldTest, SettingScalarVolFieldWorks) {
+TEST(FieldTest, SetScalarVolField) {
 
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
@@ -36,7 +36,7 @@ TEST(FieldTest, SettingScalarVolFieldWorks) {
   EXPECT_EQ(elementScalarField.values()[399], expected_element_scalar_field);
 }
 
-TEST(FieldTest, SettingVectorVolFieldWorks) {
+TEST(FieldTest, SetVectorVolField) {
 
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
@@ -71,7 +71,7 @@ TEST(FieldTest, SettingVectorVolFieldWorks) {
                           expected_element_vector_field, 3));
 }
 
-TEST(FieldTest, UsingDefaultVectorVolFieldWorks) {
+TEST(FieldTest, UseDefaultVectorVolField) {
 
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");

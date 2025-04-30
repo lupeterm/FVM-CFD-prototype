@@ -9,12 +9,12 @@ class AssembleDiffusionTerm {
 public:
   // Assemble the diffusion term on a Cartesian orthogonal mesh by looping over
   // the elements (cells)
+  template <typename MatrixType>
   void elementBasedAssemble(Mesh &fvMesh,
                             const std::vector<double> diffusionCoef,
                             const std::vector<double> &source,
                             std::vector<boundaryField<double>> &boundaryFields,
-                            Matrix<double> &coeffMatrix,
-                            std::vector<double> &RHS);
+                            MatrixType &coeffMatrix, std::vector<double> &RHS);
 
   // Assemble the diffusion term on a Cartesian orthogonal mesh by looping over
   // the faces

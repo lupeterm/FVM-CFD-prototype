@@ -1,12 +1,14 @@
 #include "AssembleDiffusionTerm.hpp"
 #include "Field.hpp"
+#include "ginkgo/ginkgo.hpp"
 #include <cstddef>
 
+template <typename MatrixType>
 void AssembleDiffusionTerm::elementBasedAssemble(
     Mesh &fvMesh, const std::vector<double> diffusionCoef,
     const std::vector<double> &source,
-    std::vector<boundaryField<double>> &boundaryFields,
-    Matrix<double> &coeffMatrix, std::vector<double> &RHS) {
+    std::vector<boundaryField<double>> &boundaryFields, MatrixType &coeffMatrix,
+    std::vector<double> &RHS) {
 
   const std::size_t nElements = fvMesh.nElements();
 
@@ -38,7 +40,21 @@ void AssembleDiffusionTerm::elementBasedAssemble(
         FluxFn = -FluxCn;
 
         // Compute the coefficient matrix
-        coeffMatrix(iElement, theElement.iNeighbors()[iFace]) = FluxFn;
+        if constexpr (std::is_same_v<MatrixType, Matrix<double>>) {
+          coeffMatrix(iElement, theElement.iNeighbors()[iFace]) = FluxFn;
+        } else if constexpr (std::is_same_v<MatrixType,
+                                            gko::matrix_data<double, int>>) {
+          coeffMatrix.size = {fvMesh.nElements(), fvMesh.nElements()};
+          coeffMatrix.nonzeros.emplace_back(
+              iElement, theElement.iNeighbors()[iFace], FluxFn);
+        } else {
+          static_assert(
+              std::is_same_v<MatrixType, Matrix<double>> ||
+                  std::is_same_v<MatrixType, gko::matrix_data<double, int>>,
+              "Unsupported MatrixType. Must be either Matrix<double> or "
+              " gko::matrix_data<double, int>.");
+        }
+        // coeffMatrix(iElement, theElement.iNeighbors()[iFace]) = FluxFn;
         diag += FluxCn;
 
       } else { // If it is a boundary face
@@ -74,9 +90,27 @@ void AssembleDiffusionTerm::elementBasedAssemble(
         // }
       }
     }
-    // Update the diagonal entry of the coefficient matrix in COO format
-    coeffMatrix(iElement, iElement) = diag;
+
+    // Set the diagonal entry of the coefficient matrix
+    if constexpr (std::is_same_v<MatrixType, Matrix<double>>) {
+      coeffMatrix(iElement, iElement) = diag;
+    } else if constexpr (std::is_same_v<MatrixType,
+                                        gko::matrix_data<double, int>>) {
+      coeffMatrix.nonzeros.emplace_back(iElement, iElement, diag);
+    }
   }
 }
+
+template void AssembleDiffusionTerm::elementBasedAssemble(
+    Mesh &fvMesh, const std::vector<double> diffusionCoef,
+    const std::vector<double> &source,
+    std::vector<boundaryField<double>> &boundaryFields,
+    Matrix<double> &coeffMatrix, std::vector<double> &RHS);
+
+template void AssembleDiffusionTerm::elementBasedAssemble(
+    Mesh &fvMesh, const std::vector<double> diffusionCoef,
+    const std::vector<double> &source,
+    std::vector<boundaryField<double>> &boundaryFields,
+    gko::matrix_data<double, int> &coeffMatrix, std::vector<double> &RHS);
 
 //   void AssembleDiffusionTerm::faceBasedAssemble() {}
