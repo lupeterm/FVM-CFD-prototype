@@ -171,7 +171,7 @@ TEST(MeshFor2DHeatConductionTest, LabelBoundaryFaces) {
   EXPECT_EQ(fvMesh.faces()[19].patchIndex(), 4);
 }
 
-TEST(DiscretizingDiffusionTermTest, Discretize2DHeatConductionOn2By2Mesh) {
+TEST(DiffusionTermDiscretizationTest, Discretize2DHeatConductionOn2By2Mesh) {
   // --- Arrange ---
   std::string caseDirectory(
       "../../cases/heat-conduction/2D-heat-conduction-on-a-2-by-2-mesh");
@@ -265,7 +265,7 @@ TEST(DiscretizingDiffusionTermTest, Discretize2DHeatConductionOn2By2Mesh) {
   }
 }
 
-TEST(DiscretizingDiffusionTermTest, Discretize2DHeatConductionOn3By3Mesh) {
+TEST(DiffusionTermDiscretizationTest, Discretize2DHeatConductionOn3By3Mesh) {
   // --- Arrange ---
   std::string caseDirectory(
       "../../cases/heat-conduction/2D-heat-conduction-on-a-3-by-3-mesh");
