@@ -23,7 +23,6 @@ void IO::discardLines(std::ifstream &file, const std::size_t nLines) {
   }
 }
 
-// Print out the contents of a vector
 template <typename ValueType>
 void IO::printVector(const std::vector<ValueType> &vec) {
   for (const auto &elem : vec) {
@@ -33,8 +32,6 @@ void IO::printVector(const std::vector<ValueType> &vec) {
 
 // Explicit template instantiation for commonly used types
 template void IO::printVector(const std::vector<double> &vec);
-
-// Function to write the solution vector to a file
 
 template <typename ValueType>
 void IO::writeSolutionToFile(const std::vector<ValueType> &solution,
@@ -131,3 +128,21 @@ template void IO::writeSolutionToFile(const std::vector<double> &solution,
                                       const std::string &caseDirectory,
                                       const std::string &timePoint,
                                       const std::string &solutionFileName);
+
+void IO::createFoamFile(const std::string &caseDirectory) {
+  std::string foamFilePath = caseDirectory + "/test.foam";
+
+  // Check if the file exists
+  if (std::filesystem::exists(foamFilePath)) {
+    std::cout << "test.foam File already exists: " << foamFilePath << std::endl;
+  } else {
+    // Create the file
+    std::ofstream foamFile(foamFilePath);
+    if (!foamFile.is_open()) {
+      throw std::ios_base::failure("Failed to create test.foam file: " +
+                                   foamFilePath);
+    }
+    foamFile.close();
+    std::cout << "test.foam File created: " << foamFilePath << std::endl;
+  }
+}

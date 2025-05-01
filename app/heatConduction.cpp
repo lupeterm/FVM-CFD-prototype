@@ -8,10 +8,14 @@
 #include "ReadMesh.hpp"
 #include "ginkgo/ginkgo.hpp"
 
-int main() {
-  // Read the mesh from the OpenFOAM case directory
-  std::string caseDirectory(
-      "../../cases/heat-conduction/2D-heat-conduction-on-a-2-by-2-mesh");
+int main(int argc, char *argv[]) {
+  // Check for command-line arguments
+  if (argc < 2) {
+    std::cerr << "Usage: " << argv[0] << " <caseDirectory>" << std::endl;
+    return 1;
+  }
+
+  std::string caseDirectory(argv[1]);
   Mesh fvMesh(caseDirectory);
   ReadMesh meshReader;
   meshReader.readOpenFoamMesh(fvMesh);
@@ -59,5 +63,7 @@ int main() {
   std::string solutionFileName = "T";
   IO::writeSolutionToFile(solution, caseDirectory, timePoint, solutionFileName);
 
+  // Create a .foam file for visualization in ParaView
+  IO::createFoamFile(caseDirectory);
   return 0;
 }

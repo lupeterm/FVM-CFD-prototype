@@ -1,7 +1,9 @@
 #include "ReadMesh.hpp"
 #include "IO.hpp"
 #include <algorithm>
+#include <filesystem>
 #include <fstream>
+#include <iostream>
 #include <limits>
 
 using namespace std::string_literals;
@@ -10,6 +12,15 @@ void ReadMesh::readOpenFoamMesh(Mesh &fvMesh) {
   if (fvMesh.caseDir().empty()) {
     IO::getDirectory(fvMesh);
   }
+
+  // Check if the case directory exists
+  if (!std::filesystem::exists(fvMesh.caseDir())) {
+    throw std::runtime_error("Error: Case directory '" + fvMesh.caseDir() +
+                             "' does not exist.");
+  }
+  std::cout << "Reading OpenFOAM mesh files from case directory: "
+            << fvMesh.caseDir() << std::endl;
+
   readPointsFile(fvMesh);
   readFacesFile(fvMesh);
   readOwnersFile(fvMesh);
