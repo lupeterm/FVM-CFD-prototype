@@ -4,6 +4,7 @@
 #include "LinearSolver.hpp"
 #include "Matrix.hpp"
 #include "Mesh.hpp"
+#include "PostProcessing.hpp"
 #include "ReadInitialBoundaryConditions.hpp"
 #include "ReadMesh.hpp"
 #include "ginkgo/ginkgo.hpp"
@@ -72,5 +73,23 @@ int main(int argc, char *argv[]) {
 
   // Create a .foam file for visualization in ParaView
   IO::createFoamFile(caseDirectory);
+
+  // Write the x coordinate of each element and the corresponding internal
+  // temperature field to a file for plotting
+  std::cout << "Writing results to results.txt for plotting..." << std::endl;
+  std::ofstream outputFile(caseDirectory + "/results.txt");
+  if (!outputFile) {
+    std::cerr << "Error opening file for writing results." << std::endl;
+    return 1;
+  }
+  outputFile << "x_coordinate temperature" << std::endl;
+  for (std::size_t i = 0; i < fvMesh.nElements(); ++i) {
+    outputFile << fvMesh.elements()[i].centroid()[0] << " "
+               << internalTemperatureField.values()[i] << std::endl;
+  }
+  outputFile.close();
+  std::cout << "Results written to " << caseDirectory + "/results.txt"
+            << std::endl;
+  std::cout << "Simulation completed successfully." << std::endl;
   return 0;
 }

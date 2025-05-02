@@ -9,6 +9,7 @@ add_library(
     Matrix.cpp
     AssembleDiffusionTerm.cpp
     LinearSolver.cpp
+    PostProcessing.cpp
 )
 
 target_include_directories(

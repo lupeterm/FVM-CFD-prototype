@@ -132,6 +132,9 @@ template void IO::writeResultToFile(const std::vector<double> &result,
 void IO::createFoamFile(const std::string &caseDirectory) {
   std::string foamFilePath = caseDirectory + "/test.foam";
 
+  std::cout << "Creating test.foam file for visualization in ParaView..."
+            << std::endl;
+
   // Check if the file exists
   if (std::filesystem::exists(foamFilePath)) {
     std::cout << "test.foam File already exists: " << foamFilePath << std::endl;
