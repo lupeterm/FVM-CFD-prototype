@@ -1,2 +1,4 @@
 build
 cases/heat-conduction/*/*.foam
+cases/heat-conduction/*/constant/polyMesh
+cases/heat-conduction/*/constant/polyMesh/*
