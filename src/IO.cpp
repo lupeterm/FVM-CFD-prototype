@@ -34,14 +34,14 @@ void IO::printVector(const std::vector<ValueType> &vec) {
 template void IO::printVector(const std::vector<double> &vec);
 
 template <typename ValueType>
-void IO::writeSolutionToFile(const std::vector<ValueType> &solution,
-                             const std::string &caseDirectory,
-                             const std::string &timePoint,
-                             const std::string &solutionFileName) {
+void IO::writeResultToFile(const std::vector<ValueType> &result,
+                           const std::string &caseDirectory,
+                           const std::string &timePoint,
+                           const std::string &resultFileName) {
   // Construct the file paths
-  std::string sourceFilePath = caseDirectory + "/0/" + solutionFileName;
+  std::string sourceFilePath = caseDirectory + "/0/" + resultFileName;
   std::string targetFilePath =
-      caseDirectory + "/" + timePoint + "/" + solutionFileName;
+      caseDirectory + "/" + timePoint + "/" + resultFileName;
 
   // Ensure the target directory exists
   std::filesystem::path targetPath(targetFilePath);
@@ -77,7 +77,7 @@ void IO::writeSolutionToFile(const std::vector<ValueType> &solution,
       << "    format      ascii;\n"
       << "    class       volScalarField;\n"
       << "    location    \"" << timePoint << "\";\n"
-      << "    object      " << solutionFileName << ";\n"
+      << "    object      " << resultFileName << ";\n"
       << "}\n"
       << "// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //\n\n";
 
@@ -86,8 +86,8 @@ void IO::writeSolutionToFile(const std::vector<ValueType> &solution,
 
   // Write the internal field
   outFile << "internalField   nonuniform List<scalar>\n";
-  outFile << solution.size() << "\n(\n";
-  for (const auto &value : solution) {
+  outFile << result.size() << "\n(\n";
+  for (const auto &value : result) {
     outFile << "    " << std::fixed << std::setprecision(6) << value << "\n";
   }
   outFile << ");\n\n";
@@ -120,14 +120,14 @@ void IO::writeSolutionToFile(const std::vector<ValueType> &solution,
   inFile.close();
   outFile.close();
 
-  std::cout << "Solution written to file: " << targetFilePath << std::endl;
+  std::cout << "Result written to file: " << targetFilePath << std::endl;
 }
 
 // Explicit template instantiation for commonly used types
-template void IO::writeSolutionToFile(const std::vector<double> &solution,
-                                      const std::string &caseDirectory,
-                                      const std::string &timePoint,
-                                      const std::string &solutionFileName);
+template void IO::writeResultToFile(const std::vector<double> &result,
+                                    const std::string &caseDirectory,
+                                    const std::string &timePoint,
+                                    const std::string &resultFileName);
 
 void IO::createFoamFile(const std::string &caseDirectory) {
   std::string foamFilePath = caseDirectory + "/test.foam";

@@ -20,10 +20,10 @@ public:
 
   // Function to write the solution vector to a file in OpenFOAM format
   template <typename ValueType>
-  static void writeSolutionToFile(const std::vector<ValueType> &solution,
-                                  const std::string &caseDirectory,
-                                  const std::string &timePoint,
-                                  const std::string &solutionFileName);
+  static void writeResultToFile(const std::vector<ValueType> &solution,
+                                const std::string &caseDirectory,
+                                const std::string &timePoint,
+                                const std::string &solutionFileName);
 
   // Function to create a .foam file for visualization of results in
   // ParaView

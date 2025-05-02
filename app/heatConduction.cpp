@@ -54,14 +54,21 @@ int main(int argc, char *argv[]) {
   LinearSolver solver;
   solver.solve(coeffMatrix, RHS, solution, reduction_factor, maxNumIterations);
 
-  // Print the solution
-  std::cout << "Solution:" << std::endl;
-  IO::printVector(solution);
+  // Write the solution to internal temperature field
+  for (std::size_t i = 0; i < fvMesh.nElements(); ++i) {
+    internalTemperatureField.values()[i] = solution[i];
+  }
+
+  // Print the internal temperature field
+  std::cout << "Internal Temperature Field:" << std::endl;
+  IO::printVector(internalTemperatureField.values());
 
   // Write the solution to a file
+  std::cout << "Writing result to a file..." << std::endl;
   std::string timePoint = "1";
-  std::string solutionFileName = "T";
-  IO::writeSolutionToFile(solution, caseDirectory, timePoint, solutionFileName);
+  std::string resultFileName = "T";
+  IO::writeResultToFile(internalTemperatureField.values(), caseDirectory,
+                        timePoint, resultFileName);
 
   // Create a .foam file for visualization in ParaView
   IO::createFoamFile(caseDirectory);
