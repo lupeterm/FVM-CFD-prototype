@@ -33,6 +33,12 @@ void ReadMesh::readOpenFoamMesh(Mesh &fvMesh) {
 
 void ReadMesh::readPointsFile(Mesh &fvMesh) {
   std::string pointsFileName = fvMesh.caseDir() + "/constant/polyMesh/points"s;
+
+  if (!std::filesystem::exists(pointsFileName)) {
+    throw std::runtime_error("Error: Points file '" + pointsFileName +
+                             "' does not exist.");
+  }
+
   std::ifstream pointsFile(pointsFileName);
   IO::IO::ifFileOpened(pointsFile, pointsFileName);
 
@@ -66,6 +72,12 @@ void ReadMesh::readPointsFile(Mesh &fvMesh) {
 
 void ReadMesh::readFacesFile(Mesh &fvMesh) {
   std::string facesFileName = fvMesh.caseDir() + "/constant/polyMesh/faces"s;
+
+  if (!std::filesystem::exists(facesFileName)) {
+    throw std::runtime_error("Error: Faces file '" + facesFileName +
+                             "' does not exist.");
+  }
+
   std::ifstream facesFile(facesFileName);
   IO::ifFileOpened(facesFile, facesFileName);
 
@@ -100,6 +112,12 @@ void ReadMesh::readFacesFile(Mesh &fvMesh) {
 
 void ReadMesh::readOwnersFile(Mesh &fvMesh) {
   std::string ownersFileName = fvMesh.caseDir() + "/constant/polyMesh/owner"s;
+
+  if (!std::filesystem::exists(ownersFileName)) {
+    throw std::runtime_error("Error: Owners file '" + ownersFileName +
+                             "' does not exist.");
+  }
+
   std::ifstream ownersFile(ownersFileName);
   IO::ifFileOpened(ownersFile, ownersFileName);
 
@@ -128,6 +146,12 @@ void ReadMesh::readOwnersFile(Mesh &fvMesh) {
 void ReadMesh::readNeighborsFile(Mesh &fvMesh) {
   std::string neighborsFileName =
       fvMesh.caseDir() + "/constant/polyMesh/neighbour"s;
+
+  if (!std::filesystem::exists(neighborsFileName)) {
+    throw std::runtime_error("Error: Neighbors file '" + neighborsFileName +
+                             "' does not exist.");
+  }
+
   std::ifstream neighborsFile(neighborsFileName);
   IO::ifFileOpened(neighborsFile, neighborsFileName);
 
@@ -155,6 +179,11 @@ void ReadMesh::readNeighborsFile(Mesh &fvMesh) {
 void ReadMesh::readBoundaryFile(Mesh &fvMesh) {
   std::string boundaryFileName =
       fvMesh.caseDir() + "/constant/polyMesh/boundary"s;
+
+  if (!std::filesystem::exists(boundaryFileName)) {
+    throw std::runtime_error("Error: Boundary file '" + boundaryFileName +
+                             "' does not exist.");
+  }
 
   std::ifstream boundaryFile(boundaryFileName);
   IO::ifFileOpened(boundaryFile, boundaryFileName);
