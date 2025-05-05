@@ -8,10 +8,11 @@ BUILD_DIR="./build/app"
 SCRIPT_DIR="./script"
 VALIDATION_DIR="./validation"
 CASE_DIR="./cases/heat-conduction/2D-heat-conduction-on-a-10-by-10-mesh"
+ASSEMBLY_METHOD="face"
 
 # Run the heatConduction executable
 echo "Running heat conduction simulation..."
-$BUILD_DIR/heatConduction $CASE_DIR
+$BUILD_DIR/heatConduction $CASE_DIR $ASSEMBLY_METHOD
 
 # Generate the analytical solution
 # echo "Calculating analytical solution..."
