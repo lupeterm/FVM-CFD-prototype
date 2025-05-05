@@ -12,6 +12,10 @@ void AssembleDiffusionTerm::elementBasedAssemble(
 
   const std::size_t nElements = fvMesh.nElements();
 
+  if constexpr (std::is_same_v<MatrixType, gko::matrix_data<double, int>>) {
+    coeffMatrix.size = {nElements, nElements};
+  }
+
   for (std::size_t iElement = 0; iElement < nElements; ++iElement) {
     // Get the element
     Element &theElement = fvMesh.elements()[iElement];
@@ -44,7 +48,6 @@ void AssembleDiffusionTerm::elementBasedAssemble(
           coeffMatrix(iElement, theElement.iNeighbors()[iFace]) = FluxFn;
         } else if constexpr (std::is_same_v<MatrixType,
                                             gko::matrix_data<double, int>>) {
-          coeffMatrix.size = {fvMesh.nElements(), fvMesh.nElements()};
           coeffMatrix.nonzeros.emplace_back(
               iElement, theElement.iNeighbors()[iFace], FluxFn);
         } else {
@@ -54,7 +57,6 @@ void AssembleDiffusionTerm::elementBasedAssemble(
               "Unsupported MatrixType. Must be either Matrix<double> or "
               " gko::matrix_data<double, int>.");
         }
-        // coeffMatrix(iElement, theElement.iNeighbors()[iFace]) = FluxFn;
         diag += FluxCn;
 
       } else { // If it is a boundary face
@@ -122,6 +124,10 @@ void AssembleDiffusionTerm::faceBasedAssemble(
     std::vector<boundaryField<double>> &boundaryFields, MatrixType &coeffMatrix,
     std::vector<double> &RHS) {
 
+  if constexpr (std::is_same_v<MatrixType, gko::matrix_data<double, int>>) {
+    coeffMatrix.size = {fvMesh.nElements(), fvMesh.nElements()};
+  }
+
   // Loop over all the faces of the given mesh
   const std::size_t nFaces = fvMesh.nFaces();
   for (std::size_t iFace = 0; iFace < nFaces; ++iFace) {
@@ -147,7 +153,6 @@ void AssembleDiffusionTerm::faceBasedAssemble(
         coeffMatrix(theFace.iNeighbor(), theFace.iNeighbor()) += FluxCn;
       } else if constexpr (std::is_same_v<MatrixType,
                                           gko::matrix_data<double, int>>) {
-        coeffMatrix.size = {fvMesh.nElements(), fvMesh.nElements()};
         coeffMatrix.nonzeros.emplace_back(theFace.iOwner(), theFace.iNeighbor(),
                                           FluxFn);
         coeffMatrix.nonzeros.emplace_back(theFace.iNeighbor(), theFace.iOwner(),
@@ -194,12 +199,10 @@ void AssembleDiffusionTerm::faceBasedAssemble(
         // Do nothing because the face does not contribute
       }
 
-      // coeffMatrix(theFace.iOwner(), theFace.iOwner()) += FluxCb;
       if constexpr (std::is_same_v<MatrixType, Matrix<double>>) {
         coeffMatrix(theFace.iOwner(), theFace.iOwner()) += FluxCb;
       } else if constexpr (std::is_same_v<MatrixType,
                                           gko::matrix_data<double, int>>) {
-        coeffMatrix.size = {fvMesh.nElements(), fvMesh.nElements()};
         coeffMatrix.nonzeros.emplace_back(theFace.iOwner(), theFace.iOwner(),
                                           FluxCb);
       } else {
