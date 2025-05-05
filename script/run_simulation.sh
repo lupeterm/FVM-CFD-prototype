@@ -14,8 +14,8 @@ echo "Running heat conduction simulation..."
 $BUILD_DIR/heatConduction $CASE_DIR
 
 # Generate the analytical solution
-echo "Calculating analytical solution..."
-python3 $SCRIPT_DIR/analytical_sol.py
+# echo "Calculating analytical solution..."
+# python3 $SCRIPT_DIR/analytical_sol.py
 
 # Run the Python plotting script
 echo "Generating plot..."
