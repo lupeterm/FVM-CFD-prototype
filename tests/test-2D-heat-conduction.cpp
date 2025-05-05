@@ -306,37 +306,35 @@ TEST(DiffusionTermDiscretizationTest, FaceBased2DHeatConductionOn2By2Mesh) {
   }
 
   // --- Act & Assert for gko::matrix_data ---
-  // {
-  //   gko::matrix_data<double, int> coeffMatrix;
-  //   std::vector<double> RHS(fvMesh.nElements(), 0.0);
+  {
+    gko::matrix_data<double, int> coeffMatrix;
+    std::vector<double> RHS(fvMesh.nElements(), 0.0);
 
-  //   AssembleDiffusionTerm diffusionTermAssembler;
-  //   diffusionTermAssembler.faceBasedAssemble(
-  //       fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
-  //       coeffMatrix, RHS);
+    AssembleDiffusionTerm diffusionTermAssembler;
+    diffusionTermAssembler.faceBasedAssemble(
+        fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
+        coeffMatrix, RHS);
 
-  //   // Verify the coefficient matrix
-  //   for (std::size_t i = 0; i < 4; ++i) {
-  //     for (std::size_t j = 0; j < 4; ++j) {
-  //       double value = 0.0;
-  //       for (const auto &entry : coeffMatrix.nonzeros) {
-  //         if (entry.row == i && entry.column == j) {
-  //           value = entry.value;
-  //           break;
-  //         }
-  //       }
-  //       EXPECT_TRUE(ScalarAlmostEqual(value, expected_coeffMatrix[i][j],
-  //       absTol,
-  //                                     relTol));
-  //     }
-  //   }
+    // Verify the coefficient matrix
+    for (std::size_t i = 0; i < 4; ++i) {
+      for (std::size_t j = 0; j < 4; ++j) {
+        double value = 0.0;
+        for (const auto &entry : coeffMatrix.nonzeros) {
+          if (entry.row == i && entry.column == j) {
+            value = entry.value;
+            break;
+          }
+        }
+        EXPECT_TRUE(ScalarAlmostEqual(value, expected_coeffMatrix[i][j], absTol,
+                                      relTol));
+      }
+    }
 
-  //   // Verify the RHS vector
-  //   for (std::size_t i = 0; i < 4; ++i) {
-  //     EXPECT_TRUE(ScalarAlmostEqual(RHS[i], expected_RHS[i], absTol,
-  //     relTol));
-  //   }
-  // }
+    // Verify the RHS vector
+    for (std::size_t i = 0; i < 4; ++i) {
+      EXPECT_TRUE(ScalarAlmostEqual(RHS[i], expected_RHS[i], absTol, relTol));
+    }
+  }
 }
 
 TEST(DiffusionTermDiscretizationTest, CellBased2DHeatConductionOn3By3Mesh) {
@@ -492,37 +490,35 @@ TEST(DiffusionTermDiscretizationTest, FaceBased2DHeatConductionOn3By3Mesh) {
   }
 
   // --- Act & Assert for gko::matrix_data ---
-  // {
-  //   gko::matrix_data<double, int> coeffMatrix;
-  //   std::vector<double> RHS(fvMesh.nElements(), 0.0);
+  {
+    gko::matrix_data<double, int> coeffMatrix;
+    std::vector<double> RHS(fvMesh.nElements(), 0.0);
 
-  //   AssembleDiffusionTerm diffusionTermAssembler;
-  //   diffusionTermAssembler.elementBasedAssemble(
-  //       fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
-  //       coeffMatrix, RHS);
+    AssembleDiffusionTerm diffusionTermAssembler;
+    diffusionTermAssembler.elementBasedAssemble(
+        fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
+        coeffMatrix, RHS);
 
-  //   // Verify the coefficient matrix
-  //   for (std::size_t i = 0; i < 9; ++i) {
-  //     for (std::size_t j = 0; j < 9; ++j) {
-  //       double value = 0.0;
-  //       for (const auto &entry : coeffMatrix.nonzeros) {
-  //         if (entry.row == i && entry.column == j) {
-  //           value = entry.value;
-  //           break;
-  //         }
-  //       }
-  //       EXPECT_TRUE(ScalarAlmostEqual(value, expected_coeffMatrix[i][j],
-  //       absTol,
-  //                                     relTol));
-  //     }
-  //   }
+    // Verify the coefficient matrix
+    for (std::size_t i = 0; i < 9; ++i) {
+      for (std::size_t j = 0; j < 9; ++j) {
+        double value = 0.0;
+        for (const auto &entry : coeffMatrix.nonzeros) {
+          if (entry.row == i && entry.column == j) {
+            value = entry.value;
+            break;
+          }
+        }
+        EXPECT_TRUE(ScalarAlmostEqual(value, expected_coeffMatrix[i][j], absTol,
+                                      relTol));
+      }
+    }
 
-  //   // Verify the RHS vector
-  //   for (std::size_t i = 0; i < 9; ++i) {
-  //     EXPECT_TRUE(ScalarAlmostEqual(RHS[i], expected_RHS[i], absTol,
-  //     relTol));
-  //   }
-  // }
+    // Verify the RHS vector
+    for (std::size_t i = 0; i < 9; ++i) {
+      EXPECT_TRUE(ScalarAlmostEqual(RHS[i], expected_RHS[i], absTol, relTol));
+    }
+  }
 }
 
 TEST(LinearSolverTest, Solve2DHeatConductionOn2By2Mesh) {
