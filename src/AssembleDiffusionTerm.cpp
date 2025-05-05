@@ -1,6 +1,5 @@
 #include "AssembleDiffusionTerm.hpp"
 #include "Field.hpp"
-#include "ginkgo/ginkgo.hpp"
 #include <cstddef>
 
 template <typename MatrixType>
@@ -101,6 +100,7 @@ void AssembleDiffusionTerm::elementBasedAssemble(
   }
 }
 
+// Explicit instantiation of the template function
 template void AssembleDiffusionTerm::elementBasedAssemble(
     Mesh &fvMesh, const std::vector<double> diffusionCoef,
     const std::vector<double> &source,
@@ -113,4 +113,9 @@ template void AssembleDiffusionTerm::elementBasedAssemble(
     std::vector<boundaryField<double>> &boundaryFields,
     gko::matrix_data<double, int> &coeffMatrix, std::vector<double> &RHS);
 
-//   void AssembleDiffusionTerm::faceBasedAssemble() {}
+// template <typename MatrixType>
+// void AssembleDiffusionTerm::faceBasedAssemble(
+//     Mesh &fvMesh, const std::vector<double> diffusionCoef,
+//     const std::vector<double> &source,
+//     std::vector<boundaryField<double>> &boundaryFields, MatrixType
+//     &coeffMatrix, std::vector<double> &RHS) {}
