@@ -18,7 +18,7 @@ public:
   std::size_t &nOwners() { return nOwners_; }
   std::size_t &nElements() { return nElements_; }
   std::size_t &nInteriorFaces() { return nInteriorFaces_; }
-  int &nBoundaries() { return nBoundaries_; }
+  std::size_t &nBoundaries() { return nBoundaries_; }
   std::size_t &nPatches() { return nPatches_; }
   std::vector<Node> &nodes() { return nodes_; }
   std::vector<Face> &faces() { return faces_; }
@@ -34,7 +34,7 @@ private:
   std::size_t nOwners_ = 0;
   std::size_t nElements_ = 0;
   std::size_t nInteriorFaces_ = 0;
-  int nBoundaries_ = 0;
+  std::size_t nBoundaries_ = 0;
   std::size_t nPatches_ = 0;
   std::vector<Node> nodes_;
   std::vector<Face> faces_;

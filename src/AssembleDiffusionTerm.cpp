@@ -235,3 +235,64 @@ template void AssembleDiffusionTerm::faceBasedAssemble(
     const std::vector<double> &source,
     std::vector<boundaryField<double>> &boundaryFields,
     gko::matrix_data<double, int> &coeffMatrix, std::vector<double> &RHS);
+
+// // The implementations of batched face-based assembly of the diffusion term
+// template <typename MatrixType>
+// void AssembleDiffusionTerm::batchedFaceBasedAssemble(
+//     Mesh &fvMesh, const std::vector<double> diffusionCoef,
+//     const std::vector<double> &source,
+//     std::vector<boundaryField<double>> &boundaryFields, MatrixType
+//     &coeffMatrix, std::vector<double> &RHS) {
+
+//   if constexpr (std::is_same_v<MatrixType, gko::matrix_data<double, int>>) {
+//     coeffMatrix.size = {fvMesh.nElements(), fvMesh.nElements()};
+//   }
+
+//   // *** Loop over all the interior faces of the given mesh ***
+//   const std::size_t nInteriorFaces = fvMesh.nInteriorFaces();
+//   for (std::size_t iFace = 0; iFace < nInteriorFaces; ++iFace) {
+//     // Get the face
+//     Face &theFace = fvMesh.faces()[iFace];
+
+//     double FluxCn = 0.0;
+//     double FluxFn = 0.0;
+//     // double FluxVn = 0.0; unused
+
+//     // Compute FluxCn, FluxFn and FluxVn for the owner cell and the neighbor
+//     // cell
+//     FluxCn = diffusionCoef[iFace] * theFace.gDiff();
+//     FluxFn = -FluxCn;
+
+//     if constexpr (std::is_same_v<MatrixType, Matrix<double>>) {
+//       coeffMatrix(theFace.iOwner(), theFace.iNeighbor()) = FluxFn;
+//       coeffMatrix(theFace.iNeighbor(), theFace.iOwner()) = FluxFn;
+
+//       coeffMatrix(theFace.iOwner(), theFace.iOwner()) += FluxCn;
+//       coeffMatrix(theFace.iNeighbor(), theFace.iNeighbor()) += FluxCn;
+//     } else if constexpr (std::is_same_v<MatrixType,
+//                                         gko::matrix_data<double, int>>) {
+//       coeffMatrix.nonzeros.emplace_back(theFace.iOwner(),
+//       theFace.iNeighbor(),
+//                                         FluxFn);
+//       coeffMatrix.nonzeros.emplace_back(theFace.iNeighbor(),
+//       theFace.iOwner(),
+//                                         FluxFn);
+
+//       coeffMatrix.nonzeros.emplace_back(theFace.iOwner(), theFace.iOwner(),
+//                                         FluxCn);
+//       coeffMatrix.nonzeros.emplace_back(theFace.iNeighbor(),
+//                                         theFace.iNeighbor(), FluxCn);
+//     }
+
+//     else {
+//       static_assert(
+//           std::is_same_v<MatrixType, Matrix<double>> ||
+//               std::is_same_v<MatrixType, gko::matrix_data<double, int>>,
+//           "Unsupported MatrixType. Must be either Matrix<double> or "
+//           "gko::matrix_data<double, int>.");
+//     }
+//   }
+//   // *** Loop over all the boundary faces of the given mesh patch by patch
+//   ***
+//   // const std::size_t
+// }
