@@ -61,4 +61,16 @@ extern template void AssembleDiffusionTerm::faceBasedAssemble(
     std::vector<boundaryField<double>> &boundaryFields,
     gko::matrix_data<double, int> &coeffMatrix, std::vector<double> &RHS);
 
+extern template void AssembleDiffusionTerm::batchedFaceBasedAssemble(
+    Mesh &fvMesh, const std::vector<double> diffusionCoef,
+    const std::vector<double> &source,
+    std::vector<boundaryField<double>> &boundaryFields,
+    Matrix<double> &coeffMatrix, std::vector<double> &RHS);
+
+extern template void AssembleDiffusionTerm::batchedFaceBasedAssemble(
+    Mesh &fvMesh, const std::vector<double> diffusionCoef,
+    const std::vector<double> &source,
+    std::vector<boundaryField<double>> &boundaryFields,
+    gko::matrix_data<double, int> &coeffMatrix, std::vector<double> &RHS);
+
 #endif // ASSERMBLE_DIFF_HPP
