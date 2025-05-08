@@ -8,7 +8,7 @@ BUILD_DIR="./build/app"
 SCRIPT_DIR="./script"
 VALIDATION_DIR="./validation"
 CASE_DIR="./cases/heat-conduction/2D-heat-conduction-on-a-10-by-10-mesh"
-ASSEMBLY_METHOD="batchedFace"
+ASSEMBLY_METHOD="batchedFace" # element, face or batchedFace
 VENV_DIR="./venv"
 
 # Create a Python virtual environment if it doesn't exist

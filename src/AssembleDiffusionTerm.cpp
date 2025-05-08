@@ -75,6 +75,9 @@ void AssembleDiffusionTerm::elementBasedAssemble(
               iFaceIndex - fvMesh.boundaries()[iBoundary].startFace();
           FluxVb =
               -FluxCb * boundaryFields[iBoundary].values()[relativeFaceIndex];
+
+          diag += FluxCb;
+          RHS[iElement] -= FluxVb;
         }
 
         else if (boundaryType == "zeroGradient") { // zero Neumann BC
@@ -84,9 +87,6 @@ void AssembleDiffusionTerm::elementBasedAssemble(
         else if (boundaryType == "empty") { // empty BC for 1D or 2D problems
           // Do nothing because the face does not contribute
         }
-
-        diag += FluxCb;
-        RHS[iElement] -= FluxVb;
 
         // else if () { // mixed BC
         // }
@@ -189,6 +189,21 @@ void AssembleDiffusionTerm::faceBasedAssemble(
             iFace - fvMesh.boundaries()[iBoundary].startFace();
         FluxVb =
             -FluxCb * boundaryFields[iBoundary].values()[relativeFaceIndex];
+
+        if constexpr (std::is_same_v<MatrixType, Matrix<double>>) {
+          coeffMatrix(theFace.iOwner(), theFace.iOwner()) += FluxCb;
+        } else if constexpr (std::is_same_v<MatrixType,
+                                            gko::matrix_data<double, int>>) {
+          coeffMatrix.nonzeros.emplace_back(theFace.iOwner(), theFace.iOwner(),
+                                            FluxCb);
+        } else {
+          static_assert(
+              std::is_same_v<MatrixType, Matrix<double>> ||
+                  std::is_same_v<MatrixType, gko::matrix_data<double, int>>,
+              "Unsupported MatrixType. Must be either Matrix<double> or "
+              "gko::matrix_data<double, int>.");
+        }
+        RHS[theFace.iOwner()] -= FluxVb;
       }
 
       else if (boundaryType == "zeroGradient") { // zero Neumann BC
@@ -198,21 +213,6 @@ void AssembleDiffusionTerm::faceBasedAssemble(
       else if (boundaryType == "empty") { // empty BC for 1D or 2D problems
         // Do nothing because the face does not contribute
       }
-
-      if constexpr (std::is_same_v<MatrixType, Matrix<double>>) {
-        coeffMatrix(theFace.iOwner(), theFace.iOwner()) += FluxCb;
-      } else if constexpr (std::is_same_v<MatrixType,
-                                          gko::matrix_data<double, int>>) {
-        coeffMatrix.nonzeros.emplace_back(theFace.iOwner(), theFace.iOwner(),
-                                          FluxCb);
-      } else {
-        static_assert(
-            std::is_same_v<MatrixType, Matrix<double>> ||
-                std::is_same_v<MatrixType, gko::matrix_data<double, int>>,
-            "Unsupported MatrixType. Must be either Matrix<double> or "
-            "gko::matrix_data<double, int>.");
-      }
-      RHS[theFace.iOwner()] -= FluxVb;
 
       // else if () { // mixed BC
       // }
