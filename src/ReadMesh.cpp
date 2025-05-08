@@ -18,7 +18,14 @@ void ReadMesh::readOpenFoamMesh(Mesh &fvMesh) {
     throw std::runtime_error("Error: Case directory '" + fvMesh.caseDir() +
                              "' does not exist.");
   }
-  std::cout << "Reading OpenFOAM mesh files from case directory: "
+
+  if (!std::filesystem::exists(fvMesh.caseDir() + "/constant/polyMesh")) {
+    throw std::runtime_error("Error: PolyMesh directory '" + fvMesh.caseDir() +
+                             "/constant/polyMesh' does not "
+                             "exist.");
+  }
+
+  std::cout << "Reading OpenFOAM mesh files from mesh directory: "
             << fvMesh.caseDir() << std::endl;
 
   readPointsFile(fvMesh);
