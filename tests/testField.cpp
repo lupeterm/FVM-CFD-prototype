@@ -7,23 +7,23 @@
 #include <string>
 
 // ****** Tests ******
-TEST(FieldTest, SettingScalarVolFieldWorks) {
+TEST(FieldTest, SetScalarVolField) {
 
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
 
   const double expected_element_scalar_field = 1.0;
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
-  Field<double> elementScalarField(fvMesh.nElements());
+  Field<double> elementScalarField(fvMesh.nCells());
   elementScalarField.set(1.0);
 
   // --- Assert ---
-  // *** Verify the scalar field values of elements ***
-  // The first two elements
+  // *** Verify the scalar field values of cells ***
+  // The first two cells
   EXPECT_EQ(elementScalarField.values()[0], expected_element_scalar_field);
   EXPECT_EQ(elementScalarField.values()[1], expected_element_scalar_field);
 
@@ -36,23 +36,23 @@ TEST(FieldTest, SettingScalarVolFieldWorks) {
   EXPECT_EQ(elementScalarField.values()[399], expected_element_scalar_field);
 }
 
-TEST(FieldTest, SettingVectorVolFieldWorks) {
+TEST(FieldTest, SetVectorVolField) {
 
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
 
   const std::array<double, 3> expected_element_vector_field = {1.0, 2.0, 3.0};
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
-  Field<std::array<double, 3>> elementVolField(fvMesh.nElements());
+  Field<std::array<double, 3>> elementVolField(fvMesh.nCells());
   elementVolField.set(expected_element_vector_field);
 
   // --- Assert ---
-  // *** Verify the scalar field values of elements ***
-  // The first two elements
+  // *** Verify the scalar field values of cells ***
+  // The first two cells
   EXPECT_TRUE(VectorMatch(elementVolField.values()[0],
                           expected_element_vector_field, 3));
   EXPECT_TRUE(VectorMatch(elementVolField.values()[1],
@@ -71,22 +71,22 @@ TEST(FieldTest, SettingVectorVolFieldWorks) {
                           expected_element_vector_field, 3));
 }
 
-TEST(FieldTest, UsingDefaultVectorVolFieldWorks) {
+TEST(FieldTest, UseDefaultVectorVolField) {
 
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
 
   const std::array<double, 3> expected_element_vector_field = {0.0, 0.0, 0.0};
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
-  Field<std::array<double, 3>> elementVolField(fvMesh.nElements());
+  Field<std::array<double, 3>> elementVolField(fvMesh.nCells());
 
   // --- Assert ---
-  // *** Verify the scalar field values of elements ***
-  // The first two elements
+  // *** Verify the scalar field values of cells ***
+  // The first two cells
   EXPECT_TRUE(VectorMatch(elementVolField.values()[0],
                           expected_element_vector_field, 3));
   EXPECT_TRUE(VectorMatch(elementVolField.values()[1],

@@ -2,17 +2,18 @@
 
 #include "Mesh.hpp"
 #include "ReadMesh.hpp"
+#include "arrayOperations.hpp"
 #include "utilitiesForTesting.hpp"
 #include <array>
 #include <string>
 
 // ****** Tests ******
-TEST(ProcessingBasicFaceGeometryTest,
-     ComputingFaceCentroidWorksForStructuredMesh) {
+TEST(StructuredFaceGeometryTest, ComputeFaceCentroid) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
+
   const std::array<double, 3> expected_face0_centroid = {
       0.00500000000000000, 0.00250000000000000, 0.00500000000000000};
   const std::array<double, 3> expected_face1_centroid = {
@@ -28,8 +29,8 @@ TEST(ProcessingBasicFaceGeometryTest,
   const std::array<double, 3> expected_face1639_centroid = {
       0.0975000000000000, 0.0975000000000000, 0.0100000000000000};
 
-  const double maxDiff = 1.0e-9;
-  const double maxRelativeDiff = 1.0e-4;
+  const double absTol = 1.0e-12;
+  const double relTol = 1.0e-8;
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
@@ -38,35 +39,29 @@ TEST(ProcessingBasicFaceGeometryTest,
   // *** Verify the centroids of faces ***
   // The first two faces
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[0].centroid(),
-                                expected_face0_centroid, 3, maxDiff,
-                                maxRelativeDiff));
+                                expected_face0_centroid, 3, absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1].centroid(),
-                                expected_face1_centroid, 3, maxDiff,
-                                maxRelativeDiff));
+                                expected_face1_centroid, 3, absTol, relTol));
 
   // The middle two faces
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[818].centroid(),
-                                expected_face818_centroid, 3, maxDiff,
-                                maxRelativeDiff));
+                                expected_face818_centroid, 3, absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[819].centroid(),
-                                expected_face819_centroid, 3, maxDiff,
-                                maxRelativeDiff));
+                                expected_face819_centroid, 3, absTol, relTol));
 
   // The last two faces
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1638].centroid(),
-                                expected_face1638_centroid, 3, maxDiff,
-                                maxRelativeDiff));
+                                expected_face1638_centroid, 3, absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1639].centroid(),
-                                expected_face1639_centroid, 3, maxDiff,
-                                maxRelativeDiff));
+                                expected_face1639_centroid, 3, absTol, relTol));
 }
 
-TEST(ProcessingBasicFaceGeometryTest,
-     ComputingFaceSurfaceVectorWorksForStructuredMesh) {
+TEST(StructuredFaceGeometryTest, ComputeSurfaceVector) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
+
   const std::array<double, 3> expected_face0_Sf = {5.00000000000000e-05, 0, 0};
   const std::array<double, 3> expected_face1_Sf = {0, 5.00000000000000e-05, 0};
 
@@ -80,8 +75,8 @@ TEST(ProcessingBasicFaceGeometryTest,
   const std::array<double, 3> expected_face1639_Sf = {0, 0,
                                                       2.50000000000000e-05};
 
-  const double maxDiff = 1.0e-9;
-  const double maxRelativeDiff = 1.0e-4;
+  const double absTol = 1.0e-12;
+  const double relTol = 1.0e-8;
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
@@ -90,28 +85,29 @@ TEST(ProcessingBasicFaceGeometryTest,
   // Verify the surface vectors of mesh faces
   // The first two faces
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[0].Sf(), expected_face0_Sf, 3,
-                                maxDiff, maxRelativeDiff));
+                                absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1].Sf(), expected_face1_Sf, 3,
-                                maxDiff, maxRelativeDiff));
+                                absTol, relTol));
 
   // The middle two faces
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[818].Sf(), expected_face818_Sf,
-                                3, maxDiff, maxRelativeDiff));
+                                3, absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[819].Sf(), expected_face819_Sf,
-                                3, maxDiff, maxRelativeDiff));
+                                3, absTol, relTol));
 
   // The last two faces
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1638].Sf(), expected_face1638_Sf,
-                                3, maxDiff, maxRelativeDiff));
+                                3, absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1639].Sf(), expected_face1639_Sf,
-                                3, maxDiff, maxRelativeDiff));
+                                3, absTol, relTol));
 }
 
-TEST(ProcessingBasicFaceGeometryTest, ComputingFaceAreaWorksForStructuredMesh) {
+TEST(StructuredFaceGeometryTest, ComputeFaceArea) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
+
   const double expected_face0_area = 5.00000000000000e-05;
   const double expected_face1_area = 5.00000000000000e-05;
   const double expected_face818_area = 5.00000000000000e-05;
@@ -119,8 +115,8 @@ TEST(ProcessingBasicFaceGeometryTest, ComputingFaceAreaWorksForStructuredMesh) {
   const double expected_face1638_area = 2.50000000000000e-05;
   const double expected_face1639_area = 2.50000000000000e-05;
 
-  const double maxDiff = 1.0e-9;
-  const double maxRelativeDiff = 1.0e-4;
+  const double absTol = 1.0e-12;
+  const double relTol = 1.0e-8;
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
@@ -129,33 +125,29 @@ TEST(ProcessingBasicFaceGeometryTest, ComputingFaceAreaWorksForStructuredMesh) {
   // Verify the surface areas of mesh faces
   // The first two faces
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[0].area(), expected_face0_area,
-                                maxDiff, maxRelativeDiff));
+                                absTol, relTol));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1].area(), expected_face1_area,
-                                maxDiff, maxRelativeDiff));
+                                absTol, relTol));
 
   // The middle two faces
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[818].area(),
-                                expected_face818_area, maxDiff,
-                                maxRelativeDiff));
+                                expected_face818_area, absTol, relTol));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[819].area(),
-                                expected_face819_area, maxDiff,
-                                maxRelativeDiff));
+                                expected_face819_area, absTol, relTol));
 
   // The last two faces
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1638].area(),
-                                expected_face1638_area, maxDiff,
-                                maxRelativeDiff));
+                                expected_face1638_area, absTol, relTol));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1639].area(),
-                                expected_face1639_area, maxDiff,
-                                maxRelativeDiff));
+                                expected_face1639_area, absTol, relTol));
 }
 
-TEST(ComputingElementVolumeAndCentroidTest,
-     ComputingElementVolumeWorksForStructuredMesh) {
+TEST(StructuredElementGeometryTest, ComputeElementVolume) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
+
   const double expected_element0_volume = 2.50000000000000e-07;
   const double expected_element1_volume = 2.50000000000000e-07;
 
@@ -165,44 +157,38 @@ TEST(ComputingElementVolumeAndCentroidTest,
   const double expected_element398_volume = 2.50000000000000e-07;
   const double expected_element399_volume = 2.50000000000000e-07;
 
-  const double maxDiff = 1.0e-9;
-  const double maxRelativeDiff = 1.0e-4;
+  const double absTol = 1.0e-12;
+  const double relTol = 1.0e-8;
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
 
   // --- Assert ---
-  // Verify the volumes of the first two elements
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[0].volume(),
-                                expected_element0_volume, maxDiff,
-                                maxRelativeDiff));
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[1].volume(),
-                                expected_element1_volume, maxDiff,
-                                maxRelativeDiff));
+  // Verify the volumes of the first two cells
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.cells()[0].volume(),
+                                expected_element0_volume, absTol, relTol));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.cells()[1].volume(),
+                                expected_element1_volume, absTol, relTol));
 
-  // Verify the volumes of the middle two elements
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[198].volume(),
-                                expected_element198_volume, maxDiff,
-                                maxRelativeDiff));
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[199].volume(),
-                                expected_element199_volume, maxDiff,
-                                maxRelativeDiff));
+  // Verify the volumes of the middle two cells
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.cells()[198].volume(),
+                                expected_element198_volume, absTol, relTol));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.cells()[199].volume(),
+                                expected_element199_volume, absTol, relTol));
 
-  // Verify the volumes of the last two elements
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[398].volume(),
-                                expected_element398_volume, maxDiff,
-                                maxRelativeDiff));
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[399].volume(),
-                                expected_element399_volume, maxDiff,
-                                maxRelativeDiff));
+  // Verify the volumes of the last two cells
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.cells()[398].volume(),
+                                expected_element398_volume, absTol, relTol));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.cells()[399].volume(),
+                                expected_element399_volume, absTol, relTol));
 }
 
-TEST(ComputingElementVolumeAndCentroidTest,
-     ComputingElementCentroidWorksForStructuredMesh) {
+TEST(StructuredElementGeometryTest, ComputeElementCentroid) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
+
   const std::array<double, 3> expected_element0_centroid = {
       0.00250000000000000, 0.00250000000000000, 0.00500000000000000};
   const std::array<double, 3> expected_element1_centroid = {
@@ -218,48 +204,46 @@ TEST(ComputingElementVolumeAndCentroidTest,
   const std::array<double, 3> expected_element399_centroid = {
       0.0975000000000000, 0.0975000000000000, 0.00500000000000000};
 
-  const double maxDiff = 1.0e-9;
-  const double maxRelativeDiff = 1.0e-4;
+  const double absTol = 1.0e-12;
+  const double relTol = 1.0e-8;
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
 
   // --- Assert ---
-  // Verify the centroids of the first two elements
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[0].centroid(),
-                                expected_element0_centroid, 3, maxDiff,
-                                maxRelativeDiff));
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[1].centroid(),
-                                expected_element1_centroid, 3, maxDiff,
-                                maxRelativeDiff));
+  // Verify the centroids of the first two cells
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.cells()[0].centroid(),
+                                expected_element0_centroid, 3, absTol, relTol));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.cells()[1].centroid(),
+                                expected_element1_centroid, 3, absTol, relTol));
 
-  // Verify the centroids of the middle two elements
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[198].centroid(),
-                                expected_element198_centroid, 3, maxDiff,
-                                maxRelativeDiff));
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[199].centroid(),
-                                expected_element199_centroid, 3, maxDiff,
-                                maxRelativeDiff));
+  // Verify the centroids of the middle two cells
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.cells()[198].centroid(),
+                                expected_element198_centroid, 3, absTol,
+                                relTol));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.cells()[199].centroid(),
+                                expected_element199_centroid, 3, absTol,
+                                relTol));
 
-  // Verify the centroids of the last two elements
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[398].centroid(),
-                                expected_element398_centroid, 3, maxDiff,
-                                maxRelativeDiff));
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[399].centroid(),
-                                expected_element399_centroid, 3, maxDiff,
-                                maxRelativeDiff));
+  // Verify the centroids of the last two cells
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.cells()[398].centroid(),
+                                expected_element398_centroid, 3, absTol,
+                                relTol));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.cells()[399].centroid(),
+                                expected_element399_centroid, 3, absTol,
+                                relTol));
 }
 
-TEST(ProcessingSecondaryFaceGeometryTest,
-     ComputingInteriorFaceGeometryWorksForStructuredMesh) {
+TEST(StructuredFaceGeometryTest, ComputeInteriorFaceGeometry) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
 
   // Expected data of face 0
   const std::array<double, 3> expected_face0_CN = {0.00500000000000000, 0,
                                                    8.67361737988404e-19};
+  const double expected_face0_magCN = mag(expected_face0_CN);
   const std::array<double, 3> expected_face0_eCN = {1, 0, 1.73472347597681e-16};
   const double expected_face0_gDiff = 0.0100000000000000;
   const std::array<double, 3> expected_face0_T = {0, 0, -8.67361737988403e-21};
@@ -267,6 +251,7 @@ TEST(ProcessingSecondaryFaceGeometryTest,
 
   // Expected data of face 1
   const std::array<double, 3> expected_face1_CN = {0, 0.00500000000000000, 0};
+  const double expected_face1_magCN = mag(expected_face1_CN);
   const std::array<double, 3> expected_face1_eCN = {0, 1, 0};
   const double expected_face1_gDiff = 0.0100000000000000;
   const std::array<double, 3> expected_face1_T = {0, 0, -8.67361737988403e-21};
@@ -275,6 +260,7 @@ TEST(ProcessingSecondaryFaceGeometryTest,
   // Expected data of face 758
   const std::array<double, 3> expected_face758_CN = {0.00499999999999999,
                                                      1.38777878078145e-17, 0};
+  const double expected_face758_magCN = mag(expected_face758_CN);
   const std::array<double, 3> expected_face758_eCN = {1, 2.77555756156290e-15,
                                                       0};
   const double expected_face758_gDiff = 0.0100000000000000;
@@ -284,14 +270,15 @@ TEST(ProcessingSecondaryFaceGeometryTest,
 
   // Expected data of face 759
   const std::array<double, 3> expected_face759_CN = {0.00499999999999999, 0, 0};
+  const double expected_face759_magCN = mag(expected_face759_CN);
   const std::array<double, 3> expected_face759_eCN = {1, 0, 0};
   const double expected_face759_gDiff = 0.0100000000000000;
   const std::array<double, 3> expected_face759_T = {0, 0, 0};
   const double expected_face759_gf = 0.500000000000000;
 
   // Set tolerance
-  const double maxDiff = 1.0e-9;
-  const double maxRelativeDiff = 1.0e-4;
+  const double absTol = 1.0e-12;
+  const double relTol = 1.0e-8;
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
@@ -299,62 +286,69 @@ TEST(ProcessingSecondaryFaceGeometryTest,
   // --- Assert ---
   // Verify the geometric quantities of the first interior two faces
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[0].CN(), expected_face0_CN, 3,
-                                maxDiff, maxRelativeDiff));
+                                absTol, relTol));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[0].magCN(), expected_face0_magCN,
+                                absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[0].eCN(), expected_face0_eCN, 3,
-                                maxDiff, maxRelativeDiff));
+                                absTol, relTol));
+
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[0].gDiff(), expected_face0_gDiff,
-                                maxDiff, maxRelativeDiff));
+                                absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[0].T(), expected_face0_T, 3,
-                                maxDiff, maxRelativeDiff));
+                                absTol, relTol));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[0].gf(), expected_face0_gf,
-                                maxDiff, maxRelativeDiff));
+                                absTol, relTol));
 
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1].CN(), expected_face1_CN, 3,
-                                maxDiff, maxRelativeDiff));
+                                absTol, relTol));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1].magCN(), expected_face1_magCN,
+                                absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1].eCN(), expected_face1_eCN, 3,
-                                maxDiff, maxRelativeDiff));
+                                absTol, relTol));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1].gDiff(), expected_face1_gDiff,
-                                maxDiff, maxRelativeDiff));
+                                absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1].T(), expected_face1_T, 3,
-                                maxDiff, maxRelativeDiff));
+                                absTol, relTol));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1].gf(), expected_face1_gf,
-                                maxDiff, maxRelativeDiff));
+                                absTol, relTol));
 
   // Verify the geometric quantities of the last two interior faces
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[758].CN(), expected_face758_CN,
-                                3, maxDiff, maxRelativeDiff));
+                                3, absTol, relTol));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[758].magCN(),
+                                expected_face758_magCN, absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[758].eCN(), expected_face758_eCN,
-                                3, maxDiff, maxRelativeDiff));
+                                3, absTol, relTol));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[758].gDiff(),
-                                expected_face758_gDiff, maxDiff,
-                                maxRelativeDiff));
+                                expected_face758_gDiff, absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[758].T(), expected_face758_T, 3,
-                                maxDiff, maxRelativeDiff));
+                                absTol, relTol));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[758].gf(), expected_face758_gf,
-                                maxDiff, maxRelativeDiff));
+                                absTol, relTol));
 
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[759].CN(), expected_face759_CN,
-                                3, maxDiff, maxRelativeDiff));
+                                3, absTol, relTol));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[759].magCN(),
+                                expected_face759_magCN, absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[759].eCN(), expected_face759_eCN,
-                                3, maxDiff, maxRelativeDiff));
+                                3, absTol, relTol));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[759].gDiff(),
-                                expected_face759_gDiff, maxDiff,
-                                maxRelativeDiff));
+                                expected_face759_gDiff, absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[759].T(), expected_face759_T, 3,
-                                maxDiff, maxRelativeDiff));
+                                absTol, relTol));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[759].gf(), expected_face759_gf,
-                                maxDiff, maxRelativeDiff));
+                                absTol, relTol));
 }
 
-TEST(ProcessingSecondaryFaceGeometryTest,
-     ComputingBoundaryFaceGeometryWorksForStructuredMesh) {
+TEST(StructuredFaceGeometryTest, ComputeBoundaryFaceGeometry) {
   // --- Arrange ---
   std::string caseDirectory("../../cases/cavity");
-  ReadMesh meshReader;
   Mesh fvMesh(caseDirectory);
+  ReadMesh meshReader;
 
   // Expected data of face 760
   const std::array<double, 3> expected_face760_CN = {0, 0.00250000000000000, 0};
+  const double expected_face760_magCN = mag(expected_face760_CN);
   const std::array<double, 3> expected_face760_eCN = {0, 1, 0};
   const double expected_face760_gDiff = 0.0200000000000000;
   const std::array<double, 3> expected_face760_T = {0, 0, 0};
@@ -364,6 +358,7 @@ TEST(ProcessingSecondaryFaceGeometryTest,
   // Expected data of face 761
   const std::array<double, 3> expected_face761_CN = {
       8.67361737988404e-19, 0.00250000000000002, 8.67361737988404e-19};
+  const double expected_face761_magCN = mag(expected_face761_CN);
   const std::array<double, 3> expected_face761_eCN = {3.46944695195359e-16, 1,
                                                       3.46944695195359e-16};
   const double expected_face761_gDiff = 0.0200000000000000;
@@ -375,6 +370,7 @@ TEST(ProcessingSecondaryFaceGeometryTest,
   // Expected data of face 1638
   const std::array<double, 3> expected_face1638_CN = {0, -1.38777878078145e-17,
                                                       0.00500000000000000};
+  const double expected_face1638_magCN = mag(expected_face1638_CN);
   const std::array<double, 3> expected_face1638_eCN = {0, -2.77555756156289e-15,
                                                        1};
   const double expected_face1638_gDiff = 0.00500000000000001;
@@ -386,6 +382,7 @@ TEST(ProcessingSecondaryFaceGeometryTest,
   // Expected data of face 1639
   const std::array<double, 3> expected_face1639_CN = {0, 0,
                                                       0.00500000000000000};
+  const double expected_face1639_magCN = mag(expected_face1639_CN);
   const std::array<double, 3> expected_face1639_eCN = {0, 0, 1};
   const double expected_face1639_gDiff = 0.00500000000000001;
   const std::array<double, 3> expected_face1639_T = {0, 0, 0};
@@ -393,8 +390,8 @@ TEST(ProcessingSecondaryFaceGeometryTest,
   const double expected_face1639_walldist = 0.00500000000000000;
 
   // Set tolerance
-  const double maxDiff = 1.0e-9;
-  const double maxRelativeDiff = 1.0e-4;
+  const double absTol = 1.0e-12;
+  const double relTol = 1.0e-8;
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
@@ -402,67 +399,65 @@ TEST(ProcessingSecondaryFaceGeometryTest,
   // --- Assert ---
   // Verify the geometric quantities of the first boundary two faces
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[760].CN(), expected_face760_CN,
-                                3, maxDiff, maxRelativeDiff));
+                                3, absTol, relTol));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[760].magCN(),
+                                expected_face760_magCN, absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[760].eCN(), expected_face760_eCN,
-                                3, maxDiff, maxRelativeDiff));
+                                3, absTol, relTol));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[760].gDiff(),
-                                expected_face760_gDiff, maxDiff,
-                                maxRelativeDiff));
+                                expected_face760_gDiff, absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[760].T(), expected_face760_T, 3,
-                                maxDiff, maxRelativeDiff));
+                                absTol, relTol));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[760].gf(), expected_face760_gf,
-                                maxDiff, maxRelativeDiff));
+                                absTol, relTol));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[760].walldist(),
-                                expected_face760_walldist, maxDiff,
-                                maxRelativeDiff));
+                                expected_face760_walldist, absTol, relTol));
 
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[761].CN(), expected_face761_CN,
-                                3, maxDiff, maxRelativeDiff));
+                                3, absTol, relTol));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[761].magCN(),
+                                expected_face761_magCN, absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[761].eCN(), expected_face761_eCN,
-                                3, maxDiff, maxRelativeDiff));
+                                3, absTol, relTol));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[761].gDiff(),
-                                expected_face761_gDiff, maxDiff,
-                                maxRelativeDiff));
+                                expected_face761_gDiff, absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[761].T(), expected_face761_T, 3,
-                                maxDiff, maxRelativeDiff));
+                                absTol, relTol));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[761].gf(), expected_face761_gf,
-                                maxDiff, maxRelativeDiff));
+                                absTol, relTol));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[761].walldist(),
-                                expected_face761_walldist, maxDiff,
-                                maxRelativeDiff));
+                                expected_face761_walldist, absTol, relTol));
 
   // Verify the geometric quantities of the last boundary two faces
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1638].CN(), expected_face1638_CN,
-                                3, maxDiff, maxRelativeDiff));
+                                3, absTol, relTol));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1638].magCN(),
+                                expected_face1638_magCN, absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1638].eCN(),
-                                expected_face1638_eCN, 3, maxDiff,
-                                maxRelativeDiff));
+                                expected_face1638_eCN, 3, absTol, relTol));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1638].gDiff(),
-                                expected_face1638_gDiff, maxDiff,
-                                maxRelativeDiff));
+                                expected_face1638_gDiff, absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1638].T(), expected_face1638_T,
-                                3, maxDiff, maxRelativeDiff));
+                                3, absTol, relTol));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1638].gf(), expected_face1638_gf,
-                                maxDiff, maxRelativeDiff));
+                                absTol, relTol));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1638].walldist(),
-                                expected_face1638_walldist, maxDiff,
-                                maxRelativeDiff));
+                                expected_face1638_walldist, absTol, relTol));
 
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1639].CN(), expected_face1639_CN,
-                                3, maxDiff, maxRelativeDiff));
+                                3, absTol, relTol));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1639].magCN(),
+                                expected_face1639_magCN, absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1639].eCN(),
-                                expected_face1639_eCN, 3, maxDiff,
-                                maxRelativeDiff));
+                                expected_face1639_eCN, 3, absTol, relTol));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1639].gDiff(),
-                                expected_face1639_gDiff, maxDiff,
-                                maxRelativeDiff));
+                                expected_face1639_gDiff, absTol, relTol));
   EXPECT_TRUE(VectorAlmostEqual(fvMesh.faces()[1639].T(), expected_face1639_T,
-                                3, maxDiff, maxRelativeDiff));
+                                3, absTol, relTol));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1639].gf(), expected_face1639_gf,
-                                maxDiff, maxRelativeDiff));
+                                absTol, relTol));
   EXPECT_TRUE(ScalarAlmostEqual(fvMesh.faces()[1639].walldist(),
-                                expected_face1639_walldist, maxDiff,
-                                maxRelativeDiff));
+                                expected_face1639_walldist, absTol, relTol));
 }
 
 // TEST(ProcessingSecondaryFaceGeometryTest,
@@ -476,7 +471,7 @@ TEST(ProcessingSecondaryFaceGeometryTest,
 //   meshReader.readOpenFoamMesh(fvMesh);
 
 //   // --- Assert ---
-//   // Verify the geometric quantities of the first two elements
+//   // Verify the geometric quantities of the first two cells
 //   //  element 0: face 0 is the only local interior face
 //   EXPECT_EQ(fvMesh.faces()[0].iOwnerNeighborCoef(), 1);
 
@@ -486,7 +481,7 @@ TEST(ProcessingSecondaryFaceGeometryTest,
 //   //  element 2: face 2 is only local interior face
 //   EXPECT_EQ(fvMesh.faces()[2].iOwnerNeighborCoef(), 1);
 
-//   // Verify the geometric quantities of the middle two elements
+//   // Verify the geometric quantities of the middle two cells
 //   // element 458: face 672, 680, and 681 are local interior faces
 //   EXPECT_EQ(fvMesh.faces()[672].iNeighborOwnerCoef(), 1);
 //   EXPECT_EQ(fvMesh.faces()[680].iNeighborOwnerCoef(), 2);
@@ -502,7 +497,7 @@ TEST(ProcessingSecondaryFaceGeometryTest,
 //   EXPECT_EQ(fvMesh.faces()[683].iOwnerNeighborCoef(), 2);
 //   EXPECT_EQ(fvMesh.faces()[684].iOwnerNeighborCoef(), 3);
 
-//   // Verify the geometric quantities of the last two elements
+//   // Verify the geometric quantities of the last two cells
 //   // element 915: face 978, 1295, 1297 are local interior faces
 //   EXPECT_EQ(fvMesh.faces()[978].iNeighborOwnerCoef(), 1);
 //   EXPECT_EQ(fvMesh.faces()[1295].iNeighborOwnerCoef(), 2);

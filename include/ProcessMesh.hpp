@@ -19,6 +19,9 @@ private:
 
   // Create a flag to sort boundary nodes from interior nodes
   void sortBoundaryNodesFromInteriorNodes(Mesh &fvMesh);
+
+  // Label boundary faces with the corresponding patch index
+  void labelBoundaryFaces(Mesh &fvMesh);
 };
 
 #endif

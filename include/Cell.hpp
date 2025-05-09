@@ -1,17 +1,17 @@
-#ifndef ELEMENT_HPP
-#define ELEMENT_HPP
+#ifndef CELL_HPP
+#define CELL_HPP
 
 #include <array>
 #include <cstddef>
 #include <vector>
 
-class Element {
+class Cell {
 public:
   std::size_t &index() { return index_; }
   std::vector<int> &faceSigns() { return faceSigns_; }
   std::vector<std::size_t> &iFaces() { return iFaces_; }
 
-  // Neighbor element indices
+  // Neighbor cell indices
   std::vector<std::size_t> &iNeighbors() { return iNeighbors_; }
 
   std::size_t &nNeighbors() { return nNeighbors_; }

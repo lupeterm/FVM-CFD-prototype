@@ -22,6 +22,7 @@ void ProcessMesh::processOpenFoamMesh(Mesh &fvMesh) {
   computeElementVolumeAndCentroid(fvMesh);
   processSecondaryFaceGeometry(fvMesh);
   sortBoundaryNodesFromInteriorNodes(fvMesh);
+  labelBoundaryFaces(fvMesh);
 }
 
 void ProcessMesh::processBasicFaceGeometry(Mesh &fvMesh) {
@@ -133,9 +134,8 @@ void ProcessMesh::processBasicFaceGeometry(Mesh &fvMesh) {
 }
 
 void ProcessMesh::computeElementVolumeAndCentroid(Mesh &fvMesh) {
-  for (std::size_t iElement = 0; iElement < fvMesh.nElements(); ++iElement) {
-    const std::vector<std::size_t> &iFaces =
-        fvMesh.elements()[iElement].iFaces();
+  for (std::size_t iElement = 0; iElement < fvMesh.nCells(); ++iElement) {
+    const std::vector<std::size_t> &iFaces = fvMesh.cells()[iElement].iFaces();
 
     // Compute the geometric center of the element
     std::array<double, 3> elementCenter = {0.0, 0.0, 0.0};
@@ -157,7 +157,7 @@ void ProcessMesh::computeElementVolumeAndCentroid(Mesh &fvMesh) {
 
     for (std::size_t iFace = 0; iFace < iFaces.size(); ++iFace) {
       Face &localFace = fvMesh.faces()[iFaces[iFace]];
-      const int localFaceSign = fvMesh.elements()[iElement].faceSigns()[iFace];
+      const int localFaceSign = fvMesh.cells()[iElement].faceSigns()[iFace];
       std::array<double, 3> Sf = {0.0, 0.0, 0.0};
 
       Sf = localFaceSign * localFace.Sf();
@@ -187,11 +187,11 @@ void ProcessMesh::computeElementVolumeAndCentroid(Mesh &fvMesh) {
     }
 
     // Compute the centroid of the element
-    fvMesh.elements()[iElement].centroid() =
+    fvMesh.cells()[iElement].centroid() =
         (1 / localVolumeSum) * localVolumeCentroidSum;
 
-    fvMesh.elements()[iElement].volume() = localVolumeSum;
-    fvMesh.elements()[iElement].oldVolume() = localVolumeSum;
+    fvMesh.cells()[iElement].volume() = localVolumeSum;
+    fvMesh.cells()[iElement].oldVolume() = localVolumeSum;
   }
 }
 
@@ -204,8 +204,8 @@ void ProcessMesh::processSecondaryFaceGeometry(Mesh &fvMesh) {
     std::array<double, 3> nf = {0.0, 0.0, 0.0};
     nf = (1 / theFace.area()) * theFace.Sf();
 
-    Element &ownerElement = fvMesh.elements()[theFace.iOwner()];
-    Element &neighborElement = fvMesh.elements()[theFace.iNeighbor()];
+    Cell &ownerElement = fvMesh.cells()[theFace.iOwner()];
+    Cell &neighborElement = fvMesh.cells()[theFace.iNeighbor()];
 
     std::array<double, 3> CN = {0.0, 0.0, 0.0};
     CN = neighborElement.centroid() - ownerElement.centroid();
@@ -213,6 +213,7 @@ void ProcessMesh::processSecondaryFaceGeometry(Mesh &fvMesh) {
 
     std::array<double, 3> eCN = {0.0, 0.0, 0.0};
     const double magCN = mag(CN);
+    fvMesh.faces()[iFace].magCN() = magCN;
     eCN = (1 / magCN) * CN;
 
     fvMesh.faces()[iFace].eCN() = eCN;
@@ -248,7 +249,7 @@ void ProcessMesh::processSecondaryFaceGeometry(Mesh &fvMesh) {
     //   nf[iCoordinate] = theBFace.Sf()[iCoordinate] / theBFace.area();
     // }
 
-    Element &ownerElement = fvMesh.elements()[theBFace.iOwner()];
+    Cell &ownerElement = fvMesh.cells()[theBFace.iOwner()];
 
     std::array<double, 3> CN = {0.0, 0.0, 0.0};
     CN = theBFace.centroid() - ownerElement.centroid();
@@ -260,6 +261,7 @@ void ProcessMesh::processSecondaryFaceGeometry(Mesh &fvMesh) {
 
     std::array<double, 3> eCN = {0.0, 0.0, 0.0};
     const double magCN = mag(CN);
+    fvMesh.faces()[iBFace].magCN() = magCN;
 
     eCN = (1 / magCN) * CN;
 
@@ -275,11 +277,11 @@ void ProcessMesh::processSecondaryFaceGeometry(Mesh &fvMesh) {
         dot_product(CN, theBFace.Sf()) / mag(theBFace.Sf());
   }
 
-  // Loop over elements
-  for (std::size_t iElement = 0; iElement < fvMesh.nElements(); ++iElement) {
-    std::vector<std::size_t> &iFaces = fvMesh.elements()[iElement].iFaces();
+  // Loop over cells
+  for (std::size_t iElement = 0; iElement < fvMesh.nCells(); ++iElement) {
+    std::vector<std::size_t> &iFaces = fvMesh.cells()[iElement].iFaces();
     std::vector<std::size_t> &iNeighbors =
-        fvMesh.elements()[iElement].iNeighbors();
+        fvMesh.cells()[iElement].iNeighbors();
 
     std::size_t kf = 1;
 
@@ -299,9 +301,9 @@ void ProcessMesh::processSecondaryFaceGeometry(Mesh &fvMesh) {
 
 void ProcessMesh::sortBoundaryNodesFromInteriorNodes(Mesh &fvMesh) {
   for (std::size_t iFace = 0; iFace < fvMesh.nInteriorFaces(); ++iFace) {
-    fvMesh.faces()[iFace].patchIndex() = 0;
+    // fvMesh.faces()[iFace].patchIndex() = 0;
 
-    std::size_t *iNodes = fvMesh.faces()[iFace].iNodes();
+    std::vector<std::size_t> &iNodes = fvMesh.faces()[iFace].iNodes();
     std::size_t nNodes = fvMesh.faces()[iFace].nNodes();
     for (std::size_t iNode = 0; iNode < nNodes; ++iNode) {
       fvMesh.nodes()[iNodes[iNode]].Flag() = 1;
@@ -317,9 +319,10 @@ void ProcessMesh::sortBoundaryNodesFromInteriorNodes(Mesh &fvMesh) {
     bool s2 =
         (fvMesh.boundaries()[iBoundary].userName() == "frontAndBackPlanes"s);
     if (s1 || s2) {
-      for (std::size_t iFace = startFace; iFace < startFace + nBFaces - 1;
+      for (std::size_t iFace = startFace; iFace < startFace + nBFaces;
            ++iFace) {
-        std::size_t *iNodes = fvMesh.faces()[iFace].iNodes();
+
+        std::vector<std::size_t> &iNodes = fvMesh.faces()[iFace].iNodes();
         const std::size_t &nNodes = fvMesh.faces()[iFace].nNodes();
 
         for (std::size_t iNode = 0; iNode < nNodes; ++iNode) {
@@ -338,17 +341,29 @@ void ProcessMesh::sortBoundaryNodesFromInteriorNodes(Mesh &fvMesh) {
     bool s2 =
         (fvMesh.boundaries()[iBoundary].userName() == "frontAndBackPlanes"s);
     if (!s1 && !s2) {
-      for (std::size_t iFace = startFace; iFace < startFace + nBFaces - 1;
+      for (std::size_t iFace = startFace; iFace < startFace + nBFaces;
            ++iFace) {
-        fvMesh.faces()[iFace].patchIndex() = iBoundary;
+        // fvMesh.faces()[iFace].patchIndex() = iBoundary;
 
-        std::size_t *iNodes = fvMesh.faces()[iFace].iNodes();
+        std::vector<std::size_t> &iNodes = fvMesh.faces()[iFace].iNodes();
         const std::size_t &nNodes = fvMesh.faces()[iFace].nNodes();
 
         for (std::size_t iNode = 0; iNode < nNodes; ++iNode) {
           fvMesh.nodes()[iNodes[iNode]].Flag() = 0;
         }
       }
+    }
+  }
+}
+
+void ProcessMesh::labelBoundaryFaces(Mesh &fvMesh) {
+  for (std::size_t iBoundary = 0; iBoundary < fvMesh.nBoundaries();
+       ++iBoundary) {
+    const std::size_t &startFace = fvMesh.boundaries()[iBoundary].startFace();
+    const std::size_t &nBFaces = fvMesh.boundaries()[iBoundary].nFaces();
+
+    for (std::size_t iFace = startFace; iFace < startFace + nBFaces; ++iFace) {
+      fvMesh.faces()[iFace].patchIndex() = iBoundary;
     }
   }
 }
