@@ -24,6 +24,16 @@ public:
                          const std::vector<double> &source,
                          std::vector<boundaryField<double>> &boundaryFields,
                          MatrixType &coeffMatrix, std::vector<double> &RHS);
+
+  // Assemble the diffusion term on a Cartesian orthogonal mesh by looping over
+  // different types of faces one by one
+  template <typename MatrixType>
+  void
+  batchedFaceBasedAssemble(Mesh &fvMesh,
+                           const std::vector<double> diffusionCoef,
+                           const std::vector<double> &source,
+                           std::vector<boundaryField<double>> &boundaryFields,
+                           MatrixType &coeffMatrix, std::vector<double> &RHS);
 };
 
 // Prevent implicit instantiation of the template function for these types
@@ -46,6 +56,18 @@ extern template void AssembleDiffusionTerm::faceBasedAssemble(
     Matrix<double> &coeffMatrix, std::vector<double> &RHS);
 
 extern template void AssembleDiffusionTerm::faceBasedAssemble(
+    Mesh &fvMesh, const std::vector<double> diffusionCoef,
+    const std::vector<double> &source,
+    std::vector<boundaryField<double>> &boundaryFields,
+    gko::matrix_data<double, int> &coeffMatrix, std::vector<double> &RHS);
+
+extern template void AssembleDiffusionTerm::batchedFaceBasedAssemble(
+    Mesh &fvMesh, const std::vector<double> diffusionCoef,
+    const std::vector<double> &source,
+    std::vector<boundaryField<double>> &boundaryFields,
+    Matrix<double> &coeffMatrix, std::vector<double> &RHS);
+
+extern template void AssembleDiffusionTerm::batchedFaceBasedAssemble(
     Mesh &fvMesh, const std::vector<double> diffusionCoef,
     const std::vector<double> &source,
     std::vector<boundaryField<double>> &boundaryFields,

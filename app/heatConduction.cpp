@@ -13,15 +13,19 @@ int main(int argc, char *argv[]) {
   // Check for command-line arguments
   if (argc < 3) {
     std::cerr << "Usage: " << argv[0]
-              << " <caseDirectory> <assembly method: cell/face>" << std::endl;
+              << " <caseDirectory> <assemblyMethod: element/face/batchedFace>"
+              << std::endl;
     return 1;
   }
 
   std::string caseDirectory(argv[1]);
   std::string assemblyMethod(argv[2]);
 
-  if (assemblyMethod != "cell" && assemblyMethod != "face") {
-    std::cerr << "Invalid assembly method. Use 'cell' or 'face'." << std::endl;
+  if (assemblyMethod != "element" && assemblyMethod != "face" &&
+      assemblyMethod != "batchedFace") {
+    std::cerr
+        << "Invalid assembly method. Use 'element', 'face', or 'batchedFace'."
+        << std::endl;
     return 1;
   }
 
@@ -50,14 +54,19 @@ int main(int argc, char *argv[]) {
 
   AssembleDiffusionTerm diffusionTermAssembler;
 
-  if (assemblyMethod == "cell") {
-    std::cout << "Using cell-based assembly..." << std::endl;
+  if (assemblyMethod == "element") {
+    std::cout << "Using element-based assembly..." << std::endl;
     diffusionTermAssembler.elementBasedAssemble(
         fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
         coeffMatrix, RHS);
   } else if (assemblyMethod == "face") {
     std::cout << "Using face-based assembly..." << std::endl;
     diffusionTermAssembler.faceBasedAssemble(
+        fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
+        coeffMatrix, RHS);
+  } else if (assemblyMethod == "batchedFace") {
+    std::cout << "Using batched face-based assembly..." << std::endl;
+    diffusionTermAssembler.batchedFaceBasedAssemble(
         fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
         coeffMatrix, RHS);
   }
