@@ -5,3 +5,4 @@ cases/heat-conduction/*/1/*
 cases/heat-conduction/*/results.txt
 cases/heat-conduction/2D-heat-conduction-on-a-10-by-10-mesh/constant/polyMesh
 validation/*.png
+venv

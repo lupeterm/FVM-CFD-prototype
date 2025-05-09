@@ -1,0 +1,8 @@
+Checks: >
+  bugprone-implicit-conversion,
+  bugprone-narrowing-conversions,
+  bugprone-implicit-widening-of-integer-types,
+  readability-implicit-bool-conversion,
+  clang-analyzer-core.*,
+  cppcoreguidelines-narrowing-conversions
+

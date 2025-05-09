@@ -11,12 +11,24 @@
 
 int main(int argc, char *argv[]) {
   // Check for command-line arguments
-  if (argc < 2) {
-    std::cerr << "Usage: " << argv[0] << " <caseDirectory>" << std::endl;
+  if (argc < 3) {
+    std::cerr << "Usage: " << argv[0]
+              << " <caseDirectory> <assemblyMethod: element/face/batchedFace>"
+              << std::endl;
     return 1;
   }
 
   std::string caseDirectory(argv[1]);
+  std::string assemblyMethod(argv[2]);
+
+  if (assemblyMethod != "element" && assemblyMethod != "face" &&
+      assemblyMethod != "batchedFace") {
+    std::cerr
+        << "Invalid assembly method. Use 'element', 'face', or 'batchedFace'."
+        << std::endl;
+    return 1;
+  }
+
   Mesh fvMesh(caseDirectory);
   ReadMesh meshReader;
   meshReader.readOpenFoamMesh(fvMesh);
@@ -41,9 +53,23 @@ int main(int argc, char *argv[]) {
   std::vector<ValueType> RHS(fvMesh.nElements(), 0.0);
 
   AssembleDiffusionTerm diffusionTermAssembler;
-  diffusionTermAssembler.elementBasedAssemble(
-      fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
-      coeffMatrix, RHS);
+
+  if (assemblyMethod == "element") {
+    std::cout << "Using element-based assembly..." << std::endl;
+    diffusionTermAssembler.elementBasedAssemble(
+        fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
+        coeffMatrix, RHS);
+  } else if (assemblyMethod == "face") {
+    std::cout << "Using face-based assembly..." << std::endl;
+    diffusionTermAssembler.faceBasedAssemble(
+        fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
+        coeffMatrix, RHS);
+  } else if (assemblyMethod == "batchedFace") {
+    std::cout << "Using batched face-based assembly..." << std::endl;
+    diffusionTermAssembler.batchedFaceBasedAssemble(
+        fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
+        coeffMatrix, RHS);
+  }
 
   std::vector<ValueType> solution(fvMesh.nElements(), 0.0);
 
@@ -59,10 +85,6 @@ int main(int argc, char *argv[]) {
   for (std::size_t i = 0; i < fvMesh.nElements(); ++i) {
     internalTemperatureField.values()[i] = solution[i];
   }
-
-  // Print the internal temperature field
-  std::cout << "Internal Temperature Field:" << std::endl;
-  IO::printVector(internalTemperatureField.values());
 
   // Write the solution to a file
   std::cout << "Writing result to a file..." << std::endl;

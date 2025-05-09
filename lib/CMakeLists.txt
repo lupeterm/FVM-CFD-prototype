@@ -13,7 +13,7 @@ FetchContent_MakeAvailable(googletest)
 FetchContent_Declare(
   ginkgo
   GIT_REPOSITORY https://github.com/ginkgo-project/ginkgo.git
-  GIT_TAG        main # You can replace 'main' with a specific version or tag
+  GIT_TAG        v1.9.0
 )
 set(GINKGO_BUILD_MPI ON CACHE INTERNAL "Enable Ginkgo MPI support")
 FetchContent_MakeAvailable(ginkgo)
