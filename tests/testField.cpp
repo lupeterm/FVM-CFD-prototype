@@ -14,26 +14,26 @@ TEST(FieldTest, SetScalarVolField) {
   Mesh fvMesh(caseDirectory);
   ReadMesh meshReader;
 
-  const double expected_element_scalar_field = 1.0;
+  const double expected_cell_scalar_field = 1.0;
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
-  Field<double> elementScalarField(fvMesh.nCells());
-  elementScalarField.set(1.0);
+  Field<double> cellScalarField(fvMesh.nCells());
+  cellScalarField.set(1.0);
 
   // --- Assert ---
   // *** Verify the scalar field values of cells ***
   // The first two cells
-  EXPECT_EQ(elementScalarField.values()[0], expected_element_scalar_field);
-  EXPECT_EQ(elementScalarField.values()[1], expected_element_scalar_field);
+  EXPECT_EQ(cellScalarField.values()[0], expected_cell_scalar_field);
+  EXPECT_EQ(cellScalarField.values()[1], expected_cell_scalar_field);
 
   // The middle two faces
-  EXPECT_EQ(elementScalarField.values()[198], expected_element_scalar_field);
-  EXPECT_EQ(elementScalarField.values()[199], expected_element_scalar_field);
+  EXPECT_EQ(cellScalarField.values()[198], expected_cell_scalar_field);
+  EXPECT_EQ(cellScalarField.values()[199], expected_cell_scalar_field);
 
   // The last two faces
-  EXPECT_EQ(elementScalarField.values()[398], expected_element_scalar_field);
-  EXPECT_EQ(elementScalarField.values()[399], expected_element_scalar_field);
+  EXPECT_EQ(cellScalarField.values()[398], expected_cell_scalar_field);
+  EXPECT_EQ(cellScalarField.values()[399], expected_cell_scalar_field);
 }
 
 TEST(FieldTest, SetVectorVolField) {
@@ -43,32 +43,32 @@ TEST(FieldTest, SetVectorVolField) {
   Mesh fvMesh(caseDirectory);
   ReadMesh meshReader;
 
-  const std::array<double, 3> expected_element_vector_field = {1.0, 2.0, 3.0};
+  const std::array<double, 3> expected_cell_vector_field = {1.0, 2.0, 3.0};
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
-  Field<std::array<double, 3>> elementVolField(fvMesh.nCells());
-  elementVolField.set(expected_element_vector_field);
+  Field<std::array<double, 3>> cellVolField(fvMesh.nCells());
+  cellVolField.set(expected_cell_vector_field);
 
   // --- Assert ---
   // *** Verify the scalar field values of cells ***
   // The first two cells
-  EXPECT_TRUE(VectorMatch(elementVolField.values()[0],
-                          expected_element_vector_field, 3));
-  EXPECT_TRUE(VectorMatch(elementVolField.values()[1],
-                          expected_element_vector_field, 3));
+  EXPECT_TRUE(
+      VectorMatch(cellVolField.values()[0], expected_cell_vector_field, 3));
+  EXPECT_TRUE(
+      VectorMatch(cellVolField.values()[1], expected_cell_vector_field, 3));
 
   // // The middle two faces
-  EXPECT_TRUE(VectorMatch(elementVolField.values()[198],
-                          expected_element_vector_field, 3));
-  EXPECT_TRUE(VectorMatch(elementVolField.values()[199],
-                          expected_element_vector_field, 3));
+  EXPECT_TRUE(
+      VectorMatch(cellVolField.values()[198], expected_cell_vector_field, 3));
+  EXPECT_TRUE(
+      VectorMatch(cellVolField.values()[199], expected_cell_vector_field, 3));
 
   // // The last two faces
-  EXPECT_TRUE(VectorMatch(elementVolField.values()[398],
-                          expected_element_vector_field, 3));
-  EXPECT_TRUE(VectorMatch(elementVolField.values()[399],
-                          expected_element_vector_field, 3));
+  EXPECT_TRUE(
+      VectorMatch(cellVolField.values()[398], expected_cell_vector_field, 3));
+  EXPECT_TRUE(
+      VectorMatch(cellVolField.values()[399], expected_cell_vector_field, 3));
 }
 
 TEST(FieldTest, UseDefaultVectorVolField) {
@@ -78,29 +78,29 @@ TEST(FieldTest, UseDefaultVectorVolField) {
   Mesh fvMesh(caseDirectory);
   ReadMesh meshReader;
 
-  const std::array<double, 3> expected_element_vector_field = {0.0, 0.0, 0.0};
+  const std::array<double, 3> expected_cell_vector_field = {0.0, 0.0, 0.0};
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
-  Field<std::array<double, 3>> elementVolField(fvMesh.nCells());
+  Field<std::array<double, 3>> cellVolField(fvMesh.nCells());
 
   // --- Assert ---
   // *** Verify the scalar field values of cells ***
   // The first two cells
-  EXPECT_TRUE(VectorMatch(elementVolField.values()[0],
-                          expected_element_vector_field, 3));
-  EXPECT_TRUE(VectorMatch(elementVolField.values()[1],
-                          expected_element_vector_field, 3));
+  EXPECT_TRUE(
+      VectorMatch(cellVolField.values()[0], expected_cell_vector_field, 3));
+  EXPECT_TRUE(
+      VectorMatch(cellVolField.values()[1], expected_cell_vector_field, 3));
 
   // // The middle two faces
-  EXPECT_TRUE(VectorMatch(elementVolField.values()[198],
-                          expected_element_vector_field, 3));
-  EXPECT_TRUE(VectorMatch(elementVolField.values()[199],
-                          expected_element_vector_field, 3));
+  EXPECT_TRUE(
+      VectorMatch(cellVolField.values()[198], expected_cell_vector_field, 3));
+  EXPECT_TRUE(
+      VectorMatch(cellVolField.values()[199], expected_cell_vector_field, 3));
 
   // // The last two faces
-  EXPECT_TRUE(VectorMatch(elementVolField.values()[398],
-                          expected_element_vector_field, 3));
-  EXPECT_TRUE(VectorMatch(elementVolField.values()[399],
-                          expected_element_vector_field, 3));
+  EXPECT_TRUE(
+      VectorMatch(cellVolField.values()[398], expected_cell_vector_field, 3));
+  EXPECT_TRUE(
+      VectorMatch(cellVolField.values()[399], expected_cell_vector_field, 3));
 }
