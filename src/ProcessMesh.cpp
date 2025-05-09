@@ -134,9 +134,8 @@ void ProcessMesh::processBasicFaceGeometry(Mesh &fvMesh) {
 }
 
 void ProcessMesh::computeElementVolumeAndCentroid(Mesh &fvMesh) {
-  for (std::size_t iElement = 0; iElement < fvMesh.nElements(); ++iElement) {
-    const std::vector<std::size_t> &iFaces =
-        fvMesh.elements()[iElement].iFaces();
+  for (std::size_t iElement = 0; iElement < fvMesh.nCells(); ++iElement) {
+    const std::vector<std::size_t> &iFaces = fvMesh.cells()[iElement].iFaces();
 
     // Compute the geometric center of the element
     std::array<double, 3> elementCenter = {0.0, 0.0, 0.0};
@@ -158,7 +157,7 @@ void ProcessMesh::computeElementVolumeAndCentroid(Mesh &fvMesh) {
 
     for (std::size_t iFace = 0; iFace < iFaces.size(); ++iFace) {
       Face &localFace = fvMesh.faces()[iFaces[iFace]];
-      const int localFaceSign = fvMesh.elements()[iElement].faceSigns()[iFace];
+      const int localFaceSign = fvMesh.cells()[iElement].faceSigns()[iFace];
       std::array<double, 3> Sf = {0.0, 0.0, 0.0};
 
       Sf = localFaceSign * localFace.Sf();
@@ -188,11 +187,11 @@ void ProcessMesh::computeElementVolumeAndCentroid(Mesh &fvMesh) {
     }
 
     // Compute the centroid of the element
-    fvMesh.elements()[iElement].centroid() =
+    fvMesh.cells()[iElement].centroid() =
         (1 / localVolumeSum) * localVolumeCentroidSum;
 
-    fvMesh.elements()[iElement].volume() = localVolumeSum;
-    fvMesh.elements()[iElement].oldVolume() = localVolumeSum;
+    fvMesh.cells()[iElement].volume() = localVolumeSum;
+    fvMesh.cells()[iElement].oldVolume() = localVolumeSum;
   }
 }
 
@@ -205,8 +204,8 @@ void ProcessMesh::processSecondaryFaceGeometry(Mesh &fvMesh) {
     std::array<double, 3> nf = {0.0, 0.0, 0.0};
     nf = (1 / theFace.area()) * theFace.Sf();
 
-    Element &ownerElement = fvMesh.elements()[theFace.iOwner()];
-    Element &neighborElement = fvMesh.elements()[theFace.iNeighbor()];
+    Cell &ownerElement = fvMesh.cells()[theFace.iOwner()];
+    Cell &neighborElement = fvMesh.cells()[theFace.iNeighbor()];
 
     std::array<double, 3> CN = {0.0, 0.0, 0.0};
     CN = neighborElement.centroid() - ownerElement.centroid();
@@ -250,7 +249,7 @@ void ProcessMesh::processSecondaryFaceGeometry(Mesh &fvMesh) {
     //   nf[iCoordinate] = theBFace.Sf()[iCoordinate] / theBFace.area();
     // }
 
-    Element &ownerElement = fvMesh.elements()[theBFace.iOwner()];
+    Cell &ownerElement = fvMesh.cells()[theBFace.iOwner()];
 
     std::array<double, 3> CN = {0.0, 0.0, 0.0};
     CN = theBFace.centroid() - ownerElement.centroid();
@@ -278,11 +277,11 @@ void ProcessMesh::processSecondaryFaceGeometry(Mesh &fvMesh) {
         dot_product(CN, theBFace.Sf()) / mag(theBFace.Sf());
   }
 
-  // Loop over elements
-  for (std::size_t iElement = 0; iElement < fvMesh.nElements(); ++iElement) {
-    std::vector<std::size_t> &iFaces = fvMesh.elements()[iElement].iFaces();
+  // Loop over cells
+  for (std::size_t iElement = 0; iElement < fvMesh.nCells(); ++iElement) {
+    std::vector<std::size_t> &iFaces = fvMesh.cells()[iElement].iFaces();
     std::vector<std::size_t> &iNeighbors =
-        fvMesh.elements()[iElement].iNeighbors();
+        fvMesh.cells()[iElement].iNeighbors();
 
     std::size_t kf = 1;
 

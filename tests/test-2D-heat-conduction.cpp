@@ -44,13 +44,13 @@ TEST(MeshFor2DHeatConductionTest, ConfirmElementOrdering) {
   Mesh fvMesh(caseDirectory);
   ReadMesh meshReader;
 
-  const std::array<double, 3> expected_element0_centroid = {
+  const std::array<double, 3> expected_cell0_centroid = {
       0.250000000000000, 0.250000000000000, 0.05};
-  const std::array<double, 3> expected_element1_centroid = {
+  const std::array<double, 3> expected_cell1_centroid = {
       0.750000000000000, 0.250000000000000, 0.05};
-  const std::array<double, 3> expected_element2_centroid = {
+  const std::array<double, 3> expected_cell2_centroid = {
       0.250000000000000, 0.750000000000000, 0.05};
-  const std::array<double, 3> expected_element3_centroid = {
+  const std::array<double, 3> expected_cell3_centroid = {
       0.750000000000000, 0.750000000000000, 0.05};
 
   const double absTol = 1.0e-12;
@@ -60,15 +60,15 @@ TEST(MeshFor2DHeatConductionTest, ConfirmElementOrdering) {
   meshReader.readOpenFoamMesh(fvMesh);
 
   // --- Assert ---
-  // Verify the centroids of all the four elements
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[0].centroid(),
-                                expected_element0_centroid, 3, absTol, relTol));
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[1].centroid(),
-                                expected_element1_centroid, 3, absTol, relTol));
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[2].centroid(),
-                                expected_element2_centroid, 3, absTol, relTol));
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[3].centroid(),
-                                expected_element3_centroid, 3, absTol, relTol));
+  // Verify the centroids of all the four cells
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.cells()[0].centroid(),
+                                expected_cell0_centroid, 3, absTol, relTol));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.cells()[1].centroid(),
+                                expected_cell1_centroid, 3, absTol, relTol));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.cells()[2].centroid(),
+                                expected_cell2_centroid, 3, absTol, relTol));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.cells()[3].centroid(),
+                                expected_cell3_centroid, 3, absTol, relTol));
 }
 
 TEST(InitialBoundaryConditionsTest, ReadBoundaryTemperatureField) {
@@ -91,7 +91,7 @@ TEST(InitialBoundaryConditionsTest, ReadBoundaryTemperatureField) {
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
-  Field<double> internalTemperatureField(fvMesh.nElements());
+  Field<double> internalTemperatureField(fvMesh.nCells());
   std::vector<boundaryField<double>> boundaryTemperatureFields;
   ReadInitialBoundaryConditions initialBoundaryConditionsReader;
   initialBoundaryConditionsReader.readTemperatureField(
@@ -177,10 +177,10 @@ TEST(DiffusionTermDiscretizationTest, CellBased2DHeatConductionOn2By2Mesh) {
 
   // Define the thermal conductivity and source term
   std::vector<double> thermalConductivity(fvMesh.nFaces(), 1.0);
-  std::vector<double> heatSource(fvMesh.nElements(), 0.0);
+  std::vector<double> heatSource(fvMesh.nCells(), 0.0);
 
   // Read initial condition and boundary conditions
-  Field<double> internalTemperatureField(fvMesh.nElements());
+  Field<double> internalTemperatureField(fvMesh.nCells());
   std::vector<boundaryField<double>> boundaryTemperatureFields;
   ReadInitialBoundaryConditions initialBoundaryConditionsReader;
   initialBoundaryConditionsReader.readTemperatureField(
@@ -198,11 +198,11 @@ TEST(DiffusionTermDiscretizationTest, CellBased2DHeatConductionOn2By2Mesh) {
 
   // --- Act & Assert for Matrix<double> ---
   {
-    Matrix<double> coeffMatrix(fvMesh.nElements(), fvMesh.nElements());
-    std::vector<double> RHS(fvMesh.nElements(), 0.0);
+    Matrix<double> coeffMatrix(fvMesh.nCells(), fvMesh.nCells());
+    std::vector<double> RHS(fvMesh.nCells(), 0.0);
 
     AssembleDiffusionTerm diffusionTermAssembler;
-    diffusionTermAssembler.elementBasedAssemble(
+    diffusionTermAssembler.cellBasedAssemble(
         fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
         coeffMatrix, RHS);
 
@@ -223,10 +223,10 @@ TEST(DiffusionTermDiscretizationTest, CellBased2DHeatConductionOn2By2Mesh) {
   // --- Act & Assert for gko::matrix_data ---
   {
     gko::matrix_data<double, int> coeffMatrix;
-    std::vector<double> RHS(fvMesh.nElements(), 0.0);
+    std::vector<double> RHS(fvMesh.nCells(), 0.0);
 
     AssembleDiffusionTerm diffusionTermAssembler;
-    diffusionTermAssembler.elementBasedAssemble(
+    diffusionTermAssembler.cellBasedAssemble(
         fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
         coeffMatrix, RHS);
 
@@ -262,10 +262,10 @@ TEST(DiffusionTermDiscretizationTest, CellBased2DHeatConductionOn3By3Mesh) {
 
   // Define the thermal conductivity and source term
   std::vector<double> thermalConductivity(fvMesh.nFaces(), 1.0);
-  std::vector<double> heatSource(fvMesh.nElements(), 0.0);
+  std::vector<double> heatSource(fvMesh.nCells(), 0.0);
 
   // Read initial condition and boundary conditions
-  Field<double> internalTemperatureField(fvMesh.nElements());
+  Field<double> internalTemperatureField(fvMesh.nCells());
   std::vector<boundaryField<double>> boundaryTemperatureFields;
   ReadInitialBoundaryConditions initialBoundaryConditionsReader;
   initialBoundaryConditionsReader.readTemperatureField(
@@ -290,11 +290,11 @@ TEST(DiffusionTermDiscretizationTest, CellBased2DHeatConductionOn3By3Mesh) {
 
   // --- Act & Assert for Matrix<double> ---
   {
-    Matrix<double> coeffMatrix(fvMesh.nElements(), fvMesh.nElements());
-    std::vector<double> RHS(fvMesh.nElements(), 0.0);
+    Matrix<double> coeffMatrix(fvMesh.nCells(), fvMesh.nCells());
+    std::vector<double> RHS(fvMesh.nCells(), 0.0);
 
     AssembleDiffusionTerm diffusionTermAssembler;
-    diffusionTermAssembler.elementBasedAssemble(
+    diffusionTermAssembler.cellBasedAssemble(
         fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
         coeffMatrix, RHS);
 
@@ -315,10 +315,10 @@ TEST(DiffusionTermDiscretizationTest, CellBased2DHeatConductionOn3By3Mesh) {
   // --- Act & Assert for gko::matrix_data ---
   {
     gko::matrix_data<double, int> coeffMatrix;
-    std::vector<double> RHS(fvMesh.nElements(), 0.0);
+    std::vector<double> RHS(fvMesh.nCells(), 0.0);
 
     AssembleDiffusionTerm diffusionTermAssembler;
-    diffusionTermAssembler.elementBasedAssemble(
+    diffusionTermAssembler.cellBasedAssemble(
         fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
         coeffMatrix, RHS);
 
@@ -354,10 +354,10 @@ TEST(DiffusionTermDiscretizationTest, FaceBased2DHeatConductionOn2By2Mesh) {
 
   // Define the thermal conductivity and source term
   std::vector<double> thermalConductivity(fvMesh.nFaces(), 1.0);
-  std::vector<double> heatSource(fvMesh.nElements(), 0.0);
+  std::vector<double> heatSource(fvMesh.nCells(), 0.0);
 
   // Read initial condition and boundary conditions
-  Field<double> internalTemperatureField(fvMesh.nElements());
+  Field<double> internalTemperatureField(fvMesh.nCells());
   std::vector<boundaryField<double>> boundaryTemperatureFields;
   ReadInitialBoundaryConditions initialBoundaryConditionsReader;
   initialBoundaryConditionsReader.readTemperatureField(
@@ -375,8 +375,8 @@ TEST(DiffusionTermDiscretizationTest, FaceBased2DHeatConductionOn2By2Mesh) {
 
   // --- Act & Assert for Matrix<double> ---
   {
-    Matrix<double> coeffMatrix(fvMesh.nElements(), fvMesh.nElements());
-    std::vector<double> RHS(fvMesh.nElements(), 0.0);
+    Matrix<double> coeffMatrix(fvMesh.nCells(), fvMesh.nCells());
+    std::vector<double> RHS(fvMesh.nCells(), 0.0);
 
     AssembleDiffusionTerm diffusionTermAssembler;
     diffusionTermAssembler.faceBasedAssemble(
@@ -400,7 +400,7 @@ TEST(DiffusionTermDiscretizationTest, FaceBased2DHeatConductionOn2By2Mesh) {
   // --- Act & Assert for gko::matrix_data ---
   {
     gko::matrix_data<double, int> coeffMatrix;
-    std::vector<double> RHS(fvMesh.nElements(), 0.0);
+    std::vector<double> RHS(fvMesh.nCells(), 0.0);
 
     AssembleDiffusionTerm diffusionTermAssembler;
     diffusionTermAssembler.faceBasedAssemble(
@@ -439,10 +439,10 @@ TEST(DiffusionTermDiscretizationTest, FaceBased2DHeatConductionOn3By3Mesh) {
 
   // Define the thermal conductivity and source term
   std::vector<double> thermalConductivity(fvMesh.nFaces(), 1.0);
-  std::vector<double> heatSource(fvMesh.nElements(), 0.0);
+  std::vector<double> heatSource(fvMesh.nCells(), 0.0);
 
   // Read initial condition and boundary conditions
-  Field<double> internalTemperatureField(fvMesh.nElements());
+  Field<double> internalTemperatureField(fvMesh.nCells());
   std::vector<boundaryField<double>> boundaryTemperatureFields;
   ReadInitialBoundaryConditions initialBoundaryConditionsReader;
   initialBoundaryConditionsReader.readTemperatureField(
@@ -467,8 +467,8 @@ TEST(DiffusionTermDiscretizationTest, FaceBased2DHeatConductionOn3By3Mesh) {
 
   // --- Act & Assert for Matrix<double> ---
   {
-    Matrix<double> coeffMatrix(fvMesh.nElements(), fvMesh.nElements());
-    std::vector<double> RHS(fvMesh.nElements(), 0.0);
+    Matrix<double> coeffMatrix(fvMesh.nCells(), fvMesh.nCells());
+    std::vector<double> RHS(fvMesh.nCells(), 0.0);
 
     AssembleDiffusionTerm diffusionTermAssembler;
     diffusionTermAssembler.faceBasedAssemble(
@@ -492,7 +492,7 @@ TEST(DiffusionTermDiscretizationTest, FaceBased2DHeatConductionOn3By3Mesh) {
   // --- Act & Assert for gko::matrix_data ---
   {
     gko::matrix_data<double, int> coeffMatrix;
-    std::vector<double> RHS(fvMesh.nElements(), 0.0);
+    std::vector<double> RHS(fvMesh.nCells(), 0.0);
 
     AssembleDiffusionTerm diffusionTermAssembler;
     diffusionTermAssembler.faceBasedAssemble(
@@ -532,10 +532,10 @@ TEST(DiffusionTermDiscretizationTest,
 
   // Define the thermal conductivity and source term
   std::vector<double> thermalConductivity(fvMesh.nFaces(), 1.0);
-  std::vector<double> heatSource(fvMesh.nElements(), 0.0);
+  std::vector<double> heatSource(fvMesh.nCells(), 0.0);
 
   // Read initial condition and boundary conditions
-  Field<double> internalTemperatureField(fvMesh.nElements());
+  Field<double> internalTemperatureField(fvMesh.nCells());
   std::vector<boundaryField<double>> boundaryTemperatureFields;
   ReadInitialBoundaryConditions initialBoundaryConditionsReader;
   initialBoundaryConditionsReader.readTemperatureField(
@@ -553,8 +553,8 @@ TEST(DiffusionTermDiscretizationTest,
 
   // --- Act & Assert for Matrix<double> ---
   {
-    Matrix<double> coeffMatrix(fvMesh.nElements(), fvMesh.nElements());
-    std::vector<double> RHS(fvMesh.nElements(), 0.0);
+    Matrix<double> coeffMatrix(fvMesh.nCells(), fvMesh.nCells());
+    std::vector<double> RHS(fvMesh.nCells(), 0.0);
 
     AssembleDiffusionTerm diffusionTermAssembler;
     diffusionTermAssembler.batchedFaceBasedAssemble(
@@ -578,7 +578,7 @@ TEST(DiffusionTermDiscretizationTest,
   // --- Act & Assert for gko::matrix_data ---
   {
     gko::matrix_data<double, int> coeffMatrix;
-    std::vector<double> RHS(fvMesh.nElements(), 0.0);
+    std::vector<double> RHS(fvMesh.nCells(), 0.0);
 
     AssembleDiffusionTerm diffusionTermAssembler;
     diffusionTermAssembler.batchedFaceBasedAssemble(
@@ -618,10 +618,10 @@ TEST(DiffusionTermDiscretizationTest,
 
   // Define the thermal conductivity and source term
   std::vector<double> thermalConductivity(fvMesh.nFaces(), 1.0);
-  std::vector<double> heatSource(fvMesh.nElements(), 0.0);
+  std::vector<double> heatSource(fvMesh.nCells(), 0.0);
 
   // Read initial condition and boundary conditions
-  Field<double> internalTemperatureField(fvMesh.nElements());
+  Field<double> internalTemperatureField(fvMesh.nCells());
   std::vector<boundaryField<double>> boundaryTemperatureFields;
   ReadInitialBoundaryConditions initialBoundaryConditionsReader;
   initialBoundaryConditionsReader.readTemperatureField(
@@ -646,8 +646,8 @@ TEST(DiffusionTermDiscretizationTest,
 
   // --- Act & Assert for Matrix<double> ---
   {
-    Matrix<double> coeffMatrix(fvMesh.nElements(), fvMesh.nElements());
-    std::vector<double> RHS(fvMesh.nElements(), 0.0);
+    Matrix<double> coeffMatrix(fvMesh.nCells(), fvMesh.nCells());
+    std::vector<double> RHS(fvMesh.nCells(), 0.0);
 
     AssembleDiffusionTerm diffusionTermAssembler;
     diffusionTermAssembler.batchedFaceBasedAssemble(
@@ -671,7 +671,7 @@ TEST(DiffusionTermDiscretizationTest,
   // --- Act & Assert for gko::matrix_data ---
   {
     gko::matrix_data<double, int> coeffMatrix;
-    std::vector<double> RHS(fvMesh.nElements(), 0.0);
+    std::vector<double> RHS(fvMesh.nCells(), 0.0);
 
     AssembleDiffusionTerm diffusionTermAssembler;
     diffusionTermAssembler.batchedFaceBasedAssemble(
@@ -714,10 +714,10 @@ TEST(LinearSolverTest, Solve2DHeatConductionOn2By2Mesh) {
 
   // Define the thermal conductivity and source term
   std::vector<ValueType> thermalConductivity(fvMesh.nFaces(), 1.0);
-  std::vector<ValueType> heatSource(fvMesh.nElements(), 0.0);
+  std::vector<ValueType> heatSource(fvMesh.nCells(), 0.0);
 
   // Read initial condition and boundary conditions
-  Field<ValueType> internalTemperatureField(fvMesh.nElements());
+  Field<ValueType> internalTemperatureField(fvMesh.nCells());
   std::vector<boundaryField<ValueType>> boundaryTemperatureFields;
   ReadInitialBoundaryConditions initialBoundaryConditionsReader;
   initialBoundaryConditionsReader.readTemperatureField(
@@ -725,7 +725,7 @@ TEST(LinearSolverTest, Solve2DHeatConductionOn2By2Mesh) {
 
   // Expected solution vector
   const std::vector<ValueType> expectedSolution = {348.0, 298.0, 348.0, 298.0};
-  std::vector<ValueType> solution(fvMesh.nElements(), 0.0);
+  std::vector<ValueType> solution(fvMesh.nCells(), 0.0);
 
   // Set up parameters
   const ValueType absTol = 1.0e-12;
@@ -733,13 +733,13 @@ TEST(LinearSolverTest, Solve2DHeatConductionOn2By2Mesh) {
   const RealValueType reduction_factor{1e-7};
   const IndexType maxNumIterations = 1000;
 
-  // --- Act & Assert for element based assembly ---
+  // --- Act & Assert for cell based assembly ---
   {
     gko::matrix_data<ValueType, IndexType> coeffMatrix;
-    std::vector<ValueType> RHS(fvMesh.nElements(), 0.0);
+    std::vector<ValueType> RHS(fvMesh.nCells(), 0.0);
 
     AssembleDiffusionTerm diffusionTermAssembler;
-    diffusionTermAssembler.elementBasedAssemble(
+    diffusionTermAssembler.cellBasedAssemble(
         fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
         coeffMatrix, RHS);
 
@@ -758,7 +758,7 @@ TEST(LinearSolverTest, Solve2DHeatConductionOn2By2Mesh) {
   // --- Act & Assert for face based assembly ---
   {
     gko::matrix_data<ValueType, IndexType> coeffMatrix;
-    std::vector<ValueType> RHS(fvMesh.nElements(), 0.0);
+    std::vector<ValueType> RHS(fvMesh.nCells(), 0.0);
 
     AssembleDiffusionTerm diffusionTermAssembler;
     diffusionTermAssembler.faceBasedAssemble(
@@ -780,7 +780,7 @@ TEST(LinearSolverTest, Solve2DHeatConductionOn2By2Mesh) {
   // --- Act & Assert for batched face-based assembly ---
   {
     gko::matrix_data<ValueType, IndexType> coeffMatrix;
-    std::vector<ValueType> RHS(fvMesh.nElements(), 0.0);
+    std::vector<ValueType> RHS(fvMesh.nCells(), 0.0);
 
     AssembleDiffusionTerm diffusionTermAssembler;
     diffusionTermAssembler.batchedFaceBasedAssemble(
@@ -814,10 +814,10 @@ TEST(LinearSolverTest, Solve2DHeatConductionOn3By3Mesh) {
 
   // Define the thermal conductivity and source term
   std::vector<ValueType> thermalConductivity(fvMesh.nFaces(), 1.0);
-  std::vector<ValueType> heatSource(fvMesh.nElements(), 0.0);
+  std::vector<ValueType> heatSource(fvMesh.nCells(), 0.0);
 
   // Read initial condition and boundary conditions
-  Field<ValueType> internalTemperatureField(fvMesh.nElements());
+  Field<ValueType> internalTemperatureField(fvMesh.nCells());
   std::vector<boundaryField<ValueType>> boundaryTemperatureFields;
   ReadInitialBoundaryConditions initialBoundaryConditionsReader;
   initialBoundaryConditionsReader.readTemperatureField(
@@ -825,8 +825,8 @@ TEST(LinearSolverTest, Solve2DHeatConductionOn3By3Mesh) {
 
   // Assemble the coefficient matrix and RHS vector
   gko::matrix_data<ValueType, IndexType> coeffMatrix;
-  std::vector<ValueType> RHS(fvMesh.nElements(), 0.0);
-  std::vector<ValueType> solution(fvMesh.nElements(), 0.0);
+  std::vector<ValueType> RHS(fvMesh.nCells(), 0.0);
+  std::vector<ValueType> solution(fvMesh.nCells(), 0.0);
 
   // Set up parameters
   const ValueType absTol = 1.0e-12;
@@ -834,13 +834,13 @@ TEST(LinearSolverTest, Solve2DHeatConductionOn3By3Mesh) {
   const RealValueType reduction_factor{1e-7};
   const IndexType maxNumIterations = 1000;
 
-  // --- Act & Assert for element based assembly ---
+  // --- Act & Assert for cell based assembly ---
   {
     gko::matrix_data<ValueType, IndexType> coeffMatrix;
-    std::vector<ValueType> RHS(fvMesh.nElements(), 0.0);
+    std::vector<ValueType> RHS(fvMesh.nCells(), 0.0);
 
     AssembleDiffusionTerm diffusionTermAssembler;
-    diffusionTermAssembler.elementBasedAssemble(
+    diffusionTermAssembler.cellBasedAssemble(
         fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
         coeffMatrix, RHS);
 
@@ -866,7 +866,7 @@ TEST(LinearSolverTest, Solve2DHeatConductionOn3By3Mesh) {
   // --- Act & Assert for face based assembly ---
   {
     gko::matrix_data<ValueType, IndexType> coeffMatrix;
-    std::vector<ValueType> RHS(fvMesh.nElements(), 0.0);
+    std::vector<ValueType> RHS(fvMesh.nCells(), 0.0);
 
     AssembleDiffusionTerm diffusionTermAssembler;
     diffusionTermAssembler.faceBasedAssemble(
@@ -895,7 +895,7 @@ TEST(LinearSolverTest, Solve2DHeatConductionOn3By3Mesh) {
   // --- Act & Assert for bacthed face-based assembly ---
   {
     gko::matrix_data<ValueType, IndexType> coeffMatrix;
-    std::vector<ValueType> RHS(fvMesh.nElements(), 0.0);
+    std::vector<ValueType> RHS(fvMesh.nCells(), 0.0);
 
     AssembleDiffusionTerm diffusionTermAssembler;
     diffusionTermAssembler.batchedFaceBasedAssemble(
