@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# === Configuration ===
+BUILD_DIR="build"             # Where compile_commands.json is located
+INCLUDE_DIRS=("src" "tests")    # Directories to include
+
+# Run clang-tidy on all .cpp files in the specified include directories
+for dir in "${INCLUDE_DIRS[@]}"; do
+  if [ ! -d "$dir" ]; then
+    echo "Directory not found: $dir"
+    continue
+  fi
+
+  FILES=$(find "$dir" -type f -name '*.cpp')
+
+  for file in $FILES; do
+    echo "Running clang-tidy on $file"
+    clang-tidy "$file" -p "$BUILD_DIR"
+  done
+done
