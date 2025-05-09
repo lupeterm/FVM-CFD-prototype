@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
   // Check for command-line arguments
   if (argc < 3) {
     std::cerr << "Usage: " << argv[0]
-              << " <caseDirectory> <assemblyMethod: element/face/batchedFace>"
+              << " <caseDirectory> <assemblyMethod: cell/face/batchedFace>"
               << std::endl;
     return 1;
   }
@@ -21,10 +21,10 @@ int main(int argc, char *argv[]) {
   std::string caseDirectory(argv[1]);
   std::string assemblyMethod(argv[2]);
 
-  if (assemblyMethod != "element" && assemblyMethod != "face" &&
+  if (assemblyMethod != "cell" && assemblyMethod != "face" &&
       assemblyMethod != "batchedFace") {
     std::cerr
-        << "Invalid assembly method. Use 'element', 'face', or 'batchedFace'."
+        << "Invalid assembly method. Use 'cell', 'face', or 'batchedFace'."
         << std::endl;
     return 1;
   }
@@ -39,10 +39,10 @@ int main(int argc, char *argv[]) {
 
   // Define the thermal conductivity and source term
   std::vector<ValueType> thermalConductivity(fvMesh.nFaces(), 1.0);
-  std::vector<ValueType> heatSource(fvMesh.nElements(), 0.0);
+  std::vector<ValueType> heatSource(fvMesh.nCells(), 0.0);
 
   // Read initial condition and boundary conditions
-  Field<ValueType> internalTemperatureField(fvMesh.nElements());
+  Field<ValueType> internalTemperatureField(fvMesh.nCells());
   std::vector<boundaryField<ValueType>> boundaryTemperatureFields;
   ReadInitialBoundaryConditions initialBoundaryConditionsReader;
   initialBoundaryConditionsReader.readTemperatureField(
@@ -50,13 +50,13 @@ int main(int argc, char *argv[]) {
 
   // Assemble the coefficient matrix and RHS vector
   gko::matrix_data<ValueType, IndexType> coeffMatrix;
-  std::vector<ValueType> RHS(fvMesh.nElements(), 0.0);
+  std::vector<ValueType> RHS(fvMesh.nCells(), 0.0);
 
   AssembleDiffusionTerm diffusionTermAssembler;
 
-  if (assemblyMethod == "element") {
-    std::cout << "Using element-based assembly..." << std::endl;
-    diffusionTermAssembler.elementBasedAssemble(
+  if (assemblyMethod == "cell") {
+    std::cout << "Using cell-based assembly..." << std::endl;
+    diffusionTermAssembler.cellBasedAssemble(
         fvMesh, thermalConductivity, heatSource, boundaryTemperatureFields,
         coeffMatrix, RHS);
   } else if (assemblyMethod == "face") {
@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
         coeffMatrix, RHS);
   }
 
-  std::vector<ValueType> solution(fvMesh.nElements(), 0.0);
+  std::vector<ValueType> solution(fvMesh.nCells(), 0.0);
 
   // Set up parameters
   const RealValueType reduction_factor{1e-7};
@@ -82,7 +82,7 @@ int main(int argc, char *argv[]) {
   solver.solve(coeffMatrix, RHS, solution, reduction_factor, maxNumIterations);
 
   // Write the solution to internal temperature field
-  for (std::size_t i = 0; i < fvMesh.nElements(); ++i) {
+  for (std::size_t i = 0; i < fvMesh.nCells(); ++i) {
     internalTemperatureField.values()[i] = solution[i];
   }
 
@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
   // Create a .foam file for visualization in ParaView
   IO::createFoamFile(caseDirectory);
 
-  // Write the x coordinate of each element and the corresponding internal
+  // Write the x coordinate of each cell and the corresponding internal
   // temperature field to a file for plotting
   std::cout << "Writing results to results.txt for plotting..." << std::endl;
   std::ofstream outputFile(caseDirectory + "/results.txt");
@@ -105,8 +105,8 @@ int main(int argc, char *argv[]) {
     return 1;
   }
   outputFile << "x_coordinate temperature" << std::endl;
-  for (std::size_t i = 0; i < fvMesh.nElements(); ++i) {
-    outputFile << fvMesh.elements()[i].centroid()[0] << " "
+  for (std::size_t i = 0; i < fvMesh.nCells(); ++i) {
+    outputFile << fvMesh.cells()[i].centroid()[0] << " "
                << internalTemperatureField.values()[i] << std::endl;
   }
   outputFile.close();

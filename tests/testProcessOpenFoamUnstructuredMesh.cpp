@@ -173,15 +173,15 @@ TEST(UnstructuredElementGeometryTest, ComputeElementVolume) {
   Mesh fvMesh(caseDirectory);
   ReadMesh meshReader;
 
-  const double expected_element0_volume = 3.750953295600002;
-  const double expected_element1_volume = 1.022987628239554;
-  const double expected_element2_volume = 3.750953295599991;
-  const double expected_element458_volume = 1.760514155353620;
-  const double expected_element459_volume = 1.476604804863560;
-  const double expected_element460_volume = 1.086792891806789;
-  const double expected_element915_volume = 1.549771597510417;
-  const double expected_element916_volume = 1.889208440606863;
-  const double expected_element917_volume = 2.160918123107190;
+  const double expected_cell0_volume = 3.750953295600002;
+  const double expected_cell1_volume = 1.022987628239554;
+  const double expected_cell2_volume = 3.750953295599991;
+  const double expected_cell458_volume = 1.760514155353620;
+  const double expected_cell459_volume = 1.476604804863560;
+  const double expected_cell460_volume = 1.086792891806789;
+  const double expected_cell915_volume = 1.549771597510417;
+  const double expected_cell916_volume = 1.889208440606863;
+  const double expected_cell917_volume = 2.160918123107190;
 
   const double absTol = 1.0e-12;
   const double relTol = 1.0e-8;
@@ -190,29 +190,29 @@ TEST(UnstructuredElementGeometryTest, ComputeElementVolume) {
   meshReader.readOpenFoamMesh(fvMesh);
 
   // --- Assert ---
-  // Verify the volumes of the first three elements
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[0].volume(),
-                                expected_element0_volume, absTol, relTol));
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[1].volume(),
-                                expected_element1_volume, absTol, relTol));
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[2].volume(),
-                                expected_element2_volume, absTol, relTol));
+  // Verify the volumes of the first three cells
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.cells()[0].volume(),
+                                expected_cell0_volume, absTol, relTol));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.cells()[1].volume(),
+                                expected_cell1_volume, absTol, relTol));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.cells()[2].volume(),
+                                expected_cell2_volume, absTol, relTol));
 
-  // Verify the volumes of the middle three elements
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[458].volume(),
-                                expected_element458_volume, absTol, relTol));
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[459].volume(),
-                                expected_element459_volume, absTol, relTol));
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[460].volume(),
-                                expected_element460_volume, absTol, relTol));
+  // Verify the volumes of the middle three cells
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.cells()[458].volume(),
+                                expected_cell458_volume, absTol, relTol));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.cells()[459].volume(),
+                                expected_cell459_volume, absTol, relTol));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.cells()[460].volume(),
+                                expected_cell460_volume, absTol, relTol));
 
-  // Verify the volumes of the last three elements
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[915].volume(),
-                                expected_element915_volume, absTol, relTol));
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[916].volume(),
-                                expected_element916_volume, absTol, relTol));
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[917].volume(),
-                                expected_element917_volume, absTol, relTol));
+  // Verify the volumes of the last three cells
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.cells()[915].volume(),
+                                expected_cell915_volume, absTol, relTol));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.cells()[916].volume(),
+                                expected_cell916_volume, absTol, relTol));
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.cells()[917].volume(),
+                                expected_cell917_volume, absTol, relTol));
 }
 
 TEST(UnstructuredElementGeometryTest, ComputeElementCentroid) {
@@ -221,23 +221,23 @@ TEST(UnstructuredElementGeometryTest, ComputeElementCentroid) {
   Mesh fvMesh(caseDirectory);
   ReadMesh meshReader;
 
-  const std::array<double, 3> expected_element0_centroid = {
+  const std::array<double, 3> expected_cell0_centroid = {
       0.666666666666667, 15.333333333333332, 4.439763456642422e-17};
-  const std::array<double, 3> expected_element1_centroid = {
-      52.872570040000000, -4.174897670333334, 0};
-  const std::array<double, 3> expected_element2_centroid = {
-      48.666666666666664, 63.333333333333330, 0};
-  const std::array<double, 3> expected_element458_centroid = {
+  const std::array<double, 3> expected_cell1_centroid = {52.872570040000000,
+                                                         -4.174897670333334, 0};
+  const std::array<double, 3> expected_cell2_centroid = {48.666666666666664,
+                                                         63.333333333333330, 0};
+  const std::array<double, 3> expected_cell458_centroid = {
       54.201239489999990, 9.628230276666667, -1.576560775227273e-17};
-  const std::array<double, 3> expected_element459_centroid = {
+  const std::array<double, 3> expected_cell459_centroid = {
       54.087574729999990, 10.260431970999997, -1.879688832395040e-17};
-  const std::array<double, 3> expected_element460_centroid = {
+  const std::array<double, 3> expected_cell460_centroid = {
       55.180164206666674, 5.540703773666666, 2.553897419174813e-17};
-  const std::array<double, 3> expected_element915_centroid = {
+  const std::array<double, 3> expected_cell915_centroid = {
       54.832016820000014, 15.735877276666670, -3.581892410496619e-17};
-  const std::array<double, 3> expected_element916_centroid = {
+  const std::array<double, 3> expected_cell916_centroid = {
       53.686867763333330, 14.990837000000000, -2.938328563333445e-17};
-  const std::array<double, 3> expected_element917_centroid = {
+  const std::array<double, 3> expected_cell917_centroid = {
       53.340025863333330, 15.796400383333333, 2.568868789504999e-17};
 
   const double absTol = 1.0e-12;
@@ -247,35 +247,29 @@ TEST(UnstructuredElementGeometryTest, ComputeElementCentroid) {
   meshReader.readOpenFoamMesh(fvMesh);
 
   // --- Assert ---
-  // Verify the centroids of the first three elements
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[0].centroid(),
-                                expected_element0_centroid, 3, absTol, relTol));
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[1].centroid(),
-                                expected_element1_centroid, 3, absTol, relTol));
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[2].centroid(),
-                                expected_element2_centroid, 3, absTol, relTol));
+  // Verify the centroids of the first three cells
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.cells()[0].centroid(),
+                                expected_cell0_centroid, 3, absTol, relTol));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.cells()[1].centroid(),
+                                expected_cell1_centroid, 3, absTol, relTol));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.cells()[2].centroid(),
+                                expected_cell2_centroid, 3, absTol, relTol));
 
-  // Verify the centroids of the middle three elements
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[458].centroid(),
-                                expected_element458_centroid, 3, absTol,
-                                relTol));
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[459].centroid(),
-                                expected_element459_centroid, 3, absTol,
-                                relTol));
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[460].centroid(),
-                                expected_element460_centroid, 3, absTol,
-                                relTol));
+  // Verify the centroids of the middle three cells
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.cells()[458].centroid(),
+                                expected_cell458_centroid, 3, absTol, relTol));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.cells()[459].centroid(),
+                                expected_cell459_centroid, 3, absTol, relTol));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.cells()[460].centroid(),
+                                expected_cell460_centroid, 3, absTol, relTol));
 
-  // Verify the centroids of the last three elements
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[915].centroid(),
-                                expected_element915_centroid, 3, absTol,
-                                relTol));
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[916].centroid(),
-                                expected_element916_centroid, 3, absTol,
-                                relTol));
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[917].centroid(),
-                                expected_element917_centroid, 3, absTol,
-                                relTol));
+  // Verify the centroids of the last three cells
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.cells()[915].centroid(),
+                                expected_cell915_centroid, 3, absTol, relTol));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.cells()[916].centroid(),
+                                expected_cell916_centroid, 3, absTol, relTol));
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.cells()[917].centroid(),
+                                expected_cell917_centroid, 3, absTol, relTol));
 }
 
 TEST(UnstructuredFaceGeometryTest, ComputeInteriorFaceGeometry) {
@@ -627,44 +621,44 @@ TEST(UnstructuredFaceGeometryTest, ComputeElementInteriorFaceGeometry) {
   meshReader.readOpenFoamMesh(fvMesh);
 
   // --- Assert ---
-  // Verify the geometric quantities of the first three elements
-  //  element 0: face 0 is the only local interior face
+  // Verify the geometric quantities of the first three cells
+  //  cell 0: face 0 is the only local interior face
   EXPECT_EQ(fvMesh.faces()[0].iOwnerNeighborCoef(), 1);
 
-  //  element 1: face 1 is the only local interior face
+  //  cell 1: face 1 is the only local interior face
   EXPECT_EQ(fvMesh.faces()[1].iOwnerNeighborCoef(), 1);
 
-  //  element 2: face 2 is only local interior face
+  //  cell 2: face 2 is only local interior face
   EXPECT_EQ(fvMesh.faces()[2].iOwnerNeighborCoef(), 1);
 
-  // Verify the geometric quantities of the middle three elements
-  // element 458: face 672, 680, and 681 are local interior faces
+  // Verify the geometric quantities of the middle three cells
+  // cell 458: face 672, 680, and 681 are local interior faces
   EXPECT_EQ(fvMesh.faces()[672].iNeighborOwnerCoef(), 1);
   EXPECT_EQ(fvMesh.faces()[680].iNeighborOwnerCoef(), 2);
   EXPECT_EQ(fvMesh.faces()[681].iOwnerNeighborCoef(), 3);
 
-  // element 459: face 678, 681, and 682 are local interior faces
+  // cell 459: face 678, 681, and 682 are local interior faces
   EXPECT_EQ(fvMesh.faces()[678].iNeighborOwnerCoef(), 1);
   EXPECT_EQ(fvMesh.faces()[681].iNeighborOwnerCoef(), 2);
   EXPECT_EQ(fvMesh.faces()[682].iOwnerNeighborCoef(), 3);
 
-  // element 460: face 338, 683, 684 are local interior faces
+  // cell 460: face 338, 683, 684 are local interior faces
   EXPECT_EQ(fvMesh.faces()[338].iNeighborOwnerCoef(), 1);
   EXPECT_EQ(fvMesh.faces()[683].iOwnerNeighborCoef(), 2);
   EXPECT_EQ(fvMesh.faces()[684].iOwnerNeighborCoef(), 3);
 
-  // Verify the geometric quantities of the last three elements
-  // element 915: face 978, 1295, 1297 are local interior faces
+  // Verify the geometric quantities of the last three cells
+  // cell 915: face 978, 1295, 1297 are local interior faces
   EXPECT_EQ(fvMesh.faces()[978].iNeighborOwnerCoef(), 1);
   EXPECT_EQ(fvMesh.faces()[1295].iNeighborOwnerCoef(), 2);
   EXPECT_EQ(fvMesh.faces()[1297].iNeighborOwnerCoef(), 3);
 
-  // element 916: face 1294, 1298, 1299 are local interior faces
+  // cell 916: face 1294, 1298, 1299 are local interior faces
   EXPECT_EQ(fvMesh.faces()[1294].iNeighborOwnerCoef(), 1);
   EXPECT_EQ(fvMesh.faces()[1298].iNeighborOwnerCoef(), 2);
   EXPECT_EQ(fvMesh.faces()[1299].iOwnerNeighborCoef(), 3);
 
-  // element 917: face 1171, 1296, 1299 are local interior faces
+  // cell 917: face 1171, 1296, 1299 are local interior faces
   EXPECT_EQ(fvMesh.faces()[1171].iNeighborOwnerCoef(), 1);
   EXPECT_EQ(fvMesh.faces()[1296].iNeighborOwnerCoef(), 2);
   EXPECT_EQ(fvMesh.faces()[1299].iNeighborOwnerCoef(), 3);

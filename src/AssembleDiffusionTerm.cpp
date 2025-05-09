@@ -4,21 +4,21 @@
 
 // The implementations of element-based assembly of the diffusion term
 template <typename MatrixType>
-void AssembleDiffusionTerm::elementBasedAssemble(
+void AssembleDiffusionTerm::cellBasedAssemble(
     Mesh &fvMesh, const std::vector<double> diffusionCoef,
     const std::vector<double> &source,
     std::vector<boundaryField<double>> &boundaryFields, MatrixType &coeffMatrix,
     std::vector<double> &RHS) {
 
-  const std::size_t nElements = fvMesh.nElements();
+  const std::size_t nCells = fvMesh.nCells();
 
   if constexpr (std::is_same_v<MatrixType, gko::matrix_data<double, int>>) {
-    coeffMatrix.size = {nElements, nElements};
+    coeffMatrix.size = {nCells, nCells};
   }
 
-  for (std::size_t iElement = 0; iElement < nElements; ++iElement) {
+  for (std::size_t iElement = 0; iElement < nCells; ++iElement) {
     // Get the element
-    Element &theElement = fvMesh.elements()[iElement];
+    Cell &theElement = fvMesh.cells()[iElement];
 
     // Calculate the source term and it to the RHS
     RHS[iElement] = source[iElement] * theElement.volume();
@@ -103,14 +103,14 @@ void AssembleDiffusionTerm::elementBasedAssemble(
   }
 }
 
-// Explicit instantiation of the template function elementBasedAssemble
-template void AssembleDiffusionTerm::elementBasedAssemble(
+// Explicit instantiation of the template function cellBasedAssemble
+template void AssembleDiffusionTerm::cellBasedAssemble(
     Mesh &fvMesh, const std::vector<double> diffusionCoef,
     const std::vector<double> &source,
     std::vector<boundaryField<double>> &boundaryFields,
     Matrix<double> &coeffMatrix, std::vector<double> &RHS);
 
-template void AssembleDiffusionTerm::elementBasedAssemble(
+template void AssembleDiffusionTerm::cellBasedAssemble(
     Mesh &fvMesh, const std::vector<double> diffusionCoef,
     const std::vector<double> &source,
     std::vector<boundaryField<double>> &boundaryFields,
@@ -125,7 +125,7 @@ void AssembleDiffusionTerm::faceBasedAssemble(
     std::vector<double> &RHS) {
 
   if constexpr (std::is_same_v<MatrixType, gko::matrix_data<double, int>>) {
-    coeffMatrix.size = {fvMesh.nElements(), fvMesh.nElements()};
+    coeffMatrix.size = {fvMesh.nCells(), fvMesh.nCells()};
   }
 
   // Loop over all the faces of the given mesh
@@ -245,7 +245,7 @@ void AssembleDiffusionTerm::batchedFaceBasedAssemble(
     std::vector<double> &RHS) {
 
   if constexpr (std::is_same_v<MatrixType, gko::matrix_data<double, int>>) {
-    coeffMatrix.size = {fvMesh.nElements(), fvMesh.nElements()};
+    coeffMatrix.size = {fvMesh.nCells(), fvMesh.nCells()};
   }
 
   // *** Loop over all the interior faces of the given mesh ***

@@ -18,12 +18,12 @@ TEST(FieldTest, SetScalarVolField) {
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
-  Field<double> elementScalarField(fvMesh.nElements());
+  Field<double> elementScalarField(fvMesh.nCells());
   elementScalarField.set(1.0);
 
   // --- Assert ---
-  // *** Verify the scalar field values of elements ***
-  // The first two elements
+  // *** Verify the scalar field values of cells ***
+  // The first two cells
   EXPECT_EQ(elementScalarField.values()[0], expected_element_scalar_field);
   EXPECT_EQ(elementScalarField.values()[1], expected_element_scalar_field);
 
@@ -47,12 +47,12 @@ TEST(FieldTest, SetVectorVolField) {
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
-  Field<std::array<double, 3>> elementVolField(fvMesh.nElements());
+  Field<std::array<double, 3>> elementVolField(fvMesh.nCells());
   elementVolField.set(expected_element_vector_field);
 
   // --- Assert ---
-  // *** Verify the scalar field values of elements ***
-  // The first two elements
+  // *** Verify the scalar field values of cells ***
+  // The first two cells
   EXPECT_TRUE(VectorMatch(elementVolField.values()[0],
                           expected_element_vector_field, 3));
   EXPECT_TRUE(VectorMatch(elementVolField.values()[1],
@@ -82,11 +82,11 @@ TEST(FieldTest, UseDefaultVectorVolField) {
 
   // --- Act ---
   meshReader.readOpenFoamMesh(fvMesh);
-  Field<std::array<double, 3>> elementVolField(fvMesh.nElements());
+  Field<std::array<double, 3>> elementVolField(fvMesh.nCells());
 
   // --- Assert ---
-  // *** Verify the scalar field values of elements ***
-  // The first two elements
+  // *** Verify the scalar field values of cells ***
+  // The first two cells
   EXPECT_TRUE(VectorMatch(elementVolField.values()[0],
                           expected_element_vector_field, 3));
   EXPECT_TRUE(VectorMatch(elementVolField.values()[1],

@@ -164,22 +164,22 @@ TEST(StructuredElementGeometryTest, ComputeElementVolume) {
   meshReader.readOpenFoamMesh(fvMesh);
 
   // --- Assert ---
-  // Verify the volumes of the first two elements
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[0].volume(),
+  // Verify the volumes of the first two cells
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.cells()[0].volume(),
                                 expected_element0_volume, absTol, relTol));
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[1].volume(),
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.cells()[1].volume(),
                                 expected_element1_volume, absTol, relTol));
 
-  // Verify the volumes of the middle two elements
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[198].volume(),
+  // Verify the volumes of the middle two cells
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.cells()[198].volume(),
                                 expected_element198_volume, absTol, relTol));
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[199].volume(),
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.cells()[199].volume(),
                                 expected_element199_volume, absTol, relTol));
 
-  // Verify the volumes of the last two elements
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[398].volume(),
+  // Verify the volumes of the last two cells
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.cells()[398].volume(),
                                 expected_element398_volume, absTol, relTol));
-  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.elements()[399].volume(),
+  EXPECT_TRUE(ScalarAlmostEqual(fvMesh.cells()[399].volume(),
                                 expected_element399_volume, absTol, relTol));
 }
 
@@ -211,25 +211,25 @@ TEST(StructuredElementGeometryTest, ComputeElementCentroid) {
   meshReader.readOpenFoamMesh(fvMesh);
 
   // --- Assert ---
-  // Verify the centroids of the first two elements
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[0].centroid(),
+  // Verify the centroids of the first two cells
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.cells()[0].centroid(),
                                 expected_element0_centroid, 3, absTol, relTol));
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[1].centroid(),
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.cells()[1].centroid(),
                                 expected_element1_centroid, 3, absTol, relTol));
 
-  // Verify the centroids of the middle two elements
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[198].centroid(),
+  // Verify the centroids of the middle two cells
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.cells()[198].centroid(),
                                 expected_element198_centroid, 3, absTol,
                                 relTol));
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[199].centroid(),
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.cells()[199].centroid(),
                                 expected_element199_centroid, 3, absTol,
                                 relTol));
 
-  // Verify the centroids of the last two elements
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[398].centroid(),
+  // Verify the centroids of the last two cells
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.cells()[398].centroid(),
                                 expected_element398_centroid, 3, absTol,
                                 relTol));
-  EXPECT_TRUE(VectorAlmostEqual(fvMesh.elements()[399].centroid(),
+  EXPECT_TRUE(VectorAlmostEqual(fvMesh.cells()[399].centroid(),
                                 expected_element399_centroid, 3, absTol,
                                 relTol));
 }
@@ -471,7 +471,7 @@ TEST(StructuredFaceGeometryTest, ComputeBoundaryFaceGeometry) {
 //   meshReader.readOpenFoamMesh(fvMesh);
 
 //   // --- Assert ---
-//   // Verify the geometric quantities of the first two elements
+//   // Verify the geometric quantities of the first two cells
 //   //  element 0: face 0 is the only local interior face
 //   EXPECT_EQ(fvMesh.faces()[0].iOwnerNeighborCoef(), 1);
 
@@ -481,7 +481,7 @@ TEST(StructuredFaceGeometryTest, ComputeBoundaryFaceGeometry) {
 //   //  element 2: face 2 is only local interior face
 //   EXPECT_EQ(fvMesh.faces()[2].iOwnerNeighborCoef(), 1);
 
-//   // Verify the geometric quantities of the middle two elements
+//   // Verify the geometric quantities of the middle two cells
 //   // element 458: face 672, 680, and 681 are local interior faces
 //   EXPECT_EQ(fvMesh.faces()[672].iNeighborOwnerCoef(), 1);
 //   EXPECT_EQ(fvMesh.faces()[680].iNeighborOwnerCoef(), 2);
@@ -497,7 +497,7 @@ TEST(StructuredFaceGeometryTest, ComputeBoundaryFaceGeometry) {
 //   EXPECT_EQ(fvMesh.faces()[683].iOwnerNeighborCoef(), 2);
 //   EXPECT_EQ(fvMesh.faces()[684].iOwnerNeighborCoef(), 3);
 
-//   // Verify the geometric quantities of the last two elements
+//   // Verify the geometric quantities of the last two cells
 //   // element 915: face 978, 1295, 1297 are local interior faces
 //   EXPECT_EQ(fvMesh.faces()[978].iNeighborOwnerCoef(), 1);
 //   EXPECT_EQ(fvMesh.faces()[1295].iNeighborOwnerCoef(), 2);

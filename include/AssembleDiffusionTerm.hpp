@@ -9,13 +9,12 @@
 class AssembleDiffusionTerm {
 public:
   // Assemble the diffusion term on a Cartesian orthogonal mesh by looping over
-  // the elements (cells)
+  // the cells
   template <typename MatrixType>
-  void elementBasedAssemble(Mesh &fvMesh,
-                            const std::vector<double> diffusionCoef,
-                            const std::vector<double> &source,
-                            std::vector<boundaryField<double>> &boundaryFields,
-                            MatrixType &coeffMatrix, std::vector<double> &RHS);
+  void cellBasedAssemble(Mesh &fvMesh, const std::vector<double> diffusionCoef,
+                         const std::vector<double> &source,
+                         std::vector<boundaryField<double>> &boundaryFields,
+                         MatrixType &coeffMatrix, std::vector<double> &RHS);
 
   // Assemble the diffusion term on a Cartesian orthogonal mesh by looping over
   // the faces
@@ -37,13 +36,13 @@ public:
 };
 
 // Prevent implicit instantiation of the template function for these types
-extern template void AssembleDiffusionTerm::elementBasedAssemble(
+extern template void AssembleDiffusionTerm::cellBasedAssemble(
     Mesh &fvMesh, const std::vector<double> diffusionCoef,
     const std::vector<double> &source,
     std::vector<boundaryField<double>> &boundaryFields,
     Matrix<double> &coeffMatrix, std::vector<double> &RHS);
 
-extern template void AssembleDiffusionTerm::elementBasedAssemble(
+extern template void AssembleDiffusionTerm::cellBasedAssemble(
     Mesh &fvMesh, const std::vector<double> diffusionCoef,
     const std::vector<double> &source,
     std::vector<boundaryField<double>> &boundaryFields,
