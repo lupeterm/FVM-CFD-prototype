@@ -1,0 +1,8 @@
+Language: Cpp
+AlignAfterOpenBracket: AlwaysBreak
+BinPackArguments: false
+BinPackParameters: false
+AllowShortLoopsOnASingleLine: false
+AllowAllArgumentsOnNextLine: false
+ColumnLimit: 0
+BreakBeforeBraces: Mozilla

@@ -1,5 +1,4 @@
 # Google Test
-enable_testing()
 
 add_executable(
   unitTests
