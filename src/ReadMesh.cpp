@@ -8,21 +8,20 @@
 
 using namespace std::string_literals;
 
-void ReadMesh::readOpenFoamMesh(Mesh &fvMesh) {
+void ReadMesh::readOpenFoamMesh(Mesh &fvMesh)
+{
   if (fvMesh.caseDir().empty()) {
     IO::getDirectory(fvMesh);
   }
 
   // Check if the case directory exists
   if (!std::filesystem::exists(fvMesh.caseDir())) {
-    throw std::runtime_error("Error: Case directory '" + fvMesh.caseDir() +
-                             "' does not exist.");
+    throw std::runtime_error("Error: Case directory '" + fvMesh.caseDir() + "' does not exist.");
   }
 
   if (!std::filesystem::exists(fvMesh.caseDir() + "/constant/polyMesh")) {
-    throw std::runtime_error("Error: PolyMesh directory '" + fvMesh.caseDir() +
-                             "/constant/polyMesh' does not "
-                             "exist.");
+    throw std::runtime_error("Error: PolyMesh directory '" + fvMesh.caseDir() + "/constant/polyMesh' does not "
+                                                                                "exist.");
   }
 
   std::cout << "Reading OpenFOAM mesh files from mesh directory: "
@@ -38,12 +37,12 @@ void ReadMesh::readOpenFoamMesh(Mesh &fvMesh) {
   MeshProcessor.processOpenFoamMesh(fvMesh);
 }
 
-void ReadMesh::readPointsFile(Mesh &fvMesh) {
+void ReadMesh::readPointsFile(Mesh &fvMesh)
+{
   std::string pointsFileName = fvMesh.caseDir() + "/constant/polyMesh/points"s;
 
   if (!std::filesystem::exists(pointsFileName)) {
-    throw std::runtime_error("Error: Points file '" + pointsFileName +
-                             "' does not exist.");
+    throw std::runtime_error("Error: Points file '" + pointsFileName + "' does not exist.");
   }
 
   std::ifstream pointsFile(pointsFileName);
@@ -77,12 +76,12 @@ void ReadMesh::readPointsFile(Mesh &fvMesh) {
   pointsFile.close();
 }
 
-void ReadMesh::readFacesFile(Mesh &fvMesh) {
+void ReadMesh::readFacesFile(Mesh &fvMesh)
+{
   std::string facesFileName = fvMesh.caseDir() + "/constant/polyMesh/faces"s;
 
   if (!std::filesystem::exists(facesFileName)) {
-    throw std::runtime_error("Error: Faces file '" + facesFileName +
-                             "' does not exist.");
+    throw std::runtime_error("Error: Faces file '" + facesFileName + "' does not exist.");
   }
 
   std::ifstream facesFile(facesFileName);
@@ -117,12 +116,12 @@ void ReadMesh::readFacesFile(Mesh &fvMesh) {
   facesFile.close();
 }
 
-void ReadMesh::readOwnersFile(Mesh &fvMesh) {
+void ReadMesh::readOwnersFile(Mesh &fvMesh)
+{
   std::string ownersFileName = fvMesh.caseDir() + "/constant/polyMesh/owner"s;
 
   if (!std::filesystem::exists(ownersFileName)) {
-    throw std::runtime_error("Error: Owners file '" + ownersFileName +
-                             "' does not exist.");
+    throw std::runtime_error("Error: Owners file '" + ownersFileName + "' does not exist.");
   }
 
   std::ifstream ownersFile(ownersFileName);
@@ -150,13 +149,13 @@ void ReadMesh::readOwnersFile(Mesh &fvMesh) {
   ownersFile.close();
 }
 
-void ReadMesh::readNeighborsFile(Mesh &fvMesh) {
+void ReadMesh::readNeighborsFile(Mesh &fvMesh)
+{
   std::string neighborsFileName =
       fvMesh.caseDir() + "/constant/polyMesh/neighbour"s;
 
   if (!std::filesystem::exists(neighborsFileName)) {
-    throw std::runtime_error("Error: Neighbors file '" + neighborsFileName +
-                             "' does not exist.");
+    throw std::runtime_error("Error: Neighbors file '" + neighborsFileName + "' does not exist.");
   }
 
   std::ifstream neighborsFile(neighborsFileName);
@@ -183,13 +182,13 @@ void ReadMesh::readNeighborsFile(Mesh &fvMesh) {
   neighborsFile.close();
 }
 
-void ReadMesh::readBoundaryFile(Mesh &fvMesh) {
+void ReadMesh::readBoundaryFile(Mesh &fvMesh)
+{
   std::string boundaryFileName =
       fvMesh.caseDir() + "/constant/polyMesh/boundary"s;
 
   if (!std::filesystem::exists(boundaryFileName)) {
-    throw std::runtime_error("Error: Boundary file '" + boundaryFileName +
-                             "' does not exist.");
+    throw std::runtime_error("Error: Boundary file '" + boundaryFileName + "' does not exist.");
   }
 
   std::ifstream boundaryFile(boundaryFileName);
@@ -235,7 +234,8 @@ void ReadMesh::readBoundaryFile(Mesh &fvMesh) {
   boundaryFile.close();
 }
 
-void ReadMesh::constructCells(Mesh &fvMesh) {
+void ReadMesh::constructCells(Mesh &fvMesh)
+{
   fvMesh.cells().resize(fvMesh.nCells());
 
   for (std::size_t iElement = 0; iElement < fvMesh.nCells(); ++iElement) {
@@ -276,7 +276,8 @@ void ReadMesh::constructCells(Mesh &fvMesh) {
   fvMesh.nBFaces() = fvMesh.nFaces() - fvMesh.nInteriorFaces();
 }
 
-void ReadMesh::setupNodeConnectivities(Mesh &fvMesh) {
+void ReadMesh::setupNodeConnectivities(Mesh &fvMesh)
+{
   for (std::size_t iFace = 0; iFace < fvMesh.nFaces(); ++iFace) {
 
     std::vector<std::size_t> &iNodes = fvMesh.faces()[iFace].iNodes();
@@ -294,9 +295,7 @@ void ReadMesh::setupNodeConnectivities(Mesh &fvMesh) {
       std::vector<std::size_t> &iNodes = fvMesh.faces()[iFace].iNodes();
       const std::size_t nNodes = fvMesh.faces()[iFace].nNodes();
       for (std::size_t iNode = 0; iNode < nNodes; ++iNode) {
-        if (std::count(fvMesh.cells()[iElement].iNodes().begin(),
-                       fvMesh.cells()[iElement].iNodes().end(),
-                       iNodes[iNode]) == 0) {
+        if (std::count(fvMesh.cells()[iElement].iNodes().begin(), fvMesh.cells()[iElement].iNodes().end(), iNodes[iNode]) == 0) {
 
           fvMesh.cells()[iElement].iNodes().push_back(iNodes[iNode]);
           fvMesh.nodes()[iNodes[iNode]].iCells().push_back(

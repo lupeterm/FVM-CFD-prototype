@@ -5,21 +5,18 @@
 #include <cstddef>
 
 // The implementations of element-based assembly of the diffusion term
-template <typename MatrixType>
 void AssembleDiffusionTerm::cellBasedAssemble(
     Mesh &fvMesh,
     const double diffusionCoef,
     Field<std::array<double, 3>> &internalVelocity,
     std::vector<boundaryField<std::array<double, 3>>> &boundaryFields,
-    std::vector<MatrixType> &coeffMatrix,
+    std::vector<gko::matrix_data<double, int>> &coeffMatrix,
     std::vector<std::array<double, 3>> &RHS)
 {
   const std::size_t nCells = fvMesh.nCells();
 
-  if constexpr (std::is_same_v<MatrixType, gko::matrix_data<double, int>>) {
-    for (size_t dim = 0; dim < 3; dim++) {
-      coeffMatrix[dim].size = {nCells, nCells};
-    }
+  for (size_t dim = 0; dim < 3; dim++) {
+    coeffMatrix[dim].size = {nCells, nCells};
   }
 
   for (std::size_t iElement = 0; iElement < nCells; ++iElement) {
@@ -35,10 +32,10 @@ void AssembleDiffusionTerm::cellBasedAssemble(
     auto diag = internalVelocity.values()[iElement];
 
     for (std::size_t iFace = 0; iFace < nFaces; ++iFace) {
+
       // Get the face
       const std::size_t iFaceIndex = theElement.iFaces()[iFace];
       Face &theFace = fvMesh.faces()[iFaceIndex];
-
       // Check if the face is an interior face or a boundary face
       if (theFace.iNeighbor() != -1) { // If it is an interior face
         double FluxFn = 0.0;
@@ -51,32 +48,27 @@ void AssembleDiffusionTerm::cellBasedAssemble(
         FluxFn = -FluxCn;
 
         // Compute the coefficient matrix
-        if constexpr (std::is_same_v<MatrixType, Matrix<std::array<double, 3>>>) {
-          for (size_t dim = 0; dim < 3; dim++) {
-            coeffMatrix(iElement, theElement.iNeighbors()[iFace]) = FluxFn;
-          }
+        // if constexpr (std::is_same_v<MatrixType, Matrix<std::array<double, 3>>>) {
+        //   for (size_t dim = 0; dim < 3; dim++) {
+        //     coeffMatrix(iElement, theElement.iNeighbors()[iFace]) = FluxFn;
+        //   }
 
-        } else if constexpr (std::is_same_v<
-                                 MatrixType,
-                                 gko::matrix_data<double, int>>) {
-          for (size_t dim = 0; dim < 3; dim++) {
-            coeffMatrix[dim].nonzeros.emplace_back(
-                iElement,
-                theElement.iNeighbors()[iFace],
-                FluxFn);
-          }
-        } else {
-          static_assert(
-              std::is_same_v<MatrixType, Matrix<double>> ||
-                  std::is_same_v<MatrixType, gko::matrix_data<double, int>>,
-              "Unsupported MatrixType. Must be either Matrix<double> or "
-              " gko::matrix_data<double, int>.");
+        // } else if constexpr (std::is_same_v<
+        //                          MatrixType,
+        //                          gko::matrix_data<double, int>>) {
+
+        for (size_t dim = 0; dim < 3; dim++) {
+          coeffMatrix[dim].nonzeros.emplace_back(
+              iElement,
+              theElement.iNeighbors()[iFace],
+              FluxFn);
         }
         for (size_t dim = 0; dim < 3; dim++) {
           diag[dim] += FluxCn;
         }
       } else { // If it is a boundary face
         // Get the boundary type
+
         const std::size_t iBoundary = fvMesh.faces()[iFaceIndex].patchIndex();
         const std::string &boundaryType =
             boundaryFields[iBoundary].boundaryType();
@@ -85,6 +77,7 @@ void AssembleDiffusionTerm::cellBasedAssemble(
         std::array<double, 3> FluxVb{0.0, 0.0, 0.0};
 
         if (boundaryType == "fixedValue") { // Dirichlet BC
+
           FluxCb = diffusionCoef * theFace.gDiff();
 
           std::size_t relativeFaceIndex =
@@ -118,40 +111,41 @@ void AssembleDiffusionTerm::cellBasedAssemble(
     }
 
     // Set the diagonal entry of the coefficient matrix
-    if constexpr (std::is_same_v<MatrixType, Matrix<std::array<double, 3>>>) {
-      for (size_t dim = 0; dim < 3; dim++) {
-        coeffMatrix(iElement, iElement) = diag[dim];
-      }
+    // if constexpr (std::is_same_v<MatrixType, Matrix<std::array<double, 3>>>) {
+    //   for (size_t dim = 0; dim < 3; dim++) {
+    //     coeffMatrix(iElement, iElement) = diag[dim];
+    //   }
 
-    } else if constexpr (std::is_same_v<
-                             MatrixType,
-                             gko::matrix_data<double, int>>) {
-      for (size_t dim = 0; dim < 3; dim++) {
-        coeffMatrix[dim].nonzeros.emplace_back(
-            iElement,
-            iElement,
-            diag[dim]);
-      }
+    // } else if constexpr (std::is_same_v<
+    //                          MatrixType,
+    //                          gko::matrix_data<double, int>>) {
+
+    for (size_t dim = 0; dim < 3; dim++) {
+      coeffMatrix[dim].nonzeros.emplace_back(
+          iElement,
+          iElement,
+          diag[dim]);
     }
+    // }
   }
 }
 
 // Explicit instantiation of the template function cellBasedAssemble
-template void AssembleDiffusionTerm::cellBasedAssemble(
-    Mesh &fvMesh,
-    const double diffusionCoef,
-    Field<std::array<double, 3>> &internalVelocity,
-    std::vector<boundaryField<std::array<double, 3>>> &boundaryFields,
-    std::vector<Matrix<double>> &coeffMatrix,
-    std::vector<std::array<double, 3>> &RHS);
+// template void AssembleDiffusionTerm::cellBasedAssemble(
+//     Mesh &fvMesh,
+//     const double diffusionCoef,
+//     Field<std::array<double, 3>> &internalVelocity,
+//     std::vector<boundaryField<std::array<double, 3>>> &boundaryFields,
+//     std::vector<Matrix<double>> &coeffMatrix,
+//     std::vector<std::array<double, 3>> &RHS);
 
-template void AssembleDiffusionTerm::cellBasedAssemble(
-    Mesh &fvMesh,
-    const double diffusionCoef,
-    Field<std::array<double, 3>> &internalVelocity,
-    std::vector<boundaryField<std::array<double, 3>>> &boundaryFields,
-    std::vector<gko::matrix_data<double>> &coeffMatrix,
-    std::vector<std::array<double, 3>> &RHS);
+// template void AssembleDiffusionTerm::cellBasedAssemble(
+//     Mesh &fvMesh,
+//     const double diffusionCoef,
+//     Field<std::array<double, 3>> &internalVelocity,
+//     std::vector<boundaryField<std::array<double, 3>>> &boundaryFields,
+//     std::vector<gko::matrix_data<double, int>> &coeffMatrix,
+//     std::vector<std::array<double, 3>> &RHS);
 
 // The implementations of face-based assembly of the diffusion term
 template <typename MatrixType>

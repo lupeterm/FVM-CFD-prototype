@@ -6,24 +6,23 @@
 using namespace std::string_literals;
 
 void ReadInitialBoundaryConditions::readOpenFoamInitialBoundaryConditions(
-    Mesh &fvMesh, Field<std::array<double, 3>> &internalVelocityField,
-    std::vector<boundaryField<std::array<double, 3>>> &boundaryVelocityFields,
-    Field<double> &internalTemperatureField,
-    std::vector<boundaryField<double>> &boundaryTemperatureFields) {
+    Mesh &fvMesh, Field<std::array<double, 3>> &internalVelocityField, std::vector<boundaryField<std::array<double, 3>>> &boundaryVelocityFields, Field<double> &internalTemperatureField, std::vector<boundaryField<double>> &boundaryTemperatureFields)
+{
 
   std::cout << "Reading initial and boundary conditions..." << std::endl;
 
   readVelocityField(fvMesh, internalVelocityField, boundaryVelocityFields);
-  readTemperatureField(fvMesh, internalTemperatureField,
-                       boundaryTemperatureFields);
+  readTemperatureField(fvMesh, internalTemperatureField, boundaryTemperatureFields);
 
   // TO DO:
   // readPressureField(fvMesh);
 }
 
 void ReadInitialBoundaryConditions::readVelocityField(
-    Mesh &fvMesh, Field<std::array<double, 3>> &internalVelocityField,
-    std::vector<boundaryField<std::array<double, 3>>> &boundaryVelocityFields) {
+    Mesh &fvMesh,
+    Field<std::array<double, 3>> &internalVelocityField,
+    std::vector<boundaryField<std::array<double, 3>>> &boundaryVelocityFields)
+{
 
   std::string UFileName = fvMesh.caseDir() + "/0/U"s;
   std::ifstream UFile(UFileName);
@@ -56,11 +55,9 @@ void ReadInitialBoundaryConditions::readVelocityField(
   UFile >> word;
 
   if (word == "boundaryField"s) {
-
     IO::discardLines(UFile, 2);
     for (std::size_t iBoundary = 0; iBoundary < fvMesh.nBoundaries();
          ++iBoundary) {
-
       UFile >> word;
 
       if (word == fvMesh.boundaries()[iBoundary].userName()) {
@@ -99,8 +96,10 @@ void ReadInitialBoundaryConditions::readVelocityField(
 }
 
 void ReadInitialBoundaryConditions::readTemperatureField(
-    Mesh &fvMesh, Field<double> &internalTemperatureField,
-    std::vector<boundaryField<double>> &boundaryTemperatureFields) {
+    Mesh &fvMesh,
+    Field<double> &internalTemperatureField,
+    std::vector<boundaryField<double>> &boundaryTemperatureFields)
+{
 
   std::string TFileName = fvMesh.caseDir() + "/0/T"s;
   std::ifstream TFile(TFileName);
