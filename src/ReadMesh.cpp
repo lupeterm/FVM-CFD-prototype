@@ -166,19 +166,21 @@ void ReadMesh::readNeighborsFile(Mesh &fvMesh)
 
   std::size_t nNeighbors{0};
   neighborsFile >> nNeighbors;
-
   // Discard the rest of the line and the next line
   if (nNeighbors <= 4) {
     neighborsFile.ignore(1); // Discard the left parenthesis
   } else {
     IO::discardLines(neighborsFile, 2);
   }
-
+  size_t i = 0;
   for (std::size_t iNeighbor = 0; iNeighbor < nNeighbors; ++iNeighbor) {
     neighborsFile >> fvMesh.faces()[iNeighbor].iNeighbor();
+    if (fvMesh.faces()[iNeighbor].iNeighbor() != -1) {
+      i++;
+    }
   }
 
-  fvMesh.nInteriorFaces() = nNeighbors;
+  fvMesh.nInteriorFaces() = i;
   neighborsFile.close();
 }
 
@@ -236,6 +238,7 @@ void ReadMesh::readBoundaryFile(Mesh &fvMesh)
 
 void ReadMesh::constructCells(Mesh &fvMesh)
 {
+  std::cout << "1\n";
   fvMesh.cells().resize(fvMesh.nCells());
 
   for (std::size_t iElement = 0; iElement < fvMesh.nCells(); ++iElement) {
@@ -247,16 +250,15 @@ void ReadMesh::constructCells(Mesh &fvMesh)
     std::size_t iOwner = fvMesh.faces()[iInteriorFace].iOwner();
     std::size_t iNeighbor = fvMesh.faces()[iInteriorFace].iNeighbor();
 
-    fvMesh.cells()[iOwner].iFaces().push_back(
-        fvMesh.faces()[iInteriorFace].index());
+    fvMesh.cells()[iOwner].iFaces().push_back(fvMesh.faces()[iInteriorFace].index());
     fvMesh.cells()[iOwner].iNeighbors().push_back(iNeighbor);
     fvMesh.cells()[iOwner].faceSigns().push_back(1);
 
-    fvMesh.cells()[iNeighbor].iFaces().push_back(
-        fvMesh.faces()[iInteriorFace].index());
+    fvMesh.cells()[iNeighbor].iFaces().push_back(fvMesh.faces()[iInteriorFace].index());
     fvMesh.cells()[iNeighbor].iNeighbors().push_back(iOwner);
     fvMesh.cells()[iNeighbor].faceSigns().push_back(-1);
   }
+  std::cout << "2\n";
 
   // Go through boundary faces
   for (std::size_t iBFace = fvMesh.nInteriorFaces(); iBFace < fvMesh.nFaces();
@@ -266,11 +268,13 @@ void ReadMesh::constructCells(Mesh &fvMesh)
     fvMesh.cells()[iOwner].iFaces().push_back(iBFace);
     fvMesh.cells()[iOwner].faceSigns().push_back(1);
   }
+  std::cout << "3\n";
 
   for (std::size_t iElement = 0; iElement < fvMesh.nCells(); ++iElement) {
     fvMesh.cells()[iElement].nNeighbors() =
         fvMesh.cells()[iElement].iNeighbors().size();
   }
+  std::cout << "4\n";
 
   fvMesh.nBCells() = fvMesh.nFaces() - fvMesh.nInteriorFaces();
   fvMesh.nBFaces() = fvMesh.nFaces() - fvMesh.nInteriorFaces();

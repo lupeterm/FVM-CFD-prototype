@@ -8,7 +8,17 @@
 #include "ReadInitialBoundaryConditions.hpp"
 #include "ReadMesh.hpp"
 #include "ginkgo/ginkgo.hpp"
+#include <iomanip>
 #include <vector>
+
+void export_mtx(const std::string path, std::shared_ptr<const gko::matrix::Csr<double, int>> A)
+{
+  std::cout << "[CFD-PROT LOG] exporting " << path << std::endl;
+  std::ofstream stream{path};
+  stream << std::setprecision(15);
+
+  gko::write(stream, A.get());
+}
 
 int main(int argc, char *argv[])
 {
@@ -19,7 +29,7 @@ int main(int argc, char *argv[])
               << std::endl;
     return 1;
   }
-
+  std::cout << "int: " << sizeof(int) << "\n";
   std::string caseDirectory(argv[1]);
   std::string assemblyMethod(argv[2]);
   std::string benchmark(argv[3]);
@@ -83,6 +93,8 @@ int main(int argc, char *argv[])
 
   // if (assemblyMethod == "cell") {
   std::cout << "Using cell-based assembly..." << std::endl;
+  auto g_tic = std::chrono::steady_clock::now();
+
   diffusionTermAssembler.cellBasedAssemble(
       fvMesh,
       transportPropertyConstant,
@@ -90,19 +102,33 @@ int main(int argc, char *argv[])
       boundaryVelocityFields,
       coeffMatrix,
       RHS);
+  auto g_tac = std::chrono::steady_clock::now();
+  auto generate_time =
+      std::chrono::duration_cast<std::chrono::nanoseconds>(g_tac - g_tic);
+  std::cout << "Matrix assembly took " << generate_time.count() / 1000000 << "ms \n";
+  // for (size_t dim = 0; dim < 3; dim++) {
 
-  std::ofstream myfile;
-  myfile.open("example.txt");
-  const unsigned int discretization_points = 100;
+  //   using mtx = gko::matrix::Csr<double, int>;
 
-  using mtx = gko::matrix::Csr<double>;
+  //   const auto exec = gko::ReferenceExecutor::create();
+  //   // coeffMatrix[dim].sort_row_major();
 
-  const auto exec = gko::ReferenceExecutor::create();
+  //   auto gko_coeffMatrix = gko::share(mtx::create(exec, coeffMatrix[dim].size, coeffMatrix[dim].nonzeros.size()));
+  //   std::cout << "1\n";
+  //   gko_coeffMatrix->read(coeffMatrix[dim]);
+  //   std::cout << "[CFD-PROT LOG] exporting " << "example.max" << std::endl;
+  //   std::string file = "coeffmatrix_X.mtx";
+  //   if (dim == 1) {
+  //     file = "coeffmatrix_Y.mtx";
+  //   } else if (dim == 2) {
+  //     file = "coeffmatrix_Z.mtx";
+  //   }
+  //   std::ofstream stream{file};
+  //   std::cout << "2\n";
 
-  auto matrix = gko::share(mtx::create(exec, gko::dim<2>(discretization_points)));
-  matrix->write(coeffMatrix[0]);
-  write(myfile, matrix);
-  myfile.close();
+  //   stream << std::setprecision(15);
 
+  //   gko::write(stream, gko_coeffMatrix.get());
+  // }
   return 0;
 }
